@@ -1,0 +1,258 @@
+{
+  "$defs": {
+    "ItemError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "ok",
+            "missing_input",
+            "empty_input",
+            "invalid_encoding",
+            "context_limit",
+            "boundary_error",
+            "numerical_error",
+            "inference_error"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ItemError",
+      "type": "object"
+    },
+    "ResultItem": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_log_probs": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Candidate Log Probs",
+          "type": "array"
+        },
+        "candidate_probs": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Candidate Probs",
+          "type": "array"
+        },
+        "coverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Coverage"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ItemError"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "present only for tasks with numeric values",
+          "title": "Expected Value"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "log_coverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Log Coverage"
+        },
+        "n_prompt_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "N Prompt Tokens"
+        },
+        "probabilities": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Probabilities",
+          "type": "array"
+        },
+        "prompt_token_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Prompt Token Sha256"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "missing_input",
+            "empty_input",
+            "invalid_encoding",
+            "context_limit",
+            "boundary_error",
+            "numerical_error",
+            "inference_error",
+            "pending"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "text_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "SHA-256 (hex) of the UTF-8 text; null for missing text",
+          "title": "Text Sha256"
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/Warning_"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "error",
+        "candidate_log_probs",
+        "candidate_probs",
+        "probabilities",
+        "log_coverage",
+        "coverage",
+        "n_prompt_tokens",
+        "prompt_token_sha256",
+        "warnings",
+        "text_sha256"
+      ],
+      "title": "ResultItem",
+      "type": "object"
+    },
+    "Warning_": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Warning_",
+      "type": "object"
+    }
+  },
+  "$id": "https://llikert.invalid/schemas/checkpoint-chunk.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "checkpoint_schema_version": {
+      "const": 1,
+      "title": "Checkpoint Schema Version",
+      "type": "integer"
+    },
+    "engine_fingerprint": {
+      "title": "Engine Fingerprint",
+      "type": "string"
+    },
+    "prepared_hash": {
+      "title": "Prepared Hash",
+      "type": "string"
+    },
+    "results": {
+      "items": {
+        "$ref": "#/$defs/ResultItem"
+      },
+      "title": "Results",
+      "type": "array"
+    },
+    "sequence": {
+      "title": "Sequence",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "checkpoint_schema_version",
+    "sequence",
+    "engine_fingerprint",
+    "prepared_hash",
+    "results"
+  ],
+  "title": "CheckpointChunk",
+  "type": "object"
+}

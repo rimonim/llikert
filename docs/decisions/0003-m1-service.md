@@ -1,6 +1,6 @@
 # 0003: M1 scoring-service implementation decisions
 
-**Status:** accepted 2026-09-16
+**Status:** accepted 2026-09-16. The CUDA evidence and default execution settings are superseded by 0004 A (CUDA toolchain correction).
 **Context:** These are routine implementation choices made while building M1, recorded so the clients (M2) and later milestones can rely on them. None changes the probability semantics. Where a choice refines a D-numbered decision, that decision is named.
 
 ## Protocol and artifacts

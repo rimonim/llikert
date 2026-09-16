@@ -3,7 +3,7 @@ import pytest
 from llikert.server.canonical import identity_hash
 from llikert.server.errors import ServiceError
 
-from conftest import numeric_task_dict, task_dict
+from .conftest import numeric_task_dict, task_dict
 
 
 def prepare_error(service, task):
@@ -25,7 +25,7 @@ def test_prepare_success_artifact(service):
 
 
 def test_prepare_is_deterministic_across_service_instances(service):
-    from conftest import make_service
+    from .conftest import make_service
 
     assert service.prepare(task_dict())["prepared"] == make_service().prepare(task_dict())["prepared"]
 
@@ -103,7 +103,7 @@ def test_non_ascii_code_needing_byte_tokens_rejected(service):
 def test_task_exceeding_context_rejected():
     from llikert.server.fake_adapter import FakeAdapter
 
-    from conftest import make_service
+    from .conftest import make_service
 
     service = make_service(FakeAdapter(n_ctx=300))
     err = prepare_error(service, task_dict(instructions="word " * 400))

@@ -6,7 +6,7 @@ from llikert.server.canonical import canonicalize
 from llikert.server.errors import ServiceError
 from llikert.server.task import parse_task
 
-from conftest import numeric_task_dict, task_dict
+from .conftest import numeric_task_dict, task_dict
 
 
 def error_of(obj):

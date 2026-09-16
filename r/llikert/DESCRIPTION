@@ -1,0 +1,28 @@
+Package: llikert
+Title: Candidate-Token Probability Scoring Client
+Version: 0.1.0.9000
+Authors@R: person("The LLikert authors", role = c("aut", "cre"), email = "louis@teitelbaum.us")
+Description: Client for an LLikert scoring service. Defines scoring tasks with
+    explicit response codes, prepares them against the service's language model,
+    and scores text datasets to next-token probabilities for each response code,
+    both as original probability mass and conditional on choosing one of the codes.
+    Supports checkpointing and resume, and saves self-describing results. The client
+    needs no Python or local inference runtime.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+Depends: R (>= 4.1)
+Imports:
+    cli,
+    httr2 (>= 1.0.0),
+    jsonlite,
+    openssl,
+    pillar,
+    rlang,
+    tibble
+Suggests:
+    dplyr,
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3

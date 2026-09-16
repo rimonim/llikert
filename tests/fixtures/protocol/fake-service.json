@@ -1,0 +1,1836 @@
+{
+ "description": "Recorded fake-service responses for client tests. Regenerate with tools/generate_client_fixtures.py.",
+ "info": {
+  "protocol_version": 1,
+  "service": {
+   "name": "llikert",
+   "version": "0.1.0.dev0"
+  },
+  "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+  "engine": {
+   "fingerprint_version": 1,
+   "model_and_execution": {
+    "backend": "fake",
+    "fake_adapter_version": 1,
+    "n_vocab": 378,
+    "n_ctx": 512
+   },
+   "template_profile": {
+    "name": "fake-chatml",
+    "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+   },
+   "renderer_version": 1,
+   "boundary_policy": "tail-suffix-v1",
+   "postprocessing_version": 1,
+   "prepared_schema_version": 1,
+   "tokenization": {
+    "template_segments": "parse_special",
+    "content_segments": "ordinary_text",
+    "add_bos": false
+   }
+  },
+  "execution": {
+   "backend": "fake"
+  },
+  "limits": {
+   "max_items_per_request": 64,
+   "max_body_bytes": 8388608,
+   "queue_limit": 4,
+   "n_ctx": 512,
+   "max_prompt_tokens": 512
+  },
+  "item_statuses": [
+   "ok",
+   "missing_input",
+   "empty_input",
+   "invalid_encoding",
+   "context_limit",
+   "boundary_error",
+   "numerical_error",
+   "inference_error"
+  ]
+ },
+ "tasks": {
+  "nominal": {
+   "task": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+     {
+      "id": "description",
+      "label": "description",
+      "response": "A",
+      "value": null
+     },
+     {
+      "id": "question",
+      "label": "question",
+      "response": "B",
+      "value": null
+     },
+     {
+      "id": "request",
+      "label": "request",
+      "response": "C",
+      "value": null
+     }
+    ],
+    "ordered": false,
+    "examples": []
+   },
+   "prepare_response": {
+    "protocol_version": 1,
+    "prepared": {
+     "prepared_schema_version": 1,
+     "task": {
+      "schema_version": 1,
+      "name": "Communicative function",
+      "instructions": "Classify the text's primary communicative function.",
+      "categories": [
+       {
+        "id": "description",
+        "label": "description",
+        "response": "A",
+        "value": null
+       },
+       {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+       },
+       {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+       }
+      ],
+      "ordered": false,
+      "examples": []
+     },
+     "task_hash": "sha256:d01e1ea7be5d759397093b55241e3f98c60272d0e9f29e0f1a253a54b83681c7",
+     "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+     "profile": {
+      "name": "fake-chatml",
+      "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+     },
+     "boundary_policy": "tail-suffix-v1",
+     "tail_tokens": [
+      1,
+      354,
+      0,
+      369,
+      354
+     ],
+     "categories": [
+      {
+       "id": "description",
+       "label": "description",
+       "response": "A",
+       "value": null,
+       "token_id": 292,
+       "token_piece": "A"
+      },
+      {
+       "id": "question",
+       "label": "question",
+       "response": "B",
+       "value": null,
+       "token_id": 293,
+       "token_piece": "B"
+      },
+      {
+       "id": "request",
+       "label": "request",
+       "response": "C",
+       "value": null,
+       "token_id": 294,
+       "token_piece": "C"
+      }
+     ],
+     "prepared_hash": "sha256:c296106417be6ec57750a28321c65e4c80869ece7920eab5f5e42d5a0584ff11"
+    },
+    "diagnostics": {
+     "n_prompt_tokens_without_text": 165,
+     "n_ctx": 512,
+     "max_text_tokens_approx": 347,
+     "warnings": []
+    },
+    "preview": {
+     "example": {
+      "prompt": "<|im_start|>system\nClassify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else.<|im_end|>\n<|im_start|>user\nText:\n<text>\nThis is an example text used only to preview the prompt.\n</text><|im_end|>\n<|im_start|>assistant\n",
+      "n_prompt_tokens": 221
+     }
+    },
+    "request_id": "prepare-nominal"
+   },
+   "item_results": {
+    "r01": {
+     "id": "r01",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -12.327680909536639,
+      -10.656477036287143,
+      -6.17726995984615
+     ],
+     "candidate_probs": [
+      4.427475904516017e-06,
+      2.3547826463915205e-05,
+      0.0020760879284179874
+     ],
+     "probabilities": [
+      0.002104250404519067,
+      0.011191596392810848,
+      0.98670415320267
+     ],
+     "log_coverage": -6.1638849319031035,
+     "coverage": 0.002104063230786419,
+     "n_prompt_tokens": 198,
+     "prompt_token_sha256": "sha256:e227f73065141685455e0f09955fbb90277fa2c4d4904f5885985522249a1dfd",
+     "warnings": []
+    },
+    "r02": {
+     "id": "r02",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -14.915502191816621,
+      -4.638192206026583,
+      -12.876943817373661
+     ],
+     "candidate_probs": [
+      3.328738685583644e-07,
+      0.009675172545872766,
+      2.556314929016401e-06
+     ],
+     "probabilities": [
+      3.439468332443978e-05,
+      0.9997014703070942,
+      0.00026413500958138677
+     ],
+     "log_coverage": -4.637893631764818,
+     "coverage": 0.009678061734670344,
+     "n_prompt_tokens": 189,
+     "prompt_token_sha256": "sha256:01d047655d0d171a4994f8ac46a69fdc65130add67608a343aa85ab5126527d9",
+     "warnings": []
+    },
+    "r03": {
+     "id": "r03",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -11.424620327827686,
+      -13.438607751015256,
+      -8.336077323132045
+     ],
+     "candidate_probs": [
+      1.0923213790053986e-05,
+      1.4577626180891735e-06,
+      0.00023971080912974445
+     ],
+     "probabilities": [
+      0.043330304344297264,
+      0.005782666083223414,
+      0.9508870295724793
+     ],
+     "log_coverage": -8.285717308442933,
+     "coverage": 0.0002520917855378878,
+     "n_prompt_tokens": 189,
+     "prompt_token_sha256": "sha256:866af3318f6506bda2a483e60f2264e57bf2f1448f716a163c29d33fc97b7d9b",
+     "warnings": []
+    },
+    "r04": {
+     "id": "r04",
+     "status": "missing_input",
+     "error": {
+      "code": "missing_input",
+      "message": "text is missing"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": null,
+     "prompt_token_sha256": null,
+     "warnings": []
+    },
+    "r05": {
+     "id": "r05",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -13.74670706376903,
+      -7.0765822073802855,
+      -8.685214103263792
+     ],
+     "candidate_probs": [
+      1.0712256863989716e-06,
+      0.0008446550765435676,
+      0.0001690672313917951
+     ],
+     "probabilities": [
+      0.0010556094918892562,
+      0.8323418001384222,
+      0.1666025903696885
+     ],
+     "log_coverage": -6.893070102331028,
+     "coverage": 0.0010147935336217617,
+     "n_prompt_tokens": 194,
+     "prompt_token_sha256": "sha256:09ca51f52de81db12797454a9a4ac2dcf247ba26b80e9fa420c16e2bb01d299d",
+     "warnings": []
+    },
+    "r06": {
+     "id": "r06",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -3.936285921858751,
+      -11.53654239369568,
+      -7.177943667745933
+     ],
+     "candidate_probs": [
+      0.019520581238875824,
+      9.766597684100584e-06,
+      0.0007632356957630508
+     ],
+     "probabilities": [
+      0.9619090294123787,
+      0.000481265305782227,
+      0.037609705281839115
+     ],
+     "log_coverage": -3.8974505250504654,
+     "coverage": 0.02029358353232297,
+     "n_prompt_tokens": 189,
+     "prompt_token_sha256": "sha256:adf79af41b2f07560f3b082758e894abaae8f4ce03eddd944296f3085c424ae0",
+     "warnings": []
+    },
+    "r07": {
+     "id": "r07",
+     "status": "empty_input",
+     "error": {
+      "code": "empty_input",
+      "message": "text is empty"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": null,
+     "prompt_token_sha256": null,
+     "warnings": []
+    },
+    "r08": {
+     "id": "r08",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -8.774955149240434,
+      -12.636964345610522,
+      -12.336501141759726
+     ],
+     "candidate_probs": [
+      0.0001545558328495859,
+      3.249646471268825e-06,
+      4.388596254704161e-06
+     ],
+     "probabilities": [
+      0.9529067711082044,
+      0.020035543590215567,
+      0.027057685301580012
+     ],
+     "log_coverage": -8.726716942378152,
+     "coverage": 0.0001621940755755588,
+     "n_prompt_tokens": 185,
+     "prompt_token_sha256": "sha256:1455c3d4bc99e251893ab5289e48ed7570f84ab3b8e5e1ef2771b91e6c2a832f",
+     "warnings": []
+    },
+    "r09": {
+     "id": "r09",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -10.197901615961225,
+      -8.034030899106716,
+      -11.618856683352986
+     ],
+     "candidate_probs": [
+      3.72483981793028e-05,
+      0.0003242385981635511,
+      8.994865140854042e-06
+     ],
+     "probabilities": [
+      0.10054040980611084,
+      0.8751807628720025,
+      0.024278827321886548
+     ],
+     "log_coverage": -7.900706071285647,
+     "coverage": 0.0003704818614837077,
+     "n_prompt_tokens": 187,
+     "prompt_token_sha256": "sha256:56d9860213f698b4f308663d1ec95c16edf9618fdcf217bf8eb14327d2d0a537",
+     "warnings": []
+    },
+    "r10": {
+     "id": "r10",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -12.327680909536639,
+      -10.656477036287143,
+      -6.17726995984615
+     ],
+     "candidate_probs": [
+      4.427475904516017e-06,
+      2.3547826463915205e-05,
+      0.0020760879284179874
+     ],
+     "probabilities": [
+      0.002104250404519067,
+      0.011191596392810848,
+      0.98670415320267
+     ],
+     "log_coverage": -6.1638849319031035,
+     "coverage": 0.002104063230786419,
+     "n_prompt_tokens": 198,
+     "prompt_token_sha256": "sha256:e227f73065141685455e0f09955fbb90277fa2c4d4904f5885985522249a1dfd",
+     "warnings": []
+    },
+    "r11": {
+     "id": "r11",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -12.43872028090654,
+      -12.768788752017333,
+      -10.914351430614316
+     ],
+     "candidate_probs": [
+      3.962163748015534e-06,
+      2.848298521351356e-06,
+      1.8195223732296308e-05
+     ],
+     "probabilities": [
+      0.15845051192564769,
+      0.11390603405809,
+      0.7276434540162623
+     ],
+     "log_coverage": -10.596407318890115,
+     "coverage": 2.5005686001663222e-05,
+     "n_prompt_tokens": 188,
+     "prompt_token_sha256": "sha256:e0fe86086e73efce109a70160ee6b7be3f09b44944c90e4df3979bfc88c961ce",
+     "warnings": []
+    },
+    "r12": {
+     "id": "r12",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -6.504423261635008,
+      -8.545747704415,
+      -8.26590389319507
+     ],
+     "candidate_probs": [
+      0.0014968037739904552,
+      0.0001943698628563275,
+      0.0002571363952086906
+     ],
+     "probabilities": [
+      0.7682574894978715,
+      0.09976331264448018,
+      0.13197919785764842
+     ],
+     "log_coverage": -6.2407929323928695,
+     "coverage": 0.0019483100320554728,
+     "n_prompt_tokens": 203,
+     "prompt_token_sha256": "sha256:88ca24fa2fe71e09ddd6fe51b1bc80377c384d69f362e963ef9b99c19ebe8a82",
+     "warnings": []
+    },
+    "r13": {
+     "id": "r13",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -10.090263934328194,
+      -12.097445722498358,
+      -12.223625805198488
+     ],
+     "candidate_probs": [
+      4.148146179235362e-05,
+      5.573731932754141e-06,
+      4.91299999793298e-06
+     ],
+     "probabilities": [
+      0.7982086507263441,
+      0.10725275468412053,
+      0.09453859458953537
+     ],
+     "log_coverage": -9.864878685694926,
+     "coverage": 5.196819372304076e-05,
+     "n_prompt_tokens": 193,
+     "prompt_token_sha256": "sha256:6ec9d16caa7590b038cad0d022526c9bfcb461acc07ae17c444845270a16758b",
+     "warnings": []
+    },
+    "r14": {
+     "id": "r14",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -14.760297391423894,
+      -9.18362077629871,
+      -16.02251398516637
+     ],
+     "candidate_probs": [
+      3.8876243321262097e-07,
+      0.00010270797647762047,
+      1.1002986751276092e-07
+     ],
+     "probabilities": [
+      0.0037668307787791966,
+      0.9951670582595545,
+      0.0010661109616663723
+     ],
+     "log_coverage": -9.178776118130212,
+     "coverage": 0.00010320676877834585,
+     "n_prompt_tokens": 194,
+     "prompt_token_sha256": "sha256:1bb4e635c7f1d007ffa0eb881b682dd7eb9b175035160b56db562c7f9819dc46",
+     "warnings": []
+    },
+    "r15": {
+     "id": "r15",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -6.226480319243155,
+      -6.201640231574676,
+      -11.962243517042154
+     ],
+     "candidate_probs": [
+      0.0019763959518419054,
+      0.002026104628544612,
+      6.380631291177975e-06
+     ],
+     "probabilities": [
+      0.49300436892087257,
+      0.5054040071436036,
+      0.0015916239355238267
+     ],
+     "log_coverage": -5.519243076172906,
+     "coverage": 0.004008881211677694,
+     "n_prompt_tokens": 167,
+     "prompt_token_sha256": "sha256:399d7392fbda8c06efca23ff7634e3633a1dfca9fb8d9e8300805189e7d69ba9",
+     "warnings": []
+    },
+    "r16": {
+     "id": "r16",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -7.515377795190408,
+      -13.28564251108202,
+      -6.652923452640502
+     ],
+     "candidate_probs": [
+      0.0005446442138027992,
+      1.6987081439935243e-06,
+      0.0012902446174687674
+     ],
+     "probabilities": [
+      0.29655227540970697,
+      0.0009249263144484189,
+      0.7025227982758446
+     ],
+     "log_coverage": -6.299846027401378,
+     "coverage": 0.0018365875394155597,
+     "n_prompt_tokens": 184,
+     "prompt_token_sha256": "sha256:7f80ded42900bf3c491144d60a8566500bf07052d0d2119d76046ce0b6d6df21",
+     "warnings": [
+      {
+       "code": "reserved_marker_text",
+       "message": "text contains special-token text, scored as ordinary text"
+      }
+     ]
+    },
+    "r17": {
+     "id": "r17",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -11.778154086988408,
+      -14.16408145139948,
+      -9.522472925942926
+     ],
+     "candidate_probs": [
+      7.670305698518555e-06,
+      7.056958840450839e-07,
+      7.318845076035393e-05
+     ],
+     "probabilities": [
+      0.09403981119459559,
+      0.008652002971566094,
+      0.8973081858338383
+     ],
+     "log_coverage": -9.414117023962339,
+     "coverage": 8.156445234291752e-05,
+     "n_prompt_tokens": 188,
+     "prompt_token_sha256": "sha256:a4ffe939f92c838d43472923a6fd6f1d72c9ea83b2d6d863102767db2fbfde45",
+     "warnings": []
+    },
+    "r18": {
+     "id": "r18",
+     "status": "context_limit",
+     "error": {
+      "code": "context_limit",
+      "message": "the rendered prompt exceeds the context limit"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": 3165,
+     "prompt_token_sha256": null,
+     "warnings": []
+    },
+    "r19": {
+     "id": "r19",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -12.88487213494163,
+      -8.924333630332942,
+      -4.301849948216452
+     ],
+     "candidate_probs": [
+      2.5361277832505204e-06,
+      0.00013311014290329941,
+      0.013543481084242573
+     ],
+     "probabilities": [
+      0.00018540128455903727,
+      0.009730894336277583,
+      0.9900837043791634
+     ],
+     "log_coverage": -4.291884158666754,
+     "coverage": 0.013679127354929118,
+     "n_prompt_tokens": 198,
+     "prompt_token_sha256": "sha256:9ba482b5823ac627ee28463d756fe6053b03b47d10211732366880646c9a69fc",
+     "warnings": []
+    },
+    "r20": {
+     "id": "r20",
+     "status": "numerical_error",
+     "error": {
+      "code": "numerical_error",
+      "message": "the model produced non-finite logits"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": 177,
+     "prompt_token_sha256": null,
+     "warnings": []
+    },
+    "r21": {
+     "id": "r21",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -7.893668962577159,
+      -6.67217451835536,
+      -7.6030511560168925
+     ],
+     "candidate_probs": [
+      0.0003730981774706484,
+      0.001265643591299591,
+      0.0004989268051604816
+     ],
+     "probabilities": [
+      0.17453509024768965,
+      0.5920672674587435,
+      0.23339764229356694
+     ],
+     "log_coverage": -6.148039495266211,
+     "coverage": 0.0021376685739307203,
+     "n_prompt_tokens": 200,
+     "prompt_token_sha256": "sha256:5836c40a6260950344898ebfb2e11c45752ab5abd4b23341977c9f3b80e25b99",
+     "warnings": []
+    },
+    "r22": {
+     "id": "r22",
+     "status": "inference_error",
+     "error": {
+      "code": "inference_error",
+      "message": "native evaluation failed"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": 191,
+     "prompt_token_sha256": null,
+     "warnings": []
+    },
+    "r23": {
+     "id": "r23",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -4.223589841612716,
+      -14.071678029403245,
+      -5.434954419175437
+     ],
+     "candidate_probs": [
+      0.014645973296419878,
+      7.740123329782184e-07,
+      0.00436143381437142
+     ],
+     "probabilities": [
+      0.7705089298945292,
+      4.071995778894377e-05,
+      0.22945035014768175
+     ],
+     "log_coverage": -3.9628858070634063,
+     "coverage": 0.019008181123124274,
+     "n_prompt_tokens": 188,
+     "prompt_token_sha256": "sha256:82d2038b73d3083a845372e92eb2cbf81924a7752e0c4ef99d04352d901c3b1a",
+     "warnings": []
+    }
+   },
+   "meta_execution": {
+    "backend": "fake"
+   }
+  },
+  "numeric": {
+   "task": {
+    "schema_version": 1,
+    "name": "Sentiment",
+    "instructions": "Rate the overall sentiment of the text.",
+    "categories": [
+     {
+      "id": "very negative",
+      "label": "very negative",
+      "response": "1",
+      "value": 1.0
+     },
+     {
+      "id": "negative",
+      "label": "negative",
+      "response": "2",
+      "value": 2.0
+     },
+     {
+      "id": "neutral",
+      "label": "neutral",
+      "response": "3",
+      "value": 3.0
+     },
+     {
+      "id": "positive",
+      "label": "positive",
+      "response": "4",
+      "value": 4.0
+     },
+     {
+      "id": "very positive",
+      "label": "very positive",
+      "response": "5",
+      "value": 5.0
+     }
+    ],
+    "ordered": true,
+    "examples": [
+     {
+      "text": "I love it.",
+      "category_id": "very positive"
+     }
+    ]
+   },
+   "prepare_response": {
+    "protocol_version": 1,
+    "prepared": {
+     "prepared_schema_version": 1,
+     "task": {
+      "schema_version": 1,
+      "name": "Sentiment",
+      "instructions": "Rate the overall sentiment of the text.",
+      "categories": [
+       {
+        "id": "very negative",
+        "label": "very negative",
+        "response": "1",
+        "value": 1.0
+       },
+       {
+        "id": "negative",
+        "label": "negative",
+        "response": "2",
+        "value": 2.0
+       },
+       {
+        "id": "neutral",
+        "label": "neutral",
+        "response": "3",
+        "value": 3.0
+       },
+       {
+        "id": "positive",
+        "label": "positive",
+        "response": "4",
+        "value": 4.0
+       },
+       {
+        "id": "very positive",
+        "label": "very positive",
+        "response": "5",
+        "value": 5.0
+       }
+      ],
+      "ordered": true,
+      "examples": [
+       {
+        "text": "I love it.",
+        "category_id": "very positive"
+       }
+      ]
+     },
+     "task_hash": "sha256:09ccaf13f957cbed77d8ecf976eab3062eb65ffa2bb117e4261f6bfef9e0d69c",
+     "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+     "profile": {
+      "name": "fake-chatml",
+      "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+     },
+     "boundary_policy": "tail-suffix-v1",
+     "tail_tokens": [
+      1,
+      354,
+      0,
+      369,
+      354
+     ],
+     "categories": [
+      {
+       "id": "very negative",
+       "label": "very negative",
+       "response": "1",
+       "value": 1.0,
+       "token_id": 276,
+       "token_piece": "1"
+      },
+      {
+       "id": "negative",
+       "label": "negative",
+       "response": "2",
+       "value": 2.0,
+       "token_id": 277,
+       "token_piece": "2"
+      },
+      {
+       "id": "neutral",
+       "label": "neutral",
+       "response": "3",
+       "value": 3.0,
+       "token_id": 278,
+       "token_piece": "3"
+      },
+      {
+       "id": "positive",
+       "label": "positive",
+       "response": "4",
+       "value": 4.0,
+       "token_id": 279,
+       "token_piece": "4"
+      },
+      {
+       "id": "very positive",
+       "label": "very positive",
+       "response": "5",
+       "value": 5.0,
+       "token_id": 280,
+       "token_piece": "5"
+      }
+     ],
+     "prepared_hash": "sha256:8bd56c08cce45cccff68813023043c887bbb3a0d54cf8cd73a1c8cb4f1773b61"
+    },
+    "diagnostics": {
+     "n_prompt_tokens_without_text": 216,
+     "n_ctx": 512,
+     "max_text_tokens_approx": 296,
+     "warnings": []
+    },
+    "preview": {
+     "example": {
+      "prompt": "<|im_start|>system\nRate the overall sentiment of the text.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else.<|im_end|>\n<|im_start|>user\nText:\n<text>\nI love it.\n</text><|im_end|>\n<|im_start|>assistant\n5<|im_end|>\n<|im_start|>user\nText:\n<text>\nThis is an example text used only to preview the prompt.\n</text><|im_end|>\n<|im_start|>assistant\n",
+      "n_prompt_tokens": 272
+     }
+    },
+    "request_id": "prepare-numeric"
+   },
+   "item_results": {
+    "r01": {
+     "id": "r01",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -8.825742699369847,
+      -7.400520402629817,
+      -10.202325653926843,
+      -10.992050835472623,
+      -6.876669769479758
+     ],
+     "candidate_probs": [
+      0.00014690231742668316,
+      0.0006109347463402413,
+      3.7083973829559524e-05,
+      1.6834994442407366e-05,
+      0.0010315737094698254
+     ],
+     "probabilities": [
+      0.07969399837624681,
+      0.3314299837858675,
+      0.020117927354227627,
+      0.009132926173386843,
+      0.5596251643102712
+     ],
+     "log_coverage": -6.296181700666518,
+     "coverage": 0.0018433297415087167,
+     "n_prompt_tokens": 249,
+     "prompt_token_sha256": "sha256:0e70ada44d42a52cc7d8cfe73729ee160fc03ffaecebb797d5b09b6607f519c6",
+     "warnings": [],
+     "expected_value": 3.637565274255568
+    },
+    "r02": {
+     "id": "r02",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -8.125665604592102,
+      -13.283668088534505,
+      -5.039276812050712,
+      -9.544021947645012,
+      -12.709356131958234
+     ],
+     "candidate_probs": [
+      0.0002958477468887849,
+      1.7020654249095903e-06,
+      0.0064784317483558874,
+      7.16281827479548e-05,
+      3.0227119526851595e-06
+     ],
+     "probabilities": [
+      0.04318546481892624,
+      0.0002484537648163183,
+      0.9456691466898701,
+      0.010455703647012222,
+      0.00044123107937510983
+     ],
+     "log_coverage": -4.983414301718959,
+     "coverage": 0.006850632455370221,
+     "n_prompt_tokens": 240,
+     "prompt_token_sha256": "sha256:cb1035ffef57f0baf99c8bb48a82d5f3d1737659203abbd769acc8c1592dfbb6",
+     "warnings": [],
+     "expected_value": 2.924718782403094
+    },
+    "r03": {
+     "id": "r03",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -9.110269366773977,
+      -9.044006194586226,
+      -11.337833025797327,
+      -13.350334850994704,
+      -13.117646507484807
+     ],
+     "candidate_probs": [
+      0.00011052493937462148,
+      0.00011809676884883788,
+      1.1913563395171007e-05,
+      1.5922939414522609e-06,
+      2.009456023723834e-06
+     ],
+     "probabilities": [
+      0.452716833594535,
+      0.48373150488484207,
+      0.04879867591520267,
+      0.006522132248204166,
+      0.008230853357216178
+     ],
+     "log_coverage": -8.317780926420996,
+     "coverage": 0.00024413702158380656,
+     "n_prompt_tokens": 240,
+     "prompt_token_sha256": "sha256:7c9ab1acb9cfcd9d38630928f29a1ebae5a2ae2ef61c8f6dfa4f9992de43bf46",
+     "warnings": [],
+     "expected_value": 1.633818666888725
+    },
+    "r04": {
+     "id": "r04",
+     "status": "missing_input",
+     "error": {
+      "code": "missing_input",
+      "message": "text is missing"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": null,
+     "prompt_token_sha256": null,
+     "warnings": [],
+     "expected_value": null
+    },
+    "r05": {
+     "id": "r05",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -11.645414825594706,
+      -11.065397553761533,
+      -15.347918442969013,
+      -9.829903956520003,
+      -18.32863107232042
+     ],
+     "candidate_probs": [
+      8.759122532160149e-06,
+      1.5644399667214584e-05,
+      2.1601490155333402e-07,
+      5.38179256097292e-05,
+      1.0964192816632748e-08
+     ],
+     "probabilities": [
+      0.11165453378609777,
+      0.19942273267587743,
+      0.0027535912456106665,
+      0.6860293792245056,
+      0.00013976306790859595
+     ],
+     "log_coverage": -9.453069131204586,
+     "coverage": 7.844842690347396e-05,
+     "n_prompt_tokens": 245,
+     "prompt_token_sha256": "sha256:f2b7f9a905c7f4e467c0337c7694c09ee0060c7d550bea455097967b442173b5",
+     "warnings": [],
+     "expected_value": 3.2635771051122497
+    },
+    "r06": {
+     "id": "r06",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -6.725103655828619,
+      -5.731175167865362,
+      -14.217866190612689,
+      -15.567135118160738,
+      -8.307344935006533
+     ],
+     "candidate_probs": [
+      0.0012003961450049497,
+      0.0032432636140497695,
+      6.687428765955333e-07,
+      1.7349186640634001e-07,
+      0.00024669817428426915
+     ],
+     "probabilities": [
+      0.25588252515256343,
+      0.6913505068737636,
+      0.00014255262036046336,
+      3.698240539526429e-05,
+      0.05258743294791706
+     ],
+     "log_coverage": -5.362066829882787,
+     "coverage": 0.004691200168081991,
+     "n_prompt_tokens": 240,
+     "prompt_token_sha256": "sha256:d2f6beefa57be7521a7e2058b24ae967bb90c747f8f6da7e0a2397be24139337",
+     "warnings": [],
+     "expected_value": 1.9020962911223385
+    },
+    "r07": {
+     "id": "r07",
+     "status": "empty_input",
+     "error": {
+      "code": "empty_input",
+      "message": "text is empty"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": null,
+     "prompt_token_sha256": null,
+     "warnings": [],
+     "expected_value": null
+    },
+    "r08": {
+     "id": "r08",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -9.709697903501217,
+      -13.87576348510115,
+      -6.910022169242562,
+      -14.926859478654265,
+      -8.822563140039824
+     ],
+     "candidate_probs": [
+      6.069204617449494e-05,
+      9.415263658979636e-07,
+      0.0009977356771948887,
+      3.2911471186985763e-07,
+      0.00014737014540994444
+     ],
+     "probabilities": [
+      0.05028053145192249,
+      0.0007800107104189386,
+      0.8265775049611809,
+      0.0002726561990328301,
+      0.12208929667744499
+     ],
+     "log_coverage": -6.719560578032572,
+     "coverage": 0.001207068509857096,
+     "n_prompt_tokens": 236,
+     "prompt_token_sha256": "sha256:660c6d207bdbb0d2442d3c2599de5d97afd79c239a2c7ed0044878f67c1779f6",
+     "warnings": [],
+     "expected_value": 3.1431101759396594
+    },
+    "r09": {
+     "id": "r09",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -8.852967231668384,
+      -9.375255934605583,
+      -9.18182491946839,
+      -9.77586179691778,
+      -9.245658103503757
+     ],
+     "candidate_probs": [
+      0.00014295692002355535,
+      8.479653010255229e-05,
+      0.00010289259101973264,
+      5.6806386685179e-05,
+      9.65298661709001e-05
+     ],
+     "probabilities": [
+      0.29537634288536263,
+      0.17520585185336546,
+      0.21259577528950815,
+      0.11737286134057155,
+      0.19944916863119214
+     ],
+     "log_coverage": -7.6334622345574665,
+     "coverage": 0.0004839822940019191,
+     "n_prompt_tokens": 238,
+     "prompt_token_sha256": "sha256:6c4a92b6c195a72076a8843eef5a584e5643d74f1a8d272a75ce9b6d93c546cb",
+     "warnings": [],
+     "expected_value": 2.750312660978865
+    },
+    "r10": {
+     "id": "r10",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -8.825742699369847,
+      -7.400520402629817,
+      -10.202325653926843,
+      -10.992050835472623,
+      -6.876669769479758
+     ],
+     "candidate_probs": [
+      0.00014690231742668316,
+      0.0006109347463402413,
+      3.7083973829559524e-05,
+      1.6834994442407366e-05,
+      0.0010315737094698254
+     ],
+     "probabilities": [
+      0.07969399837624681,
+      0.3314299837858675,
+      0.020117927354227627,
+      0.009132926173386843,
+      0.5596251643102712
+     ],
+     "log_coverage": -6.296181700666518,
+     "coverage": 0.0018433297415087167,
+     "n_prompt_tokens": 249,
+     "prompt_token_sha256": "sha256:0e70ada44d42a52cc7d8cfe73729ee160fc03ffaecebb797d5b09b6607f519c6",
+     "warnings": [],
+     "expected_value": 3.637565274255568
+    },
+    "r11": {
+     "id": "r11",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -7.400707571554502,
+      -9.06488218473434,
+      -10.11141741100475,
+      -9.066251079249794,
+      -6.140403351243065
+     ],
+     "candidate_probs": [
+      0.0006108204090412444,
+      0.00011565693742156192,
+      4.0613200407764953e-05,
+      0.000115498723587982,
+      0.0021540546024485575
+     ],
+     "probabilities": [
+      0.2011498333706414,
+      0.038087092942788364,
+      0.013374370557613046,
+      0.03803499139904412,
+      0.709353711729913
+     ],
+     "log_coverage": -5.797002362584232,
+     "coverage": 0.0030366438729071098,
+     "n_prompt_tokens": 239,
+     "prompt_token_sha256": "sha256:6c44e74dc070758e84630e007801afceb7624748d900e668663be952d9a7e2c9",
+     "warnings": [],
+     "expected_value": 4.016355655174799
+    },
+    "r12": {
+     "id": "r12",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -10.747588442246212,
+      -9.264388457902362,
+      -10.72399676039503,
+      -11.640882342933068,
+      -10.241037883101923
+     ],
+     "candidate_probs": [
+      2.1497187566530037e-05,
+      9.473865494468009e-05,
+      2.2010372016843442e-05,
+      8.798913210328147e-06,
+      3.567580310678246e-05
+     ],
+     "probabilities": [
+      0.11765038338572475,
+      0.5184882460179704,
+      0.1204589529783799,
+      0.04815492767921736,
+      0.19524748993870758
+     ],
+     "log_coverage": -8.607550537129327,
+     "coverage": 0.0001827209308451643,
+     "n_prompt_tokens": 254,
+     "prompt_token_sha256": "sha256:01bbbb336dbf9fd7acd33e6fc72312f8bfdf0a82df4b292fa09d6fe66f1dc93b",
+     "warnings": [],
+     "expected_value": 2.6848608947672123
+    },
+    "r13": {
+     "id": "r13",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -9.596768319959118,
+      -10.51648318425302,
+      -6.50801379536901,
+      -11.00530158797164,
+      -11.862123098608336
+     ],
+     "candidate_probs": [
+      6.794796814925279e-05,
+      2.708628127543355e-05,
+      0.0014914390863561542,
+      1.6613389555964545e-05,
+      7.0525373463441e-06
+     ],
+     "probabilities": [
+      0.04220005668082636,
+      0.016822322083058054,
+      0.926279559117643,
+      0.010317983009916697,
+      0.00438007910855592
+     ],
+     "log_coverage": -6.431434605165588,
+     "coverage": 0.001610139262683149,
+     "n_prompt_tokens": 244,
+     "prompt_token_sha256": "sha256:a7cc337be7d8a5f329c5ccd9d9bb136fa89ac1eeb0920b23ea91b7c9bd48d9ab",
+     "warnings": [],
+     "expected_value": 2.917855705782318
+    },
+    "r14": {
+     "id": "r14",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -10.91065109646511,
+      -9.705588308459895,
+      -11.199632643515631,
+      -15.798779128652782,
+      -10.840163374152555
+     ],
+     "candidate_probs": [
+      1.8262676862619514e-05,
+      6.094197911633566e-05,
+      1.3679220293058962e-05,
+      1.3761868498102821e-07,
+      1.9596425630435858e-05
+     ],
+     "probabilities": [
+      0.16216492692600615,
+      0.5411392680530208,
+      0.12146575093649585,
+      0.0012219963240591705,
+      0.1740080577604181
+     ],
+     "log_coverage": -9.09150970228064,
+     "coverage": 0.00011261792058743098,
+     "n_prompt_tokens": 245,
+     "prompt_token_sha256": "sha256:be3dc03d3d5e2194125ec5d6417bd7c8d48e2eae0e5fdf692e8c7ef6d0b28d8e",
+     "warnings": [],
+     "expected_value": 2.4837689899398625
+    },
+    "r15": {
+     "id": "r15",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -11.831500243031506,
+      -6.073221214485619,
+      -7.8284348514561435,
+      -12.982434327334282,
+      -15.414355979500623
+     ],
+     "candidate_probs": [
+      7.271846984604672e-06,
+      0.0023037404037369725,
+      0.00039824831051476627,
+      2.3003843798137604e-06,
+      2.021297579872442e-07
+     ],
+     "probabilities": [
+      0.0026815937758874315,
+      0.8495360176032795,
+      0.14685955204984844,
+      0.0008482984375382323,
+      7.453813344639488e-05
+     ],
+     "log_coverage": -5.910156274307939,
+     "coverage": 0.002711763075374144,
+     "n_prompt_tokens": 218,
+     "prompt_token_sha256": "sha256:ddc694f362e24596ac2e598fce0461c9305712296afc34dbcb0546f13fa34ee9",
+     "warnings": [],
+     "expected_value": 2.1460981695493766
+    },
+    "r16": {
+     "id": "r16",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -8.217232963076277,
+      -11.424068139004941,
+      -13.349429082408086,
+      -6.932272055297394,
+      -10.977042260289114
+     ],
+     "candidate_probs": [
+      0.000269961024503597,
+      1.0929247132236062e-05,
+      1.5937368446546389e-06,
+      0.0009757813187660664,
+      1.7089569346785658e-05
+     ],
+     "probabilities": [
+      0.21167521701190994,
+      0.008569573192081414,
+      0.0012496418439382968,
+      0.7651057140036246,
+      0.013399853948445567
+     ],
+     "log_coverage": -6.6645307888347105,
+     "coverage": 0.0012753548965933397,
+     "n_prompt_tokens": 235,
+     "prompt_token_sha256": "sha256:c4a0420ac6d767a6f1e96e98c0ad5bab800b0b867c0ef99eef401525753780c8",
+     "warnings": [
+      {
+       "code": "reserved_marker_text",
+       "message": "text contains special-token text, scored as ordinary text"
+      }
+     ],
+     "expected_value": 3.3599854146846138
+    },
+    "r17": {
+     "id": "r17",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -9.671159588695863,
+      -12.099246161556248,
+      -5.64055456494028,
+      -7.0943522216696895,
+      -8.126750906842194
+     ],
+     "candidate_probs": [
+      6.307666991641205e-05,
+      5.563705796516222e-06,
+      0.003550898656193476,
+      0.0008297781171313934,
+      0.0002955268368371021
+     ],
+     "probabilities": [
+      0.013293728962256146,
+      0.0011725792909269548,
+      0.7483699499423535,
+      0.17487995803478273,
+      0.06228378376968074
+     ],
+     "log_coverage": -5.350696727149963,
+     "coverage": 0.0047448439858748985,
+     "n_prompt_tokens": 239,
+     "prompt_token_sha256": "sha256:fe380144d5fdc2cf630cde2fb5dffa38b0de3764eb5d9d1396f30dd6a492ab39",
+     "warnings": [],
+     "expected_value": 3.2716874883587055
+    },
+    "r18": {
+     "id": "r18",
+     "status": "context_limit",
+     "error": {
+      "code": "context_limit",
+      "message": "the rendered prompt exceeds the context limit"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": 3216,
+     "prompt_token_sha256": null,
+     "warnings": [],
+     "expected_value": null
+    },
+    "r19": {
+     "id": "r19",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -11.81442970132396,
+      -7.522926393077682,
+      -7.391381801504534,
+      -7.27692670774382,
+      -13.40389390475027
+     ],
+     "candidate_probs": [
+      7.3970469269726715e-06,
+      0.0005405483919460412,
+      0.0006165434240010598,
+      0.0006913068904075609,
+      1.5092557570746958e-06
+     ],
+     "probabilities": [
+      0.0039826775306018225,
+      0.2910391073708537,
+      0.3319559366935461,
+      0.372209673178754,
+      0.0008126052262443664
+     ],
+     "log_coverage": -6.288628761828129,
+     "coverage": 0.0018573050090387084,
+     "n_prompt_tokens": 249,
+     "prompt_token_sha256": "sha256:17b538f21440990ec57bb56aaa800415368c93ceffd8c0ccd7d7f32d0b785c53",
+     "warnings": [],
+     "expected_value": 3.0748304211991853
+    },
+    "r20": {
+     "id": "r20",
+     "status": "numerical_error",
+     "error": {
+      "code": "numerical_error",
+      "message": "the model produced non-finite logits"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": 228,
+     "prompt_token_sha256": null,
+     "warnings": [],
+     "expected_value": null
+    },
+    "r21": {
+     "id": "r21",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -10.70230542756168,
+      -4.10764828706777,
+      -15.474554195911526,
+      -4.569422160756861,
+      -11.19792660050371
+     ],
+     "candidate_probs": [
+      2.24930220590856e-05,
+      0.016446406309462695,
+      1.9032090878781726e-07,
+      0.010363946682802523,
+      1.3702577549825544e-05
+     ],
+     "probabilities": [
+      0.0008378307001144075,
+      0.6126035032743523,
+      7.089163022969508e-06,
+      0.3860411767876876,
+      0.000510400074822538
+     ],
+     "log_coverage": -3.6176109211658867,
+     "coverage": 0.026846738912782917,
+     "n_prompt_tokens": 251,
+     "prompt_token_sha256": "sha256:867d3210268a5e34d94cdc5c3d66b3a0f6690d25e6e47dc77c266806081a5be9",
+     "warnings": [],
+     "expected_value": 2.7727828122627516
+    },
+    "r22": {
+     "id": "r22",
+     "status": "inference_error",
+     "error": {
+      "code": "inference_error",
+      "message": "native evaluation failed"
+     },
+     "candidate_log_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "candidate_probs": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "probabilities": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "log_coverage": null,
+     "coverage": null,
+     "n_prompt_tokens": 242,
+     "prompt_token_sha256": null,
+     "warnings": [],
+     "expected_value": null
+    },
+    "r23": {
+     "id": "r23",
+     "status": "ok",
+     "error": null,
+     "candidate_log_probs": [
+      -9.85213491188169,
+      -13.326836075899433,
+      -9.46627137106442,
+      -4.61590885219544,
+      -11.85209998432955
+     ],
+     "candidate_probs": [
+      5.2634702527784866e-05,
+      1.6301539888845964e-06,
+      7.741953871368642e-05,
+      0.00989318787426234,
+      7.123581179580589e-06
+     ],
+     "probabilities": [
+      0.005246683044058241,
+      0.0001624954807746808,
+      0.007717261835639443,
+      0.9861634735025697,
+      0.0007100861369578026
+     ],
+     "log_coverage": -4.601975708700881,
+     "coverage": 0.010031995850672276,
+     "n_prompt_tokens": 239,
+     "prompt_token_sha256": "sha256:b3bd1fa62f714320efeb7e9776757b25ad907eb07609230a0e81ed94a503914c",
+     "warnings": [],
+     "expected_value": 3.976927784207594
+    }
+   },
+   "meta_execution": {
+    "backend": "fake"
+   }
+  }
+ },
+ "invalid_codes": {
+  "task": {
+   "schema_version": 1,
+   "name": "Communicative function",
+   "instructions": "Classify the text's primary communicative function.",
+   "categories": [
+    {
+     "id": "description",
+     "label": "description",
+     "response": "description",
+     "value": null
+    },
+    {
+     "id": "question",
+     "label": "question",
+     "response": "question",
+     "value": null
+    },
+    {
+     "id": "request",
+     "label": "request",
+     "response": "request",
+     "value": null
+    }
+   ],
+   "ordered": false,
+   "examples": []
+  },
+  "error_response": {
+   "status": 422,
+   "body": {
+    "error": {
+     "code": "invalid_response_codes",
+     "message": "one or more response codes are not distinct single tokens at the answer boundary",
+     "details": {
+      "problems": [
+       {
+        "category_id": "description",
+        "response": "description",
+        "problem": "multi_token",
+        "tokens": [
+         {
+          "token_id": 355,
+          "piece": "desc"
+         },
+         {
+          "token_id": 356,
+          "piece": "ription"
+         }
+        ]
+       },
+       {
+        "category_id": "question",
+        "response": "question",
+        "problem": "multi_token",
+        "tokens": [
+         {
+          "token_id": 357,
+          "piece": "quest"
+         },
+         {
+          "token_id": 358,
+          "piece": "ion"
+         }
+        ]
+       },
+       {
+        "category_id": "request",
+        "response": "request",
+        "problem": "multi_token",
+        "tokens": [
+         {
+          "token_id": 360,
+          "piece": "req"
+         },
+         {
+          "token_id": 361,
+          "piece": "uest"
+         }
+        ]
+       }
+      ],
+      "suggestions": {
+       "prefix": {
+        "complete": {
+         "source": "from_response",
+         "responses": [
+          "desc",
+          "quest",
+          "req"
+         ]
+        },
+        "per_category": [
+         {
+          "category_id": "description",
+          "from_response": "desc",
+          "from_label": "desc",
+          "collision": false
+         },
+         {
+          "category_id": "question",
+          "from_response": "quest",
+          "from_label": "quest",
+          "collision": false
+         },
+         {
+          "category_id": "request",
+          "from_response": "req",
+          "from_label": "req",
+          "collision": false
+         }
+        ]
+       },
+       "generic": [
+        {
+         "kind": "letters",
+         "responses": [
+          "A",
+          "B",
+          "C"
+         ]
+        },
+        {
+         "kind": "digits",
+         "responses": [
+          "1",
+          "2",
+          "3"
+         ]
+        }
+       ]
+      }
+     },
+     "request_id": "prepare-invalid"
+    }
+   }
+  }
+ }
+}

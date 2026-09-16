@@ -167,6 +167,59 @@ class InfoResponse(_Strict):
     item_statuses: list[ItemStatusName]
 
 
+# -- client files (written by the R and Python clients, read by both) ---------------------
+
+ResultItemStatus = Literal[
+    "ok", "missing_input", "empty_input", "invalid_encoding", "context_limit",
+    "boundary_error", "numerical_error", "inference_error", "pending",
+]
+
+
+class ResultItem(ItemResult):
+    status: ResultItemStatus
+    text_sha256: str | None = Field(description="SHA-256 (hex) of the UTF-8 text; null for missing text")
+
+
+class ClientInfo(_Strict):
+    language: Literal["python", "r"]
+    package: str
+    version: str
+
+
+class ResultFile(_Strict):
+    result_schema_version: Literal[1]
+    protocol_version: Literal[1]
+    created_at: str
+    client: ClientInfo
+    engine_fingerprint: str
+    engine: dict[str, Any]
+    execution: dict[str, Any]
+    prepared: PreparedTask
+    category_ids: list[str]
+    items: list[ResultItem]
+
+
+class CheckpointManifest(_Strict):
+    checkpoint_schema_version: Literal[1]
+    created_at: str
+    client: ClientInfo
+    protocol_version: Literal[1]
+    engine_fingerprint: str
+    engine: dict[str, Any]
+    execution: dict[str, Any]
+    prepared: PreparedTask
+    ids: list[str]
+    text_sha256: list[str | None]
+
+
+class CheckpointChunk(_Strict):
+    checkpoint_schema_version: Literal[1]
+    sequence: int
+    engine_fingerprint: str
+    prepared_hash: str
+    results: list[ResultItem]
+
+
 EXPORTED = {
     "task.v1.json": Task,
     "prepared-task.v1.json": PreparedTask,
@@ -176,6 +229,9 @@ EXPORTED = {
     "score-response.v1.json": ScoreResponse,
     "info-response.v1.json": InfoResponse,
     "error.v1.json": ErrorEnvelope,
+    "result.v1.json": ResultFile,
+    "checkpoint-manifest.v1.json": CheckpointManifest,
+    "checkpoint-chunk.v1.json": CheckpointChunk,
 }
 
 

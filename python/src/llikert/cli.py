@@ -22,8 +22,8 @@ def _add_engine_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
     p.add_argument("--n-ctx", type=int, default=4096)
     p.add_argument("--batch-size", type=int, default=512, help="physical micro-batch size (affects numerics)")
-    p.add_argument("--flash-attn", choices=["auto", "on", "off"], default="auto")
-    p.add_argument("--kv-type", choices=["f16", "f32"], default="f16")
+    p.add_argument("--flash-attn", choices=["auto", "on", "off"], default="off")
+    p.add_argument("--kv-type", choices=["f16", "f32"], default="f32")
     p.add_argument("--threads", type=int, default=None)
 
 

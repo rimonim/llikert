@@ -2,7 +2,7 @@ import pathlib
 
 from llikert.server.schemas import export_schemas
 
-REPO = pathlib.Path(__file__).resolve().parents[2]
+REPO = pathlib.Path(__file__).resolve().parents[3]
 
 
 def test_committed_schemas_match_models(capsys):

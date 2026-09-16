@@ -10,7 +10,7 @@ from llikert.server.fake_adapter import FakeAdapter
 from llikert.server.schemas import ErrorEnvelope, InfoResponse, PrepareResponse, ScoreResponse
 from llikert.server.service import StartupError
 
-from conftest import make_service, task_dict
+from .conftest import make_service, task_dict
 
 TOKEN = "t" * 32
 

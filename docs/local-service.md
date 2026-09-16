@@ -18,11 +18,11 @@ Use a distribution or python.org CPython 3.10 or newer, **not a conda Python**. 
 The service requires llama-cpp-python 0.3.35 built against llama.cpp v0.4.1. A llama-cpp-python wheel from PyPI is rejected at startup.
 
 ```bash
-PYTHON=.venv/bin/python tools/build-llama-cpp-python.sh cuda   # CUDA 12.x toolkit required
+CUDA_HOME=/usr/local/cuda-12.9 PYTHON=.venv/bin/python tools/build-llama-cpp-python.sh cuda
 .venv/bin/pip install --no-deps build/wheels/cuda/llama_cpp_python-0.3.35-*.whl
 ```
 
-For other GPU generations, set `CUDA_ARCHITECTURES`; the default of 89 is Ada.
+Set `CUDA_HOME` to the toolkit you mean to use. The script pins CMake to it, because otherwise a distribution CUDA runtime can be linked silently. Check the result with `llikert selfcheck`: `math_libraries` should list `libcublas.so.12.9…`. For other GPU generations, set `CUDA_ARCHITECTURES`; the default of 89 is Ada.
 
 ## 3. Model file
 
@@ -53,7 +53,7 @@ sha256sum models/qwen3-4b-instruct-2507-f32.gguf
 
 `serve` binds to `127.0.0.1:8080` by default. `/health` returns 503 while the model file is hashed and loaded (about 15 s for the F32 file), then 200. Stop the service with Ctrl-C.
 
-The defaults (`--device cuda --batch-size 512 --flash-attn auto --kv-type f16 --n-ctx 4096`) are the supported profile. Changing any execution setting changes the engine fingerprint, and a profile you change is not covered by the fidelity evidence in `docs/compatibility.md`.
+The defaults (`--device cuda --batch-size 512 --flash-attn off --kv-type f32 --n-ctx 4096`) are the supported profile. Changing any execution setting changes the engine fingerprint, and a profile you change is not covered by the fidelity evidence in `docs/compatibility.md`.
 
 ## Serving beyond this machine
 

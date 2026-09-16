@@ -4,7 +4,7 @@ from llikert.server.fake_adapter import FAKE_CHAT_TEMPLATE
 from llikert.server.render import Renderer, RenderError, messages_for, system_message
 from llikert.server.task import parse_task
 
-from conftest import task_dict
+from .conftest import task_dict
 
 
 def test_segments_alternate_and_reconstruct_prompt():

@@ -1,0 +1,66 @@
+{
+ "checkpoint_schema_version": 1,
+ "sequence": 1,
+ "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+ "prepared_hash": "sha256:c296106417be6ec57750a28321c65e4c80869ece7920eab5f5e42d5a0584ff11",
+ "results": [
+  {
+   "id": "r04",
+   "status": "missing_input",
+   "error": {
+    "code": "missing_input",
+    "message": "text is missing"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": null,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "text_sha256": null
+  },
+  {
+   "id": "r07",
+   "status": "empty_input",
+   "error": {
+    "code": "empty_input",
+    "message": "text is empty"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": null,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+ ]
+}

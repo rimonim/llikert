@@ -39,8 +39,10 @@ class LlamaConfig:
     device: str = "cuda"  # "cuda" | "cpu"
     n_ctx: int = 4096
     batch_size: int = 512
-    flash_attn: str = "auto"  # "auto" | "on" | "off"
-    kv_type: str = "f16"  # "f16" | "f32"
+    # defaults are the supported profile: the only 512-batch CUDA configuration that passed the
+    # reference-fidelity gate on CUDA 12.9 / cuBLAS 12.9 (docs/decisions/0004-m2-cuda-toolchain.md)
+    flash_attn: str = "off"  # "auto" | "on" | "off"
+    kv_type: str = "f32"  # "f16" | "f32"
     threads: int | None = None
     expected_sha256: str | None = None
 
@@ -92,6 +94,7 @@ class LlamaAdapter:
             raise AdapterStartupError("llama.cpp could not load the model file")
         self._vocab = L.llama_model_get_vocab(self._model)
         self._n_vocab = L.llama_vocab_n_tokens(self._vocab)
+        self._math_libraries = native.Native.loaded_math_libraries()
         self._threads = config.threads or os.cpu_count() or 4
         self._ctx = None
         self._init_context()
@@ -299,6 +302,7 @@ class LlamaAdapter:
                 "add_bos": bool(L.llama_vocab_get_add_bos(self._vocab)),
             },
             "device": {"type": self.config.device, "devices": [d["description"] for d in self._devices]},
+            "math_libraries": self._math_libraries,
             "n_gpu_layers": -1 if self.config.device == "cuda" else 0,
             "n_ctx": self._eff_n_ctx,
             "n_ubatch": self._eff_n_ubatch,

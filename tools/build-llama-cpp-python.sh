@@ -26,7 +26,13 @@ actual=$(git -C "$SRC/vendor/llama.cpp" rev-parse HEAD)
 rm -rf "$SRC/build"
 
 case "$VARIANT" in
-  cuda) export CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=${CUDA_ARCHITECTURES:-89}" ;;
+  cuda)
+    # pin the toolkit root: otherwise CMake can link a distribution CUDA runtime from
+    # /lib/x86_64-linux-gnu (CUDA 11 on Ubuntu 22.04) while compiling with a newer nvcc
+    CUDA_HOME=${CUDA_HOME:-/usr/local/cuda}
+    export CUDACXX="$CUDA_HOME/bin/nvcc"
+    export CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=${CUDA_ARCHITECTURES:-89} -DCUDAToolkit_ROOT=$CUDA_HOME -DCMAKE_CUDA_COMPILER=$CUDA_HOME/bin/nvcc"
+    ;;
   cpu)  export CMAKE_ARGS="-DGGML_CUDA=off -DGGML_NATIVE=off -DGGML_AVX2=on -DGGML_F16C=on -DGGML_FMA=on" ;;
   *) echo "variant must be cuda or cpu" >&2; exit 2 ;;
 esac

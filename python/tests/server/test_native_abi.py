@@ -16,7 +16,7 @@ import pytest
 from llikert.server import native
 
 HERE = pathlib.Path(__file__).parent
-REPO = HERE.parents[1]
+REPO = HERE.parents[2]
 SOURCE = pathlib.Path(os.environ.get("LLIKERT_LLAMA_CPP_SOURCE", REPO / "build/llama-cpp-python/vendor/llama.cpp"))
 
 

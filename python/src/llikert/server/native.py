@@ -173,6 +173,9 @@ FLASH_ATTN_TYPES = {"auto": -1, "off": 0, "on": 1}
 TOKEN_ATTR = {"unknown": 1 << 0, "unused": 1 << 1, "normal": 1 << 2, "control": 1 << 3, "user_defined": 1 << 4, "byte": 1 << 5}
 
 
+MATH_LIBRARY_PREFIXES = ("libcudart.", "libcublas.", "libcublasLt.", "libopenblas", "libmkl_", "libvulkan.")
+
+
 class NativeLibraryError(RuntimeError):
     """The pinned llama.cpp build is missing or a different version is installed."""
 
@@ -225,6 +228,24 @@ class Native:
         _declare(self.llama, PROTOTYPES)
         _declare(self.ggml, GGML_PROTOTYPES)
         _declare(self.ggml_base, GGML_BASE_PROTOTYPES)
+
+    @staticmethod
+    def loaded_math_libraries() -> list[str]:
+        """Resolved file names of loaded GPU runtime and BLAS libraries (Linux).
+
+        These change numerics (a cuBLAS 11 vs 12 build is a different engine), so they are
+        part of the engine identity. Call after the backend has initialized.
+        """
+        maps = pathlib.Path("/proc/self/maps")
+        if not maps.exists():
+            return []
+        names = set()
+        for line in maps.read_text().splitlines():
+            path = line.split()[-1] if line.split() else ""
+            name = pathlib.Path(path).name
+            if name.startswith(MATH_LIBRARY_PREFIXES):
+                names.add(pathlib.Path(path).resolve().name)
+        return sorted(names)
 
     def devices(self) -> list[dict[str, str]]:
         out = []

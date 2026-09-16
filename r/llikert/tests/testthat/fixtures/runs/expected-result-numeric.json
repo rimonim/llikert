@@ -1,0 +1,922 @@
+{
+ "result_schema_version": 1,
+ "protocol_version": 1,
+ "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+ "engine": {
+  "fingerprint_version": 1,
+  "model_and_execution": {
+   "backend": "fake",
+   "fake_adapter_version": 1,
+   "n_vocab": 378,
+   "n_ctx": 512
+  },
+  "template_profile": {
+   "name": "fake-chatml",
+   "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+  },
+  "renderer_version": 1,
+  "boundary_policy": "tail-suffix-v1",
+  "postprocessing_version": 1,
+  "prepared_schema_version": 1,
+  "tokenization": {
+   "template_segments": "parse_special",
+   "content_segments": "ordinary_text",
+   "add_bos": false
+  }
+ },
+ "execution": {
+  "backend": "fake"
+ },
+ "prepared": {
+  "prepared_schema_version": 1,
+  "task": {
+   "schema_version": 1,
+   "name": "Sentiment",
+   "instructions": "Rate the overall sentiment of the text.",
+   "categories": [
+    {
+     "id": "very negative",
+     "label": "very negative",
+     "response": "1",
+     "value": 1.0
+    },
+    {
+     "id": "negative",
+     "label": "negative",
+     "response": "2",
+     "value": 2.0
+    },
+    {
+     "id": "neutral",
+     "label": "neutral",
+     "response": "3",
+     "value": 3.0
+    },
+    {
+     "id": "positive",
+     "label": "positive",
+     "response": "4",
+     "value": 4.0
+    },
+    {
+     "id": "very positive",
+     "label": "very positive",
+     "response": "5",
+     "value": 5.0
+    }
+   ],
+   "ordered": true,
+   "examples": [
+    {
+     "text": "I love it.",
+     "category_id": "very positive"
+    }
+   ]
+  },
+  "task_hash": "sha256:09ccaf13f957cbed77d8ecf976eab3062eb65ffa2bb117e4261f6bfef9e0d69c",
+  "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+  "profile": {
+   "name": "fake-chatml",
+   "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+  },
+  "boundary_policy": "tail-suffix-v1",
+  "tail_tokens": [
+   1,
+   354,
+   0,
+   369,
+   354
+  ],
+  "categories": [
+   {
+    "id": "very negative",
+    "label": "very negative",
+    "response": "1",
+    "value": 1.0,
+    "token_id": 276,
+    "token_piece": "1"
+   },
+   {
+    "id": "negative",
+    "label": "negative",
+    "response": "2",
+    "value": 2.0,
+    "token_id": 277,
+    "token_piece": "2"
+   },
+   {
+    "id": "neutral",
+    "label": "neutral",
+    "response": "3",
+    "value": 3.0,
+    "token_id": 278,
+    "token_piece": "3"
+   },
+   {
+    "id": "positive",
+    "label": "positive",
+    "response": "4",
+    "value": 4.0,
+    "token_id": 279,
+    "token_piece": "4"
+   },
+   {
+    "id": "very positive",
+    "label": "very positive",
+    "response": "5",
+    "value": 5.0,
+    "token_id": 280,
+    "token_piece": "5"
+   }
+  ],
+  "prepared_hash": "sha256:8bd56c08cce45cccff68813023043c887bbb3a0d54cf8cd73a1c8cb4f1773b61"
+ },
+ "category_ids": [
+  "very negative",
+  "negative",
+  "neutral",
+  "positive",
+  "very positive"
+ ],
+ "items": [
+  {
+   "id": "r01",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -8.825742699369847,
+    -7.400520402629817,
+    -10.202325653926843,
+    -10.992050835472623,
+    -6.876669769479758
+   ],
+   "candidate_probs": [
+    0.00014690231742668316,
+    0.0006109347463402413,
+    3.7083973829559524e-05,
+    1.6834994442407366e-05,
+    0.0010315737094698254
+   ],
+   "probabilities": [
+    0.07969399837624681,
+    0.3314299837858675,
+    0.020117927354227627,
+    0.009132926173386843,
+    0.5596251643102712
+   ],
+   "log_coverage": -6.296181700666518,
+   "coverage": 0.0018433297415087167,
+   "n_prompt_tokens": 249,
+   "prompt_token_sha256": "sha256:0e70ada44d42a52cc7d8cfe73729ee160fc03ffaecebb797d5b09b6607f519c6",
+   "warnings": [],
+   "expected_value": 3.637565274255568,
+   "text_sha256": "fdff77e4922c88b06f166ab1fcf8b0e71f49b58126b5bbf73cd7952daff26cff"
+  },
+  {
+   "id": "r02",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -8.125665604592102,
+    -13.283668088534505,
+    -5.039276812050712,
+    -9.544021947645012,
+    -12.709356131958234
+   ],
+   "candidate_probs": [
+    0.0002958477468887849,
+    1.7020654249095903e-06,
+    0.0064784317483558874,
+    7.16281827479548e-05,
+    3.0227119526851595e-06
+   ],
+   "probabilities": [
+    0.04318546481892624,
+    0.0002484537648163183,
+    0.9456691466898701,
+    0.010455703647012222,
+    0.00044123107937510983
+   ],
+   "log_coverage": -4.983414301718959,
+   "coverage": 0.006850632455370221,
+   "n_prompt_tokens": 240,
+   "prompt_token_sha256": "sha256:cb1035ffef57f0baf99c8bb48a82d5f3d1737659203abbd769acc8c1592dfbb6",
+   "warnings": [],
+   "expected_value": 2.924718782403094,
+   "text_sha256": "e63f43c3e08e4bf10f7c01a2beb7644d11121eb2382b831f269f8857ddd249b7"
+  },
+  {
+   "id": "r03",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -9.110269366773977,
+    -9.044006194586226,
+    -11.337833025797327,
+    -13.350334850994704,
+    -13.117646507484807
+   ],
+   "candidate_probs": [
+    0.00011052493937462148,
+    0.00011809676884883788,
+    1.1913563395171007e-05,
+    1.5922939414522609e-06,
+    2.009456023723834e-06
+   ],
+   "probabilities": [
+    0.452716833594535,
+    0.48373150488484207,
+    0.04879867591520267,
+    0.006522132248204166,
+    0.008230853357216178
+   ],
+   "log_coverage": -8.317780926420996,
+   "coverage": 0.00024413702158380656,
+   "n_prompt_tokens": 240,
+   "prompt_token_sha256": "sha256:7c9ab1acb9cfcd9d38630928f29a1ebae5a2ae2ef61c8f6dfa4f9992de43bf46",
+   "warnings": [],
+   "expected_value": 1.633818666888725,
+   "text_sha256": "883cd6f3633c178602badca2e695b4506e7f6a6c76063ff8312e52c6de7a328b"
+  },
+  {
+   "id": "r04",
+   "status": "missing_input",
+   "error": {
+    "code": "missing_input",
+    "message": "text is missing"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": null,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "expected_value": null,
+   "text_sha256": null
+  },
+  {
+   "id": "r05",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -11.645414825594706,
+    -11.065397553761533,
+    -15.347918442969013,
+    -9.829903956520003,
+    -18.32863107232042
+   ],
+   "candidate_probs": [
+    8.759122532160149e-06,
+    1.5644399667214584e-05,
+    2.1601490155333402e-07,
+    5.38179256097292e-05,
+    1.0964192816632748e-08
+   ],
+   "probabilities": [
+    0.11165453378609777,
+    0.19942273267587743,
+    0.0027535912456106665,
+    0.6860293792245056,
+    0.00013976306790859595
+   ],
+   "log_coverage": -9.453069131204586,
+   "coverage": 7.844842690347396e-05,
+   "n_prompt_tokens": 245,
+   "prompt_token_sha256": "sha256:f2b7f9a905c7f4e467c0337c7694c09ee0060c7d550bea455097967b442173b5",
+   "warnings": [],
+   "expected_value": 3.2635771051122497,
+   "text_sha256": "0c9b5eafa71825918fcfbcfa3690aae7fbe59732c3a53d55c6acde44e66a1a24"
+  },
+  {
+   "id": "r06",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -6.725103655828619,
+    -5.731175167865362,
+    -14.217866190612689,
+    -15.567135118160738,
+    -8.307344935006533
+   ],
+   "candidate_probs": [
+    0.0012003961450049497,
+    0.0032432636140497695,
+    6.687428765955333e-07,
+    1.7349186640634001e-07,
+    0.00024669817428426915
+   ],
+   "probabilities": [
+    0.25588252515256343,
+    0.6913505068737636,
+    0.00014255262036046336,
+    3.698240539526429e-05,
+    0.05258743294791706
+   ],
+   "log_coverage": -5.362066829882787,
+   "coverage": 0.004691200168081991,
+   "n_prompt_tokens": 240,
+   "prompt_token_sha256": "sha256:d2f6beefa57be7521a7e2058b24ae967bb90c747f8f6da7e0a2397be24139337",
+   "warnings": [],
+   "expected_value": 1.9020962911223385,
+   "text_sha256": "4458847ee024672dd621bfc9c1b295ec06e0bdaeb94c25cf002fdb8e95fa7bbd"
+  },
+  {
+   "id": "r07",
+   "status": "empty_input",
+   "error": {
+    "code": "empty_input",
+    "message": "text is empty"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": null,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "expected_value": null,
+   "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "id": "r08",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -9.709697903501217,
+    -13.87576348510115,
+    -6.910022169242562,
+    -14.926859478654265,
+    -8.822563140039824
+   ],
+   "candidate_probs": [
+    6.069204617449494e-05,
+    9.415263658979636e-07,
+    0.0009977356771948887,
+    3.2911471186985763e-07,
+    0.00014737014540994444
+   ],
+   "probabilities": [
+    0.05028053145192249,
+    0.0007800107104189386,
+    0.8265775049611809,
+    0.0002726561990328301,
+    0.12208929667744499
+   ],
+   "log_coverage": -6.719560578032572,
+   "coverage": 0.001207068509857096,
+   "n_prompt_tokens": 236,
+   "prompt_token_sha256": "sha256:660c6d207bdbb0d2442d3c2599de5d97afd79c239a2c7ed0044878f67c1779f6",
+   "warnings": [],
+   "expected_value": 3.1431101759396594,
+   "text_sha256": "09ea26793343ba6c850b0e7b499ff5d4fca39de5381cdec99a6375a7b4efbc64"
+  },
+  {
+   "id": "r09",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -8.852967231668384,
+    -9.375255934605583,
+    -9.18182491946839,
+    -9.77586179691778,
+    -9.245658103503757
+   ],
+   "candidate_probs": [
+    0.00014295692002355535,
+    8.479653010255229e-05,
+    0.00010289259101973264,
+    5.6806386685179e-05,
+    9.65298661709001e-05
+   ],
+   "probabilities": [
+    0.29537634288536263,
+    0.17520585185336546,
+    0.21259577528950815,
+    0.11737286134057155,
+    0.19944916863119214
+   ],
+   "log_coverage": -7.6334622345574665,
+   "coverage": 0.0004839822940019191,
+   "n_prompt_tokens": 238,
+   "prompt_token_sha256": "sha256:6c4a92b6c195a72076a8843eef5a584e5643d74f1a8d272a75ce9b6d93c546cb",
+   "warnings": [],
+   "expected_value": 2.750312660978865,
+   "text_sha256": "71546a5e24fd9a671876b51aa781fe1b23246f389e9dc2fd500ccef9014a5e44"
+  },
+  {
+   "id": "r10",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -8.825742699369847,
+    -7.400520402629817,
+    -10.202325653926843,
+    -10.992050835472623,
+    -6.876669769479758
+   ],
+   "candidate_probs": [
+    0.00014690231742668316,
+    0.0006109347463402413,
+    3.7083973829559524e-05,
+    1.6834994442407366e-05,
+    0.0010315737094698254
+   ],
+   "probabilities": [
+    0.07969399837624681,
+    0.3314299837858675,
+    0.020117927354227627,
+    0.009132926173386843,
+    0.5596251643102712
+   ],
+   "log_coverage": -6.296181700666518,
+   "coverage": 0.0018433297415087167,
+   "n_prompt_tokens": 249,
+   "prompt_token_sha256": "sha256:0e70ada44d42a52cc7d8cfe73729ee160fc03ffaecebb797d5b09b6607f519c6",
+   "warnings": [],
+   "expected_value": 3.637565274255568,
+   "text_sha256": "fdff77e4922c88b06f166ab1fcf8b0e71f49b58126b5bbf73cd7952daff26cff"
+  },
+  {
+   "id": "r11",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -7.400707571554502,
+    -9.06488218473434,
+    -10.11141741100475,
+    -9.066251079249794,
+    -6.140403351243065
+   ],
+   "candidate_probs": [
+    0.0006108204090412444,
+    0.00011565693742156192,
+    4.0613200407764953e-05,
+    0.000115498723587982,
+    0.0021540546024485575
+   ],
+   "probabilities": [
+    0.2011498333706414,
+    0.038087092942788364,
+    0.013374370557613046,
+    0.03803499139904412,
+    0.709353711729913
+   ],
+   "log_coverage": -5.797002362584232,
+   "coverage": 0.0030366438729071098,
+   "n_prompt_tokens": 239,
+   "prompt_token_sha256": "sha256:6c44e74dc070758e84630e007801afceb7624748d900e668663be952d9a7e2c9",
+   "warnings": [],
+   "expected_value": 4.016355655174799,
+   "text_sha256": "92bcb7159c30445b8b2dcde4c2a0d00d79616ea8956e81d07c24ccf1983a1faf"
+  },
+  {
+   "id": "r12",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -10.747588442246212,
+    -9.264388457902362,
+    -10.72399676039503,
+    -11.640882342933068,
+    -10.241037883101923
+   ],
+   "candidate_probs": [
+    2.1497187566530037e-05,
+    9.473865494468009e-05,
+    2.2010372016843442e-05,
+    8.798913210328147e-06,
+    3.567580310678246e-05
+   ],
+   "probabilities": [
+    0.11765038338572475,
+    0.5184882460179704,
+    0.1204589529783799,
+    0.04815492767921736,
+    0.19524748993870758
+   ],
+   "log_coverage": -8.607550537129327,
+   "coverage": 0.0001827209308451643,
+   "n_prompt_tokens": 254,
+   "prompt_token_sha256": "sha256:01bbbb336dbf9fd7acd33e6fc72312f8bfdf0a82df4b292fa09d6fe66f1dc93b",
+   "warnings": [],
+   "expected_value": 2.6848608947672123,
+   "text_sha256": "5ce6728084f22bba3866187aa3588ff8becff85839245bfd9403e07cfb4df350"
+  },
+  {
+   "id": "r13",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -9.596768319959118,
+    -10.51648318425302,
+    -6.50801379536901,
+    -11.00530158797164,
+    -11.862123098608336
+   ],
+   "candidate_probs": [
+    6.794796814925279e-05,
+    2.708628127543355e-05,
+    0.0014914390863561542,
+    1.6613389555964545e-05,
+    7.0525373463441e-06
+   ],
+   "probabilities": [
+    0.04220005668082636,
+    0.016822322083058054,
+    0.926279559117643,
+    0.010317983009916697,
+    0.00438007910855592
+   ],
+   "log_coverage": -6.431434605165588,
+   "coverage": 0.001610139262683149,
+   "n_prompt_tokens": 244,
+   "prompt_token_sha256": "sha256:a7cc337be7d8a5f329c5ccd9d9bb136fa89ac1eeb0920b23ea91b7c9bd48d9ab",
+   "warnings": [],
+   "expected_value": 2.917855705782318,
+   "text_sha256": "0f69650a65cf99e3ebcfd3923ec23443a52f334a67f6e2dc68a853814b231270"
+  },
+  {
+   "id": "r14",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -10.91065109646511,
+    -9.705588308459895,
+    -11.199632643515631,
+    -15.798779128652782,
+    -10.840163374152555
+   ],
+   "candidate_probs": [
+    1.8262676862619514e-05,
+    6.094197911633566e-05,
+    1.3679220293058962e-05,
+    1.3761868498102821e-07,
+    1.9596425630435858e-05
+   ],
+   "probabilities": [
+    0.16216492692600615,
+    0.5411392680530208,
+    0.12146575093649585,
+    0.0012219963240591705,
+    0.1740080577604181
+   ],
+   "log_coverage": -9.09150970228064,
+   "coverage": 0.00011261792058743098,
+   "n_prompt_tokens": 245,
+   "prompt_token_sha256": "sha256:be3dc03d3d5e2194125ec5d6417bd7c8d48e2eae0e5fdf692e8c7ef6d0b28d8e",
+   "warnings": [],
+   "expected_value": 2.4837689899398625,
+   "text_sha256": "e79d82e93681e1ab58522acbb27c9c720fd0c3b96e1f3881de9bd3c8cf20ea20"
+  },
+  {
+   "id": "r15",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -11.831500243031506,
+    -6.073221214485619,
+    -7.8284348514561435,
+    -12.982434327334282,
+    -15.414355979500623
+   ],
+   "candidate_probs": [
+    7.271846984604672e-06,
+    0.0023037404037369725,
+    0.00039824831051476627,
+    2.3003843798137604e-06,
+    2.021297579872442e-07
+   ],
+   "probabilities": [
+    0.0026815937758874315,
+    0.8495360176032795,
+    0.14685955204984844,
+    0.0008482984375382323,
+    7.453813344639488e-05
+   ],
+   "log_coverage": -5.910156274307939,
+   "coverage": 0.002711763075374144,
+   "n_prompt_tokens": 218,
+   "prompt_token_sha256": "sha256:ddc694f362e24596ac2e598fce0461c9305712296afc34dbcb0546f13fa34ee9",
+   "warnings": [],
+   "expected_value": 2.1460981695493766,
+   "text_sha256": "0aad7da77d2ed59c396c99a74e49f3a4524dcdbcb5163251b1433d640247aeb4"
+  },
+  {
+   "id": "r16",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -8.217232963076277,
+    -11.424068139004941,
+    -13.349429082408086,
+    -6.932272055297394,
+    -10.977042260289114
+   ],
+   "candidate_probs": [
+    0.000269961024503597,
+    1.0929247132236062e-05,
+    1.5937368446546389e-06,
+    0.0009757813187660664,
+    1.7089569346785658e-05
+   ],
+   "probabilities": [
+    0.21167521701190994,
+    0.008569573192081414,
+    0.0012496418439382968,
+    0.7651057140036246,
+    0.013399853948445567
+   ],
+   "log_coverage": -6.6645307888347105,
+   "coverage": 0.0012753548965933397,
+   "n_prompt_tokens": 235,
+   "prompt_token_sha256": "sha256:c4a0420ac6d767a6f1e96e98c0ad5bab800b0b867c0ef99eef401525753780c8",
+   "warnings": [
+    {
+     "code": "reserved_marker_text",
+     "message": "text contains special-token text, scored as ordinary text"
+    }
+   ],
+   "expected_value": 3.3599854146846138,
+   "text_sha256": "e60f94b5349d07bb46b82d13fa4c54e747a41f3829fe6eba12212c4508ed1806"
+  },
+  {
+   "id": "r17",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -9.671159588695863,
+    -12.099246161556248,
+    -5.64055456494028,
+    -7.0943522216696895,
+    -8.126750906842194
+   ],
+   "candidate_probs": [
+    6.307666991641205e-05,
+    5.563705796516222e-06,
+    0.003550898656193476,
+    0.0008297781171313934,
+    0.0002955268368371021
+   ],
+   "probabilities": [
+    0.013293728962256146,
+    0.0011725792909269548,
+    0.7483699499423535,
+    0.17487995803478273,
+    0.06228378376968074
+   ],
+   "log_coverage": -5.350696727149963,
+   "coverage": 0.0047448439858748985,
+   "n_prompt_tokens": 239,
+   "prompt_token_sha256": "sha256:fe380144d5fdc2cf630cde2fb5dffa38b0de3764eb5d9d1396f30dd6a492ab39",
+   "warnings": [],
+   "expected_value": 3.2716874883587055,
+   "text_sha256": "97abd604afe21f970d1f49c0dc9e5fd269042c7342a8c4a7cac06a77afa0dacc"
+  },
+  {
+   "id": "r18",
+   "status": "context_limit",
+   "error": {
+    "code": "context_limit",
+    "message": "the rendered prompt exceeds the context limit"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": 3216,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "expected_value": null,
+   "text_sha256": "a59203b04b82156942a4451086e53f2ab7ee167397112ffdb5786d91b1ee9086"
+  },
+  {
+   "id": "r19",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -11.81442970132396,
+    -7.522926393077682,
+    -7.391381801504534,
+    -7.27692670774382,
+    -13.40389390475027
+   ],
+   "candidate_probs": [
+    7.3970469269726715e-06,
+    0.0005405483919460412,
+    0.0006165434240010598,
+    0.0006913068904075609,
+    1.5092557570746958e-06
+   ],
+   "probabilities": [
+    0.0039826775306018225,
+    0.2910391073708537,
+    0.3319559366935461,
+    0.372209673178754,
+    0.0008126052262443664
+   ],
+   "log_coverage": -6.288628761828129,
+   "coverage": 0.0018573050090387084,
+   "n_prompt_tokens": 249,
+   "prompt_token_sha256": "sha256:17b538f21440990ec57bb56aaa800415368c93ceffd8c0ccd7d7f32d0b785c53",
+   "warnings": [],
+   "expected_value": 3.0748304211991853,
+   "text_sha256": "0f8d8e37d36d5a5c1c0cf44808841b618e8d00fa45c22d94713566da777918db"
+  },
+  {
+   "id": "r20",
+   "status": "numerical_error",
+   "error": {
+    "code": "numerical_error",
+    "message": "the model produced non-finite logits"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": 228,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "expected_value": null,
+   "text_sha256": "5d355f02b90c8d8adc5081c420dd84fed31b457752a64d2beb54183aad58536e"
+  },
+  {
+   "id": "r21",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -10.70230542756168,
+    -4.10764828706777,
+    -15.474554195911526,
+    -4.569422160756861,
+    -11.19792660050371
+   ],
+   "candidate_probs": [
+    2.24930220590856e-05,
+    0.016446406309462695,
+    1.9032090878781726e-07,
+    0.010363946682802523,
+    1.3702577549825544e-05
+   ],
+   "probabilities": [
+    0.0008378307001144075,
+    0.6126035032743523,
+    7.089163022969508e-06,
+    0.3860411767876876,
+    0.000510400074822538
+   ],
+   "log_coverage": -3.6176109211658867,
+   "coverage": 0.026846738912782917,
+   "n_prompt_tokens": 251,
+   "prompt_token_sha256": "sha256:867d3210268a5e34d94cdc5c3d66b3a0f6690d25e6e47dc77c266806081a5be9",
+   "warnings": [],
+   "expected_value": 2.7727828122627516,
+   "text_sha256": "a2f3319e0d470182470c991880b5308b481b48186735df9d24705383116ffa7b"
+  },
+  {
+   "id": "r22",
+   "status": "inference_error",
+   "error": {
+    "code": "inference_error",
+    "message": "native evaluation failed"
+   },
+   "candidate_log_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "candidate_probs": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "probabilities": [
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "log_coverage": null,
+   "coverage": null,
+   "n_prompt_tokens": 242,
+   "prompt_token_sha256": null,
+   "warnings": [],
+   "expected_value": null,
+   "text_sha256": "56a8f167e78ffd22fbb7f600b624513cb1e5ed247a1f4b023d02ba5f1b59efc7"
+  },
+  {
+   "id": "r23",
+   "status": "ok",
+   "error": null,
+   "candidate_log_probs": [
+    -9.85213491188169,
+    -13.326836075899433,
+    -9.46627137106442,
+    -4.61590885219544,
+    -11.85209998432955
+   ],
+   "candidate_probs": [
+    5.2634702527784866e-05,
+    1.6301539888845964e-06,
+    7.741953871368642e-05,
+    0.00989318787426234,
+    7.123581179580589e-06
+   ],
+   "probabilities": [
+    0.005246683044058241,
+    0.0001624954807746808,
+    0.007717261835639443,
+    0.9861634735025697,
+    0.0007100861369578026
+   ],
+   "log_coverage": -4.601975708700881,
+   "coverage": 0.010031995850672276,
+   "n_prompt_tokens": 239,
+   "prompt_token_sha256": "sha256:b3bd1fa62f714320efeb7e9776757b25ad907eb07609230a0e81ed94a503914c",
+   "warnings": [],
+   "expected_value": 3.976927784207594,
+   "text_sha256": "8a883ffa11c0e740836d49fdd1e8aa6bb17b2ddf8b78a89082c73b6361debdf0"
+  }
+ ]
+}

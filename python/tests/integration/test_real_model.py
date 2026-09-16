@@ -54,10 +54,13 @@ def nominal_task():
     }
 
 
-def test_small_model_matches_m0_spike(small):
+def test_small_model_matches_m0_spike_and_independent_reduction(small):
+    """Prompt tokens match the M0 spike exactly; probabilities match an independent scalar
+    full-vocabulary reduction of the same final-position logits. (Spike probabilities were
+    recorded with different execution settings, so they are not compared.)"""
+    import math
+
     spike = json.loads((REPO / "spikes/out/m0-qwen2.5-0.5b-instruct-q8_0-cuda.json").read_text())
-    if DEVICE != "cuda":
-        pytest.skip("spike reference was recorded on CUDA")
     texts = {
         "t1": "The library opens at nine and closes at five on weekdays.",
         "t2": "Could you tell me where the nearest train station is?",
@@ -65,15 +68,25 @@ def test_small_model_matches_m0_spike(small):
         "t4": "I absolutely loved the concert last night, it was wonderful!",
         "t5": "This is the worst service I have ever received.",
     }
-    prepared = small.prepare(nominal_task())["prepared"]
-    assert [c["token_id"] for c in prepared["categories"]] == [32, 33, 34]
+    task = nominal_task()
+    prepared = small.prepare(task)["prepared"]
+    ids = [c["token_id"] for c in prepared["categories"]]
+    assert ids == [32, 33, 34]
     out = small.score(prepared, [{"id": k, "text": v} for k, v in texts.items()])
     reference = spike["results"]["Communicative function"]["items"]
     for r in out["results"]:
-        ref = reference[r["id"]]
-        assert r["n_prompt_tokens"] == ref["n_prompt_tokens"]
-        assert r["probabilities"] == pytest.approx(ref["probabilities"], abs=1e-6)
-        assert r["candidate_log_probs"] == pytest.approx(ref["candidate_log_probs"], abs=1e-6)
+        assert r["n_prompt_tokens"] == reference[r["id"]]["n_prompt_tokens"]
+        assert r["prompt_token_sha256"] == "sha256:" + reference[r["id"]]["prompt_token_sha256"]
+        tokens = small.preparer.prompt_tokens(service_task(task), texts[r["id"]])[0]
+        logits = [float(v) for v in small.adapter.final_logits(tokens)]
+        top = max(logits)
+        log_z = top + math.log(math.fsum(math.exp(v - top) for v in logits))
+        log_q = [logits[i] - log_z for i in ids]
+        top_q = max(log_q)
+        log_cov = top_q + math.log(math.fsum(math.exp(v - top_q) for v in log_q))
+        assert r["candidate_log_probs"] == pytest.approx(log_q, abs=1e-12)
+        assert r["log_coverage"] == pytest.approx(log_cov, abs=1e-12)
+        assert r["probabilities"] == pytest.approx([math.exp(v - log_cov) for v in log_q], abs=1e-12)
 
 
 def test_real_tokenizer_boundary_rules(small):

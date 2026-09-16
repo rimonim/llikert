@@ -1,0 +1,166 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "c0",
+        "label": "category number 0 with a long descriptive name",
+        "response": "A",
+        "value": 10.0
+      },
+      {
+        "id": "c1",
+        "label": "category number 1 with a long descriptive name",
+        "response": "B",
+        "value": 20.0
+      },
+      {
+        "id": "c2",
+        "label": "category number 2 with a long descriptive name",
+        "response": "C",
+        "value": 30.0
+      },
+      {
+        "id": "c3",
+        "label": "category number 3 with a long descriptive name",
+        "response": "D",
+        "value": 40.0
+      },
+      {
+        "id": "c4",
+        "label": "category number 4 with a long descriptive name",
+        "response": "E",
+        "value": 50.0
+      },
+      {
+        "id": "c5",
+        "label": "category number 5 with a long descriptive name",
+        "response": "F",
+        "value": 60.0
+      },
+      {
+        "id": "c6",
+        "label": "category number 6 with a long descriptive name",
+        "response": "G",
+        "value": 70.0
+      },
+      {
+        "id": "c7",
+        "label": "category number 7 with a long descriptive name",
+        "response": "H",
+        "value": 80.0
+      },
+      {
+        "id": "c8",
+        "label": "category number 8 with a long descriptive name",
+        "response": "I",
+        "value": 90.0
+      },
+      {
+        "id": "c9",
+        "label": "category number 9 with a long descriptive name",
+        "response": "J",
+        "value": 100.0
+      },
+      {
+        "id": "c10",
+        "label": "category number 10 with a long descriptive name",
+        "response": "K",
+        "value": 110.0
+      },
+      {
+        "id": "c11",
+        "label": "category number 11 with a long descriptive name",
+        "response": "L",
+        "value": 120.0
+      }
+    ],
+    "ordered": false,
+    "examples": []
+  },
+  "canonical": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "c0",
+        "label": "category number 0 with a long descriptive name",
+        "response": "A",
+        "value": 10.0
+      },
+      {
+        "id": "c1",
+        "label": "category number 1 with a long descriptive name",
+        "response": "B",
+        "value": 20.0
+      },
+      {
+        "id": "c2",
+        "label": "category number 2 with a long descriptive name",
+        "response": "C",
+        "value": 30.0
+      },
+      {
+        "id": "c3",
+        "label": "category number 3 with a long descriptive name",
+        "response": "D",
+        "value": 40.0
+      },
+      {
+        "id": "c4",
+        "label": "category number 4 with a long descriptive name",
+        "response": "E",
+        "value": 50.0
+      },
+      {
+        "id": "c5",
+        "label": "category number 5 with a long descriptive name",
+        "response": "F",
+        "value": 60.0
+      },
+      {
+        "id": "c6",
+        "label": "category number 6 with a long descriptive name",
+        "response": "G",
+        "value": 70.0
+      },
+      {
+        "id": "c7",
+        "label": "category number 7 with a long descriptive name",
+        "response": "H",
+        "value": 80.0
+      },
+      {
+        "id": "c8",
+        "label": "category number 8 with a long descriptive name",
+        "response": "I",
+        "value": 90.0
+      },
+      {
+        "id": "c9",
+        "label": "category number 9 with a long descriptive name",
+        "response": "J",
+        "value": 100.0
+      },
+      {
+        "id": "c10",
+        "label": "category number 10 with a long descriptive name",
+        "response": "K",
+        "value": 110.0
+      },
+      {
+        "id": "c11",
+        "label": "category number 11 with a long descriptive name",
+        "response": "L",
+        "value": 120.0
+      }
+    ],
+    "ordered": false,
+    "examples": []
+  },
+  "canonical_jcs": "{\"categories\":[{\"id\":\"c0\",\"label\":\"category number 0 with a long descriptive name\",\"response\":\"A\",\"value\":10},{\"id\":\"c1\",\"label\":\"category number 1 with a long descriptive name\",\"response\":\"B\",\"value\":20},{\"id\":\"c2\",\"label\":\"category number 2 with a long descriptive name\",\"response\":\"C\",\"value\":30},{\"id\":\"c3\",\"label\":\"category number 3 with a long descriptive name\",\"response\":\"D\",\"value\":40},{\"id\":\"c4\",\"label\":\"category number 4 with a long descriptive name\",\"response\":\"E\",\"value\":50},{\"id\":\"c5\",\"label\":\"category number 5 with a long descriptive name\",\"response\":\"F\",\"value\":60},{\"id\":\"c6\",\"label\":\"category number 6 with a long descriptive name\",\"response\":\"G\",\"value\":70},{\"id\":\"c7\",\"label\":\"category number 7 with a long descriptive name\",\"response\":\"H\",\"value\":80},{\"id\":\"c8\",\"label\":\"category number 8 with a long descriptive name\",\"response\":\"I\",\"value\":90},{\"id\":\"c9\",\"label\":\"category number 9 with a long descriptive name\",\"response\":\"J\",\"value\":100},{\"id\":\"c10\",\"label\":\"category number 10 with a long descriptive name\",\"response\":\"K\",\"value\":110},{\"id\":\"c11\",\"label\":\"category number 11 with a long descriptive name\",\"response\":\"L\",\"value\":120}],\"examples\":[],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"schema_version\":1}",
+  "task_hash": "sha256:0f672966689c320d2b84ae8fe9dc6cbb0eb8d7acfa54300fa0ad23942c3d4121"
+}

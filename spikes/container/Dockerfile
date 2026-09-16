@@ -5,10 +5,10 @@
 #   docker run --rm --gpus all -p 8080:8080 -v $PWD/models:/repository:ro \
 #     -e LLIKERT_MODEL=/repository/qwen2.5-0.5b-instruct-q8_0.gguf llikert-probe:m0
 #   curl -i localhost:8080/health
-FROM nvidia/cuda:12.9.1-runtime-ubuntu22.04
+FROM nvidia/cuda:12.9.0-runtime-ubuntu22.04
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 python3-venv \
+    && apt-get install -y --no-install-recommends python3 python3-venv libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 RUN useradd -m app
 RUN python3 -m venv /opt/venv

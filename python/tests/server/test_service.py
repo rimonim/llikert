@@ -9,7 +9,7 @@ from llikert.server.fake_adapter import FAIL_MARKER, NAN_MARKER, FakeAdapter
 from llikert.server.schemas import PrepareResponse, ScoreResponse
 from llikert.server.service import Limits, StartupError
 
-from conftest import FAKE_PROFILES, make_service, numeric_task_dict, task_dict
+from .conftest import FAKE_PROFILES, make_service, numeric_task_dict, task_dict
 
 
 def score(service, task, items):

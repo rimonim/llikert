@@ -1,0 +1,157 @@
+{
+ "checkpoint_schema_version": 1,
+ "created_at": "2026-09-16T18:26:02Z",
+ "client": {
+  "language": "python",
+  "package": "llikert",
+  "version": "0.1.0.dev0"
+ },
+ "protocol_version": 1,
+ "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+ "engine": {
+  "fingerprint_version": 1,
+  "model_and_execution": {
+   "backend": "fake",
+   "fake_adapter_version": 1,
+   "n_vocab": 378,
+   "n_ctx": 512
+  },
+  "template_profile": {
+   "name": "fake-chatml",
+   "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+  },
+  "renderer_version": 1,
+  "boundary_policy": "tail-suffix-v1",
+  "postprocessing_version": 1,
+  "prepared_schema_version": 1,
+  "tokenization": {
+   "template_segments": "parse_special",
+   "content_segments": "ordinary_text",
+   "add_bos": false
+  }
+ },
+ "execution": {
+  "backend": "fake"
+ },
+ "prepared": {
+  "prepared_schema_version": 1,
+  "task": {
+   "schema_version": 1,
+   "name": "Communicative function",
+   "instructions": "Classify the text's primary communicative function.",
+   "categories": [
+    {
+     "id": "description",
+     "label": "description",
+     "response": "A",
+     "value": null
+    },
+    {
+     "id": "question",
+     "label": "question",
+     "response": "B",
+     "value": null
+    },
+    {
+     "id": "request",
+     "label": "request",
+     "response": "C",
+     "value": null
+    }
+   ],
+   "ordered": false,
+   "examples": []
+  },
+  "task_hash": "sha256:d01e1ea7be5d759397093b55241e3f98c60272d0e9f29e0f1a253a54b83681c7",
+  "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+  "profile": {
+   "name": "fake-chatml",
+   "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
+  },
+  "boundary_policy": "tail-suffix-v1",
+  "tail_tokens": [
+   1,
+   354,
+   0,
+   369,
+   354
+  ],
+  "categories": [
+   {
+    "id": "description",
+    "label": "description",
+    "response": "A",
+    "value": null,
+    "token_id": 292,
+    "token_piece": "A"
+   },
+   {
+    "id": "question",
+    "label": "question",
+    "response": "B",
+    "value": null,
+    "token_id": 293,
+    "token_piece": "B"
+   },
+   {
+    "id": "request",
+    "label": "request",
+    "response": "C",
+    "value": null,
+    "token_id": 294,
+    "token_piece": "C"
+   }
+  ],
+  "prepared_hash": "sha256:c296106417be6ec57750a28321c65e4c80869ece7920eab5f5e42d5a0584ff11"
+ },
+ "ids": [
+  "r01",
+  "r02",
+  "r03",
+  "r04",
+  "r05",
+  "r06",
+  "r07",
+  "r08",
+  "r09",
+  "r10",
+  "r11",
+  "r12",
+  "r13",
+  "r14",
+  "r15",
+  "r16",
+  "r17",
+  "r18",
+  "r19",
+  "r20",
+  "r21",
+  "r22",
+  "r23"
+ ],
+ "text_sha256": [
+  "fdff77e4922c88b06f166ab1fcf8b0e71f49b58126b5bbf73cd7952daff26cff",
+  "e63f43c3e08e4bf10f7c01a2beb7644d11121eb2382b831f269f8857ddd249b7",
+  "883cd6f3633c178602badca2e695b4506e7f6a6c76063ff8312e52c6de7a328b",
+  null,
+  "0c9b5eafa71825918fcfbcfa3690aae7fbe59732c3a53d55c6acde44e66a1a24",
+  "4458847ee024672dd621bfc9c1b295ec06e0bdaeb94c25cf002fdb8e95fa7bbd",
+  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "09ea26793343ba6c850b0e7b499ff5d4fca39de5381cdec99a6375a7b4efbc64",
+  "71546a5e24fd9a671876b51aa781fe1b23246f389e9dc2fd500ccef9014a5e44",
+  "fdff77e4922c88b06f166ab1fcf8b0e71f49b58126b5bbf73cd7952daff26cff",
+  "92bcb7159c30445b8b2dcde4c2a0d00d79616ea8956e81d07c24ccf1983a1faf",
+  "5ce6728084f22bba3866187aa3588ff8becff85839245bfd9403e07cfb4df350",
+  "0f69650a65cf99e3ebcfd3923ec23443a52f334a67f6e2dc68a853814b231270",
+  "e79d82e93681e1ab58522acbb27c9c720fd0c3b96e1f3881de9bd3c8cf20ea20",
+  "0aad7da77d2ed59c396c99a74e49f3a4524dcdbcb5163251b1433d640247aeb4",
+  "e60f94b5349d07bb46b82d13fa4c54e747a41f3829fe6eba12212c4508ed1806",
+  "97abd604afe21f970d1f49c0dc9e5fd269042c7342a8c4a7cac06a77afa0dacc",
+  "a59203b04b82156942a4451086e53f2ab7ee167397112ffdb5786d91b1ee9086",
+  "0f8d8e37d36d5a5c1c0cf44808841b618e8d00fa45c22d94713566da777918db",
+  "5d355f02b90c8d8adc5081c420dd84fed31b457752a64d2beb54183aad58536e",
+  "a2f3319e0d470182470c991880b5308b481b48186735df9d24705383116ffa7b",
+  "56a8f167e78ffd22fbb7f600b624513cb1e5ed247a1f4b023d02ba5f1b59efc7",
+  "8a883ffa11c0e740836d49fdd1e8aa6bb17b2ddf8b78a89082c73b6361debdf0"
+ ]
+}
