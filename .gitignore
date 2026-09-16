@@ -1,0 +1,15 @@
+# local environments and builds
+.venv*/
+build/
+models/
+spikes/out/*.gguf
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+# R
+.Rproj.user/
+.Rhistory
+r/llikert/*.tar.gz
+r/llikert.Rcheck/
