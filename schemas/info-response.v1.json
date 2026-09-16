@@ -1,0 +1,100 @@
+{
+  "$defs": {
+    "InfoLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "max_body_bytes": {
+          "title": "Max Body Bytes",
+          "type": "integer"
+        },
+        "max_items_per_request": {
+          "title": "Max Items Per Request",
+          "type": "integer"
+        },
+        "max_prompt_tokens": {
+          "title": "Max Prompt Tokens",
+          "type": "integer"
+        },
+        "n_ctx": {
+          "title": "N Ctx",
+          "type": "integer"
+        },
+        "queue_limit": {
+          "title": "Queue Limit",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_items_per_request",
+        "max_body_bytes",
+        "queue_limit",
+        "n_ctx",
+        "max_prompt_tokens"
+      ],
+      "title": "InfoLimits",
+      "type": "object"
+    }
+  },
+  "$id": "https://llikert.invalid/schemas/info-response.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "engine": {
+      "additionalProperties": true,
+      "title": "Engine",
+      "type": "object"
+    },
+    "engine_fingerprint": {
+      "title": "Engine Fingerprint",
+      "type": "string"
+    },
+    "execution": {
+      "additionalProperties": true,
+      "title": "Execution",
+      "type": "object"
+    },
+    "item_statuses": {
+      "items": {
+        "enum": [
+          "ok",
+          "missing_input",
+          "empty_input",
+          "invalid_encoding",
+          "context_limit",
+          "boundary_error",
+          "numerical_error",
+          "inference_error"
+        ],
+        "type": "string"
+      },
+      "title": "Item Statuses",
+      "type": "array"
+    },
+    "limits": {
+      "$ref": "#/$defs/InfoLimits"
+    },
+    "protocol_version": {
+      "const": 1,
+      "title": "Protocol Version",
+      "type": "integer"
+    },
+    "service": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Service",
+      "type": "object"
+    }
+  },
+  "required": [
+    "protocol_version",
+    "service",
+    "engine_fingerprint",
+    "engine",
+    "execution",
+    "limits",
+    "item_statuses"
+  ],
+  "title": "InfoResponse",
+  "type": "object"
+}

@@ -1,0 +1,58 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Ünïcode  name",
+    "instructions": "Line one\nLine two\ttab",
+    "categories": [
+      {
+        "id": "description",
+        "label": "Beschreibung ✎ ",
+        "response": " A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": []
+  },
+  "canonical": {
+    "schema_version": 1,
+    "name": "Ünïcode  name",
+    "instructions": "Line one\nLine two\ttab",
+    "categories": [
+      {
+        "id": "description",
+        "label": "Beschreibung ✎ ",
+        "response": " A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": []
+  },
+  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"Beschreibung ✎ \",\"response\":\" A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Line one\\nLine two\\ttab\",\"name\":\"Ünïcode  name\",\"ordered\":false,\"schema_version\":1}",
+  "task_hash": "sha256:8efc22d148beb19975cea0fd26f0c6afa11c65a1fb007f1f4aecdc5a5f3e1000"
+}

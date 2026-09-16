@@ -1,0 +1,98 @@
+{
+  "description": "Hand-derived candidate scoring cases (closed forms).",
+  "cases": [
+    {
+      "name": "weights_4_2_1_1",
+      "logits": [
+        1.3862943611198906,
+        0.6931471805599453,
+        0.0,
+        0.0
+      ],
+      "token_ids": [
+        0,
+        1
+      ],
+      "values": [
+        1.0,
+        5.0
+      ],
+      "expected": {
+        "candidate_log_probs": [
+          -0.6931471805599453,
+          -1.3862943611198906
+        ],
+        "probabilities": [
+          0.6666666666666666,
+          0.3333333333333333
+        ],
+        "log_coverage": -0.2876820724517809,
+        "expected_value": 2.3333333333333335
+      }
+    },
+    {
+      "name": "uniform_five_tokens_three_candidates",
+      "logits": [
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "token_ids": [
+        4,
+        2,
+        0
+      ],
+      "values": null,
+      "expected": {
+        "candidate_log_probs": [
+          -1.6094379124341003,
+          -1.6094379124341003,
+          -1.6094379124341003
+        ],
+        "probabilities": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "log_coverage": -0.5108256237659907,
+        "expected_value": null
+      }
+    },
+    {
+      "name": "weights_1_1_2_4_8_reversed_values",
+      "logits": [
+        0.0,
+        0.0,
+        0.6931471805599453,
+        1.3862943611198906,
+        2.0794415416798357
+      ],
+      "token_ids": [
+        2,
+        3,
+        4
+      ],
+      "values": [
+        3.0,
+        2.0,
+        1.0
+      ],
+      "expected": {
+        "candidate_log_probs": [
+          -2.0794415416798357,
+          -1.3862943611198906,
+          -0.6931471805599453
+        ],
+        "probabilities": [
+          0.14285714285714285,
+          0.2857142857142857,
+          0.5714285714285714
+        ],
+        "log_coverage": -0.13353139262452263,
+        "expected_value": 1.5714285714285714
+      }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "description",
+        "label": "description",
+        "response": "A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": [
+      {
+        "text": "Where is it?",
+        "category_id": "question"
+      },
+      {
+        "text": "Close the door.",
+        "category_id": "request"
+      }
+    ]
+  },
+  "canonical": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "description",
+        "label": "description",
+        "response": "A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": [
+      {
+        "text": "Where is it?",
+        "category_id": "question"
+      },
+      {
+        "text": "Close the door.",
+        "category_id": "request"
+      }
+    ]
+  },
+  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[{\"category_id\":\"question\",\"text\":\"Where is it?\"},{\"category_id\":\"request\",\"text\":\"Close the door.\"}],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"schema_version\":1}",
+  "task_hash": "sha256:01dc5e18ef5bff064ae56b60bad7c5dc5b5597f5f8dca79921a43578ae11f1c4"
+}

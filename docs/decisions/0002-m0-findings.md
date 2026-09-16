@@ -127,4 +127,8 @@ The conversion is byte-reproducible: a second run produced the same SHA-256. Con
   - The proxy returns `503` while scaling from zero. A client may send `X-Scale-Up-Timeout: <seconds>` to have the proxy hold the request, which should be added to the client connect policy (D15).
   - The image must be linux/amd64 in an accessible registry. The documented client sends `Authorization: Bearer <HF token>`.
 - **Not in the docs (verify in M4):** whether the `Authorization` header is forwarded to the container, request duration and body limits, and path rewriting.
-- **Local container probe: NOT EXECUTED.** The user account has no access to the Docker daemon. `spikes/container/` holds a CUDA runtime Dockerfile and a `/health` stub. The stub itself was run outside Docker: `/health` returned 503 during load, then 200, with GPU offload available.
+- **Local container probe: partially executed (2026-09-16).**
+  - `spikes/container/run_probe.sh` builds the CUDA runtime image (`llikert-probe:m0`, 4.6 GB, image id `sha256:b9761c3f…`).
+  - Starting it with a GPU failed. `--gpus all` gives "could not select device driver", and `--runtime nvidia` fails because `nvidia-container-runtime` is not installed on the host.
+  - **Owner action:** install `nvidia-container-toolkit` (needs sudo), then rerun `sg docker -c spikes/container/run_probe.sh`.
+  - The `/health` stub was run outside Docker: 503 during load, then 200, with GPU offload available.

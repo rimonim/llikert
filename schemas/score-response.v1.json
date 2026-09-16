@@ -1,0 +1,276 @@
+{
+  "$defs": {
+    "ItemError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "ok",
+            "missing_input",
+            "empty_input",
+            "invalid_encoding",
+            "context_limit",
+            "boundary_error",
+            "numerical_error",
+            "inference_error"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ItemError",
+      "type": "object"
+    },
+    "ItemResult": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_log_probs": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Candidate Log Probs",
+          "type": "array"
+        },
+        "candidate_probs": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Candidate Probs",
+          "type": "array"
+        },
+        "coverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Coverage"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ItemError"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "present only for tasks with numeric values",
+          "title": "Expected Value"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "log_coverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Log Coverage"
+        },
+        "n_prompt_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "N Prompt Tokens"
+        },
+        "probabilities": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Probabilities",
+          "type": "array"
+        },
+        "prompt_token_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Prompt Token Sha256"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "missing_input",
+            "empty_input",
+            "invalid_encoding",
+            "context_limit",
+            "boundary_error",
+            "numerical_error",
+            "inference_error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/Warning_"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "error",
+        "candidate_log_probs",
+        "candidate_probs",
+        "probabilities",
+        "log_coverage",
+        "coverage",
+        "n_prompt_tokens",
+        "prompt_token_sha256",
+        "warnings"
+      ],
+      "title": "ItemResult",
+      "type": "object"
+    },
+    "ScoreMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "elapsed_ms": {
+          "title": "Elapsed Ms",
+          "type": "number"
+        },
+        "execution": {
+          "additionalProperties": true,
+          "title": "Execution",
+          "type": "object"
+        }
+      },
+      "required": [
+        "elapsed_ms",
+        "execution"
+      ],
+      "title": "ScoreMeta",
+      "type": "object"
+    },
+    "Warning_": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "Warning_",
+      "type": "object"
+    }
+  },
+  "$id": "https://llikert.invalid/schemas/score-response.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "category_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Category Ids",
+      "type": "array"
+    },
+    "engine_fingerprint": {
+      "title": "Engine Fingerprint",
+      "type": "string"
+    },
+    "meta": {
+      "$ref": "#/$defs/ScoreMeta"
+    },
+    "prepared_hash": {
+      "title": "Prepared Hash",
+      "type": "string"
+    },
+    "protocol_version": {
+      "const": 1,
+      "title": "Protocol Version",
+      "type": "integer"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "results": {
+      "items": {
+        "$ref": "#/$defs/ItemResult"
+      },
+      "title": "Results",
+      "type": "array"
+    }
+  },
+  "required": [
+    "protocol_version",
+    "request_id",
+    "engine_fingerprint",
+    "prepared_hash",
+    "category_ids",
+    "results",
+    "meta"
+  ],
+  "title": "ScoreResponse",
+  "type": "object"
+}

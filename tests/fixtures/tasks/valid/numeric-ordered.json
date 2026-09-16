@@ -1,0 +1,82 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Sentiment",
+    "instructions": "Rate the sentiment.",
+    "categories": [
+      {
+        "id": "s1",
+        "label": "very negative",
+        "response": "1",
+        "value": 1.0
+      },
+      {
+        "id": "s2",
+        "label": "negative",
+        "response": "2",
+        "value": 2.0
+      },
+      {
+        "id": "s3",
+        "label": "neutral",
+        "response": "3",
+        "value": 3.0
+      },
+      {
+        "id": "s4",
+        "label": "positive",
+        "response": "4",
+        "value": 4.0
+      },
+      {
+        "id": "s5",
+        "label": "very positive",
+        "response": "5",
+        "value": 5.0
+      }
+    ],
+    "ordered": true,
+    "examples": []
+  },
+  "canonical": {
+    "schema_version": 1,
+    "name": "Sentiment",
+    "instructions": "Rate the sentiment.",
+    "categories": [
+      {
+        "id": "s1",
+        "label": "very negative",
+        "response": "1",
+        "value": 1.0
+      },
+      {
+        "id": "s2",
+        "label": "negative",
+        "response": "2",
+        "value": 2.0
+      },
+      {
+        "id": "s3",
+        "label": "neutral",
+        "response": "3",
+        "value": 3.0
+      },
+      {
+        "id": "s4",
+        "label": "positive",
+        "response": "4",
+        "value": 4.0
+      },
+      {
+        "id": "s5",
+        "label": "very positive",
+        "response": "5",
+        "value": 5.0
+      }
+    ],
+    "ordered": true,
+    "examples": []
+  },
+  "canonical_jcs": "{\"categories\":[{\"id\":\"s1\",\"label\":\"very negative\",\"response\":\"1\",\"value\":1},{\"id\":\"s2\",\"label\":\"negative\",\"response\":\"2\",\"value\":2},{\"id\":\"s3\",\"label\":\"neutral\",\"response\":\"3\",\"value\":3},{\"id\":\"s4\",\"label\":\"positive\",\"response\":\"4\",\"value\":4},{\"id\":\"s5\",\"label\":\"very positive\",\"response\":\"5\",\"value\":5}],\"examples\":[],\"instructions\":\"Rate the sentiment.\",\"name\":\"Sentiment\",\"ordered\":true,\"schema_version\":1}",
+  "task_hash": "sha256:79c42d983588bde8e8c4eec0d0c5ce952b6077a6f16a5bdf09c57e08936ba226"
+}
