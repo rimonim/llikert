@@ -51,9 +51,9 @@ sha256sum models/qwen3-4b-instruct-2507-f32.gguf
 
 `selfcheck` reports the native library, the template profile, the smoke check and the engine fingerprint.
 
-`serve` binds to `127.0.0.1:8080` by default. `/health` returns 503 while the model file is hashed and loaded (about 15 s for the F32 file), then 200. Stop the service with Ctrl-C.
+`serve` binds to `127.0.0.1:8080` by default. `/health` returns 503 while the model file is hashed, loaded and warmed up with one full-context evaluation (about 22 s for the F32 file), then 200. A context that does not fit in GPU memory fails at startup, not during a run. Stop the service with Ctrl-C.
 
-The defaults (`--device cuda --batch-size 512 --flash-attn off --kv-type f32 --n-ctx 4096`) are the supported profile. Changing any execution setting changes the engine fingerprint, and a profile you change is not covered by the fidelity evidence in `docs/compatibility.md`.
+The defaults (`--device cuda --batch-size 512 --flash-attn off --kv-type f32 --n-ctx 4096`) are the supported profile. The service also always disables TF32 in cuBLAS (`NVIDIA_TF32_OVERRIDE=0`), because TF32 moves probabilities by up to 0.03 (decision 0005). Changing any execution setting changes the engine fingerprint, and a profile you change is not covered by the fidelity evidence in `docs/compatibility.md`.
 
 ## Serving beyond this machine
 

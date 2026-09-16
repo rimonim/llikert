@@ -1,0 +1,117 @@
+{
+ "label": "supported-f32-cuda",
+ "corpus_version": 1,
+ "platform": "Linux-6.8.0-65-generic-x86_64-with-glibc2.35",
+ "settings": {
+  "device": "cuda",
+  "batch_size": 512,
+  "flash_attn": "off",
+  "kv_type": "f32",
+  "n_ctx": 4096,
+  "chunk_size": 16
+ },
+ "engine_fingerprint": "sha256:3f0496367bd33e512a3ce938db3fde10dd5c7c749ebd628d9385097ad04c6816",
+ "math_libraries": [
+  "libcublas.so.12.9.0.13",
+  "libcublasLt.so.12.9.0.13",
+  "libcudart.so.12.9.37"
+ ],
+ "startup": {
+  "sha256_seconds": 8.74,
+  "load_and_smoke_seconds": 13.09
+ },
+ "tasks": {
+  "binary-food": {
+   "items": 500,
+   "seconds": 26.737,
+   "items_per_second": 18.7,
+   "decode_calls": 546,
+   "tokens_evaluated": 76869,
+   "by_length": {
+    "short": {
+     "n": 300,
+     "mean_prompt_tokens": 81.3,
+     "median_ms": 36.05,
+     "p95_ms": 37.46
+    },
+    "medium": {
+     "n": 150,
+     "mean_prompt_tokens": 143.6,
+     "median_ms": 53.15,
+     "p95_ms": 54.9
+    },
+    "long": {
+     "n": 50,
+     "mean_prompt_tokens": 619.0,
+     "median_ms": 165.1,
+     "p95_ms": 189.63
+    }
+   }
+  },
+  "sentiment-5": {
+   "items": 500,
+   "seconds": 35.209,
+   "items_per_second": 14.2,
+   "decode_calls": 550,
+   "tokens_evaluated": 116369,
+   "by_length": {
+    "short": {
+     "n": 300,
+     "mean_prompt_tokens": 160.3,
+     "median_ms": 54.82,
+     "p95_ms": 56.21
+    },
+    "medium": {
+     "n": 150,
+     "mean_prompt_tokens": 222.6,
+     "median_ms": 63.57,
+     "p95_ms": 65.0
+    },
+    "long": {
+     "n": 50,
+     "mean_prompt_tokens": 698.0,
+     "median_ms": 182.54,
+     "p95_ms": 211.97
+    }
+   }
+  },
+  "topic-10": {
+   "items": 500,
+   "seconds": 28.997,
+   "items_per_second": 17.24,
+   "decode_calls": 550,
+   "tokens_evaluated": 86869,
+   "by_length": {
+    "short": {
+     "n": 300,
+     "mean_prompt_tokens": 101.3,
+     "median_ms": 40.57,
+     "p95_ms": 42.01
+    },
+    "medium": {
+     "n": 150,
+     "mean_prompt_tokens": 163.6,
+     "median_ms": 55.18,
+     "p95_ms": 56.66
+    },
+    "long": {
+     "n": 50,
+     "mean_prompt_tokens": 639.0,
+     "median_ms": 167.21,
+     "p95_ms": 203.5
+    }
+   }
+  }
+ },
+ "memory": {
+  "gpu_mib": 17250,
+  "peak_rss_mib": 15707.5
+ },
+ "http": {
+  "items": 128,
+  "chunk_size": 16,
+  "http_seconds": 4.667,
+  "direct_seconds": 4.642,
+  "overhead_ms_per_item": 0.193
+ }
+}

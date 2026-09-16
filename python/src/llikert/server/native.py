@@ -180,6 +180,20 @@ class NativeLibraryError(RuntimeError):
     """The pinned llama.cpp build is missing or a different version is installed."""
 
 
+def disable_tf32() -> None:
+    """Force exact float32 matrix multiplication in cuBLAS.
+
+    ggml's CUDA backend sets CUBLAS_TF32_TENSOR_OP_MATH on its cuBLAS handles, so on Ampere
+    and newer GPUs "F32" batched matrix products run in TF32 and move candidate
+    probabilities by up to ~0.03 (docs/decisions/0005-m3-performance-and-fidelity.md).
+    NVIDIA_TF32_OVERRIDE=0 disables TF32 process-wide; it must be set before cuBLAS
+    creates its handles, so it is set before the native libraries load.
+    """
+    import os
+
+    os.environ["NVIDIA_TF32_OVERRIDE"] = "0"
+
+
 def library_dir() -> pathlib.Path:
     import importlib.util
 
@@ -211,6 +225,7 @@ class Native:
     """The loaded libraries with llikert's declarations applied."""
 
     def __init__(self, lib_dir: pathlib.Path | None = None, require_pinned: bool = True):
+        disable_tf32()
         lib_dir = lib_dir or library_dir()
         llama_path = lib_dir / "libllama.so"
         if not llama_path.exists():

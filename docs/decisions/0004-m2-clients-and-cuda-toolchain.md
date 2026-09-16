@@ -1,6 +1,6 @@
 # 0004: M2 clients; CUDA toolchain correction and supported execution settings
 
-**Status:** accepted 2026-09-16
+**Status:** accepted 2026-09-16. Section A's supported-profile evidence is superseded by 0005 B: TF32 must be disabled, and the 28-item gate was too small to detect the problem.
 **Context:** M2 built the R and Python clients. On the way, the container probe exposed a CUDA toolchain error in the M0/M1 build that changes the evidence for the supported profile.
 
 ## A. CUDA toolchain correction (supersedes parts of 0002 F8/D23 and 0003 evidence)

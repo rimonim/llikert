@@ -39,8 +39,8 @@ class LlamaConfig:
     device: str = "cuda"  # "cuda" | "cpu"
     n_ctx: int = 4096
     batch_size: int = 512
-    # defaults are the supported profile: the only 512-batch CUDA configuration that passed the
-    # reference-fidelity gate on CUDA 12.9 / cuBLAS 12.9 (docs/decisions/0004-m2-cuda-toolchain.md)
+    # defaults are the supported profile: with TF32 disabled, the only CUDA configuration that
+    # passed the reference-fidelity gate (docs/decisions/0005-m3-performance-and-fidelity.md)
     flash_attn: str = "off"  # "auto" | "on" | "off"
     kv_type: str = "f32"  # "f16" | "f32"
     threads: int | None = None
@@ -100,6 +100,22 @@ class LlamaAdapter:
         self._init_context()
         self._healthy = True
         self._specials: list[str] | None = None
+        self.stats = {"prompts": 0, "decode_calls": 0, "tokens_evaluated": 0}
+        self._warm_up()
+
+    def _warm_up(self) -> None:
+        """Evaluate one full-context prompt at startup, so memory problems surface before the
+        service reports ready rather than in the middle of a dataset run."""
+        filler = self.tokenize(" a", parse_special=False)
+        try:
+            self.final_logits(filler * self._eff_n_ctx)
+        except (InferenceError, ValueError) as exc:
+            self.close()
+            raise AdapterStartupError(f"full-context warm-up failed: {exc}") from None
+        finally:
+            if self._ctx:
+                self.lib.llama.llama_memory_clear(self.lib.llama.llama_get_memory(self._ctx), True)
+        self.stats = {"prompts": 0, "decode_calls": 0, "tokens_evaluated": 0}
 
     # -- native lifecycle ---------------------------------------------------------------
     @staticmethod
@@ -239,6 +255,7 @@ class LlamaAdapter:
         n_batch = self._eff_n_batch
         memory = L.llama_get_memory(self._ctx)
         L.llama_memory_clear(memory, True)
+        self.stats["prompts"] += 1
         batch = L.llama_batch_init(n_batch, 0, 1)
         try:
             for start in range(0, len(tokens), n_batch):
@@ -250,10 +267,11 @@ class LlamaAdapter:
                     batch.n_seq_id[i] = 1
                     batch.seq_id[i][0] = 0
                     batch.logits[i] = 0
-                last = start + len(chunk) == len(tokens)
-                if last:
+                if start + len(chunk) == len(tokens):
                     batch.logits[len(chunk) - 1] = 1
                 rc = L.llama_decode(self._ctx, batch)
+                self.stats["decode_calls"] += 1
+                self.stats["tokens_evaluated"] += len(chunk)
                 if rc != 0:
                     self._recover(rc)
             ptr = L.llama_get_logits_ith(self._ctx, -1)
@@ -302,6 +320,7 @@ class LlamaAdapter:
                 "add_bos": bool(L.llama_vocab_get_add_bos(self._vocab)),
             },
             "device": {"type": self.config.device, "devices": [d["description"] for d in self._devices]},
+            "cuda_tf32": "disabled" if self.config.device == "cuda" else None,
             "math_libraries": self._math_libraries,
             "n_gpu_layers": -1 if self.config.device == "cuda" else 0,
             "n_ctx": self._eff_n_ctx,

@@ -1,0 +1,63 @@
+{
+ "passed": true,
+ "settings": {
+  "device": "cuda",
+  "batch_size": 512,
+  "flash_attn": "off",
+  "kv_type": "f32",
+  "prefix_reuse": false,
+  "shuffle_seed": null
+ },
+ "tolerances": {
+  "max_abs_probability": 0.005,
+  "max_abs_candidate_log_prob": 0.1,
+  "log_prob_floor": -15.0
+ },
+ "max_abs_dp": 0.0013419903248264864,
+ "max_abs_dlogq": 0.0156823958200647,
+ "ms_per_item": 61.51164090136687,
+ "engine_fingerprint": "sha256:1612e0bb018fe898b84b327b21d546bbd6a9452ce6dde46415a3bab7b9f54251",
+ "math_libraries": [
+  "libcublas.so.12.9.0.13",
+  "libcublasLt.so.12.9.0.13",
+  "libcudart.so.12.9.37"
+ ],
+ "worst_items": [
+  {
+   "key": "topic-10/long-0010",
+   "max_abs_dp": 2.0826733955009447e-05,
+   "max_abs_dlogq": 0.0156823958200647,
+   "reference_log_q_at_max": -13.90316232140308
+  },
+  {
+   "key": "topic-10/long-0037",
+   "max_abs_dp": 0.0013419903248264864,
+   "max_abs_dlogq": 0.013351252756066856,
+   "reference_log_q_at_max": -12.207172283551579
+  },
+  {
+   "key": "topic-10/short-0240",
+   "max_abs_dp": 5.707526451459444e-09,
+   "max_abs_dlogq": 0.0008125248100157023,
+   "reference_log_q_at_max": -11.865729683740923
+  }
+ ],
+ "by_group": {
+  "long": {
+   "items": 150,
+   "max_abs_dp": 0.0013419903248264864,
+   "max_abs_dlogq": 0.0156823958200647
+  },
+  "medium": {
+   "items": 450,
+   "max_abs_dp": 7.64860826376057e-05,
+   "max_abs_dlogq": 0.00033948723847032625
+  },
+  "short": {
+   "items": 900,
+   "max_abs_dp": 3.3990930681904175e-05,
+   "max_abs_dlogq": 0.0008125248100157023
+  }
+ },
+ "fixture": "benchmarks/corpus-v1.json (1500 items; reference from benchmarks/reference.py, not committed)"
+}

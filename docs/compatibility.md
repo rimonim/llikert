@@ -9,18 +9,20 @@
 
 ## Model profiles
 
-A profile is weights, device, math libraries and execution settings together. Decision D24 requires the reference-fidelity gate: a comparison with transformers float32 on the official weights over the 28 items in `tests/fixtures/fidelity/`, with max |Δp| ≤ 0.005 and max |Δlog q| ≤ 0.1. Run it with `tools/fidelity_gate.py`.
+A profile is weights, device, math libraries and execution settings together. Decision D24 requires the reference-fidelity gate: a comparison with transformers float32 (TF32 off) on the official weights, with max |Δp| ≤ 0.005 and max |Δlog q| ≤ 0.1. The fixtures are `tests/fixtures/fidelity/` (28 and 450 items); the benchmark corpus adds 1,500 items. Run it with `tools/fidelity_gate.py`.
 
 | Profile | Weights (sha256) | Device and settings | Gate | Status |
 |---|---|---|---|---|
-| **Qwen3-4B-Instruct-2507, F32** | `qwen3-4b-instruct-2507-f32.gguf` (`a5733d5a…e357`) | CUDA 12.9, cuBLAS 12.9, RTX 4090; `--batch-size 512 --flash-attn off --kv-type f32` (defaults) | **Passed**: max \|Δp\| 0.0044, max \|Δlog q\| 0.045 | Supported |
-| Qwen3-4B-Instruct-2507, F32 | same | CUDA 12.9 with flash attention auto or on, or KV f16 | Failed (max \|Δlog q\| 0.10–0.12) | Not supported |
-| Qwen3-4B-Instruct-2507, F32 | same | CUDA 12.9, batch 1, FA off, KV f32 | Passed (max \|Δp\| 0.00001), about 1.2 s per item | Valid but slow; not a default |
-| Qwen3-4B-Instruct-2507, F32 | same | CPU, FA off, KV f32 | M0 spike only (max \|Δp\| < 1e-4), not through the service | Not verified |
+| **Qwen3-4B-Instruct-2507, F32** | `qwen3-4b-instruct-2507-f32.gguf` (`a5733d5a…e357`) | CUDA 12.9, cuBLAS 12.9, RTX 4090; **TF32 disabled** (enforced by the service); `--batch-size 512 --flash-attn off --kv-type f32` (defaults) | **Passed**: 28 items 0.000012 / 0.00019; 450 items 0.000093 / 0.0011; 1,500 items 0.0013 / 0.016 (max \|Δp\| / max \|Δlog q\|) | Supported |
+| Qwen3-4B-Instruct-2507, F32 | same | CUDA with TF32 enabled (the ggml default before 0005), any settings | Failed (450 items: max \|Δp\| 0.027) | Not supported |
+| Qwen3-4B-Instruct-2507, F32 | same | CUDA, TF32 disabled, flash attention auto/on, or KV f16 | Failed (450 items: max \|Δp\| 0.017–0.031) | Not supported |
+| Qwen3-4B-Instruct-2507, F32 | same | CPU, FA off, KV f32 | M0 spike only (28 items, max \|Δp\| < 1e-4), not through the service | Not verified |
 | Qwen3-4B-Instruct-2507, Q8_0 | `ae916ede…d5f1` | any | Failed in M0 | Not supported (D23) |
-| Qwen2.5-0.5B-Instruct, Q8_0 | `ca59ca7f…844e` | CUDA | No fidelity claim | Smoke and CI model only |
+| Qwen2.5-0.5B-Instruct, Q8_0 | `ca59ca7f…844e` | CUDA | No fidelity claim | Smoke, CI and stress-test model only |
 
-M0 and M1 CUDA measurements were made with a wheel that accidentally linked cuBLAS 11.7. Those results are superseded by the rows above (decision 0004 A).
+Earlier CUDA measurements are superseded: M0 and M1 used a wheel that linked cuBLAS 11.7 (0004 A), and M2 ran with TF32 enabled (0005 B).
+
+Performance of the supported profile is in `docs/benchmark-report.md`: 14–19 items/s on the synthetic corpus, and 17.3 GB of GPU memory.
 
 ## Template profiles
 
@@ -34,7 +36,7 @@ M0 and M1 CUDA measurements were made with a wheel that accidentally linked cuBL
 | Environment | Status | Evidence |
 |---|---|---|
 | Linux x86_64, NVIDIA driver 575.51, CUDA 12.9, RTX 4090 (local) | Verified | Unit and integration suites; end-to-end runs with both clients |
-| Container `nvidia/cuda:12.9.0-runtime-ubuntu22.04` with the NVIDIA runtime | Probe verified | Model loaded from a `/repository` mount, CUDA offload, `/health` 200; the full service image is not built yet (M4) |
+| Container `nvidia/cuda:12.9.0-runtime-ubuntu22.04` (`--gpus all`) | Probe verified | Model loaded from a `/repository` mount, CUDA offload, `/health` 200; the full service image is not built yet (M4) |
 | Linux x86_64, CPU-only build | Not verified through the service | M0 spikes only |
 | Hugging Face Inference Endpoint | Not verified | Deferred by owner |
 | Windows, macOS, Apple Metal inference | Not supported in v0.1 | — |

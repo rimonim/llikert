@@ -141,9 +141,10 @@ def service_task(obj):
     return parse_task(obj)
 
 
-def test_f32_reference_fidelity_gate():
+@pytest.mark.parametrize("fixture_name", ["qwen3-4b-instruct-2507.json", "qwen3-4b-instruct-2507-v2.json"])
+def test_f32_reference_fidelity_gate(fixture_name):
     """Decision D24: max |dp| and |d log q| against transformers float32 on the official weights."""
-    fixture = json.loads((REPO / "tests/fixtures/fidelity/qwen3-4b-instruct-2507.json").read_text())
+    fixture = json.loads((REPO / "tests/fixtures/fidelity" / fixture_name).read_text())
     service = build_service(model_path("LLIKERT_TEST_MODEL_F32"))
     try:
         tol = fixture["tolerances"]
