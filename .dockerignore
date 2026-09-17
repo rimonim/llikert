@@ -1,0 +1,8 @@
+# the service image needs only the Python package, the build script, and deploy/
+*
+!python/pyproject.toml
+!python/README.md
+!python/src/
+!tools/build-llama-cpp-python.sh
+!deploy/
+**/__pycache__

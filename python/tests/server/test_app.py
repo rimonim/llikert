@@ -222,3 +222,14 @@ def test_queue_limit_returns_429_and_health_stays_responsive():
         gate.set()
         t.join(5)
         assert results["slow"].status_code == 200
+
+
+def test_startup_failure_callback_runs_after_logging():
+    called = threading.Event()
+
+    def failing_loader():
+        raise StartupError("model file sha256 does not match --model-sha256")
+
+    with TestClient(create_app(failing_loader, on_startup_failure=called.set)) as c:
+        assert called.wait(5)
+        assert c.get("/health").status_code == 503

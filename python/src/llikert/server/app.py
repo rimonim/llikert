@@ -97,9 +97,15 @@ class _State:
         self.pending = 0
 
 
-def create_app(load_service: Callable[[], ScoringService], settings: HttpSettings = HttpSettings()) -> FastAPI:
+def create_app(
+    load_service: Callable[[], ScoringService],
+    settings: HttpSettings = HttpSettings(),
+    on_startup_failure: Callable[[], None] | None = None,
+) -> FastAPI:
     """Build the app. ``load_service`` runs on the worker thread at startup and must
-    return a ready service (smoke check passed) or raise."""
+    return a ready service (smoke check passed) or raise. ``on_startup_failure`` runs after
+    a failed startup has been logged; the CLI uses it to exit, so a broken deployment is
+    visible to its supervisor instead of staying unready forever."""
     if settings.auth == AuthMode.TOKEN and not settings.token:
         raise ValueError("token auth requires a token")
     state = _State()
@@ -115,9 +121,11 @@ def create_app(load_service: Callable[[], ScoringService], settings: HttpSetting
         except StartupError as exc:
             state.startup_error = str(exc)
             log.error("startup failed: %s", exc)
-        except Exception as exc:  # noqa: BLE001 - never leak details; keep the process alive for /health
-            state.startup_error = type(exc).__name__
-            log.error("startup failed: %s", type(exc).__name__)
+        except Exception as exc:  # noqa: BLE001 - adapter errors carry safe messages; no tracebacks in logs
+            state.startup_error = f"{type(exc).__name__}: {exc}"
+            log.error("startup failed: %s", state.startup_error)
+        if state.startup_error is not None and on_startup_failure is not None:
+            on_startup_failure()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):

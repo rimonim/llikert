@@ -1,5 +1,7 @@
 # Running the scoring service locally
 
+To run the service in a container instead of installing it on the host, see `deploy/README.md`. For a Hugging Face Inference Endpoint, see `deploy/hf-endpoint.md` (experimental).
+
 Written for: operators setting up a LLikert service on a Linux machine with an NVIDIA GPU. Researchers who only connect to a running service need nothing on this page.
 
 Before you start, know the unavoidable local costs: the model file (16 GB for the supported F32 profile), a GPU with at least 24 GB of memory, and a native library build that takes a few minutes.

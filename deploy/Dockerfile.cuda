@@ -1,0 +1,55 @@
+# syntax=docker/dockerfile:1
+# LLikert scoring service, CUDA 12.9 (supported hosted hardware profile: NVIDIA Ada/Ampere, 24 GB).
+#
+#   docker build -f deploy/Dockerfile.cuda -t llikert-service:0.1.0.dev0-cuda12.9 \
+#     --build-arg SOURCE_REVISION=$(git rev-parse HEAD) .
+#
+# Model weights are not included; mount them (Hugging Face mounts the model repository at /repository).
+
+ARG CUDA_DEVEL=nvidia/cuda:12.9.0-devel-ubuntu22.04@sha256:26cd7d00c09c1f3ff187929c7f4aa7e9273020cb18e86730f40e062e8ffa4d33
+ARG CUDA_RUNTIME=nvidia/cuda:12.9.0-runtime-ubuntu22.04@sha256:d1ad87e98b335faaf097f2b6772dc4eec20b4516bac175761c30c91490a3f9cf
+
+# --- native: pinned llama-cpp-python wheel against llama.cpp v0.4.1, linked to the image's CUDA 12.9 ---
+FROM ${CUDA_DEVEL} AS native
+ARG CUDA_ARCHITECTURES="86;89"
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-venv python3-dev git build-essential ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+RUN python3 -m venv /opt/build
+COPY deploy/requirements-build.lock /tmp/requirements-build.lock
+RUN /opt/build/bin/pip install --no-cache-dir --require-hashes -r /tmp/requirements-build.lock
+COPY tools/build-llama-cpp-python.sh /src/tools/build-llama-cpp-python.sh
+RUN SRC=/src/llama-cpp-python WHEEL_DIR=/wheels PYTHON=/opt/build/bin/python PIP_WHEEL_ARGS=--no-build-isolation \
+    CUDA_HOME=/usr/local/cuda CUDA_ARCHITECTURES="${CUDA_ARCHITECTURES}" CMAKE_BUILD_PARALLEL_LEVEL=16 \
+    /src/tools/build-llama-cpp-python.sh cuda
+COPY python /src/python
+RUN /opt/build/bin/pip wheel --no-deps --no-build-isolation -w /wheels /src/python
+
+# --- runtime ---
+FROM ${CUDA_RUNTIME}
+ARG SOURCE_REVISION=unknown
+LABEL org.opencontainers.image.title="llikert-service" \
+      org.opencontainers.image.version="0.1.0.dev0" \
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.description="LLikert candidate-token probability scoring service (llama.cpp v0.4.1, CUDA 12.9)"
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-venv libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+RUN useradd --create-home --uid 10001 llikert && python3 -m venv /opt/llikert
+COPY deploy/requirements-server.lock /tmp/requirements-server.lock
+RUN /opt/llikert/bin/pip install --no-cache-dir --require-hashes -r /tmp/requirements-server.lock && rm /tmp/requirements-server.lock
+COPY --from=native /wheels /tmp/wheels
+RUN /opt/llikert/bin/pip install --no-cache-dir --no-deps /tmp/wheels/*.whl && rm -rf /tmp/wheels
+COPY deploy/entrypoint.sh /usr/local/bin/llikert-entrypoint
+# TF32 changes probabilities (decision 0005); the service also sets this itself before loading CUDA
+ENV PATH=/opt/llikert/bin:$PATH \
+    NVIDIA_TF32_OVERRIDE=0 \
+    PYTHONUNBUFFERED=1 \
+    LLIKERT_PORT=8080
+USER llikert
+WORKDIR /home/llikert
+EXPOSE 8080
+HEALTHCHECK --interval=15s --timeout=5s --start-period=180s --retries=3 \
+    CMD python3 -c "import os, sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:%s/health' % os.environ.get('LLIKERT_PORT', '8080'), timeout=4).status == 200 else 1)"
+ENTRYPOINT ["llikert-entrypoint"]

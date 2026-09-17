@@ -8,17 +8,20 @@
 set -euo pipefail
 
 BINDING_TAG=v0.3.35
+BINDING_COMMIT=3691546f1c9e0c1bf93323dff02230bd959cf562
 LLAMA_CPP_TAG=v0.4.1
 LLAMA_CPP_COMMIT=b29c606e28a01b1bc8c1351026a0fa6e616bf6c4
 VARIANT=${1:?usage: $0 cuda|cpu}
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
-SRC=$ROOT/build/llama-cpp-python
+SRC=${SRC:-$ROOT/build/llama-cpp-python}
 PYTHON=${PYTHON:-/usr/bin/python3}
 
 if [ ! -d "$SRC" ]; then
   git clone --depth 1 --branch "$BINDING_TAG" --recurse-submodules --shallow-submodules \
     https://github.com/abetlen/llama-cpp-python.git "$SRC"
 fi
+actual=$(git -C "$SRC" rev-parse HEAD)
+[ "$actual" = "$BINDING_COMMIT" ] || { echo "llama-cpp-python $BINDING_TAG is $actual, expected $BINDING_COMMIT" >&2; exit 1; }
 git -C "$SRC/vendor/llama.cpp" fetch --depth 1 origin tag "$LLAMA_CPP_TAG"
 git -C "$SRC/vendor/llama.cpp" checkout -q "$LLAMA_CPP_TAG"
 actual=$(git -C "$SRC/vendor/llama.cpp" rev-parse HEAD)
@@ -37,5 +40,6 @@ case "$VARIANT" in
   *) echo "variant must be cuda or cpu" >&2; exit 2 ;;
 esac
 
-"$PYTHON" -m pip wheel --no-deps -w "$ROOT/build/wheels/$VARIANT" "$SRC"
-ls -1 "$ROOT/build/wheels/$VARIANT"
+# PIP_WHEEL_ARGS=--no-build-isolation builds with pre-installed, locked tools (deploy/requirements-build.lock)
+"$PYTHON" -m pip wheel --no-deps ${PIP_WHEEL_ARGS:-} -w "${WHEEL_DIR:-$ROOT/build/wheels/$VARIANT}" "$SRC"
+ls -1 "${WHEEL_DIR:-$ROOT/build/wheels/$VARIANT}"

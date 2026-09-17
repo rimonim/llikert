@@ -94,7 +94,11 @@ def cmd_serve(args: argparse.Namespace) -> int:
 
     limits = Limits(max_items_per_request=args.max_items, max_body_bytes=args.max_body_bytes, queue_limit=args.queue)
     settings = HttpSettings(auth=auth, token=token, max_body_bytes=args.max_body_bytes, queue_limit=args.queue)
-    app = create_app(lambda: _load_service(args, limits), settings)
+    def exit_on_failure() -> None:
+        logging.shutdown()
+        os._exit(3)  # nothing is loaded; the supervisor sees a failed start
+
+    app = create_app(lambda: _load_service(args, limits), settings, on_startup_failure=exit_on_failure)
     # one process, one worker: the model is loaded exactly once
     uvicorn.run(app, host=args.host, port=args.port, workers=1, log_level=args.log_level, access_log=False)
     return 0

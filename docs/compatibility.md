@@ -36,9 +36,10 @@ Performance of the supported profile is in `docs/benchmark-report.md`: 14–19 i
 | Environment | Status | Evidence |
 |---|---|---|
 | Linux x86_64, NVIDIA driver 575.51, CUDA 12.9, RTX 4090 (local) | Verified | Unit and integration suites; end-to-end runs with both clients |
-| Container `nvidia/cuda:12.9.0-runtime-ubuntu22.04` (`--gpus all`) | Probe verified | Model loaded from a `/repository` mount, CUDA offload, `/health` 200; the full service image is not built yet (M4) |
+| Service image `llikert-service:0.1.0.dev0-cuda12.9` (`--gpus all`, RTX 4090) | Verified | `deploy/test-container.sh`: 16/16 checks, including the HTTP fidelity gate; same engine fingerprint as the host service (decision 0006) |
 | Linux x86_64, CPU-only build | Not verified through the service | M0 spikes only |
-| Hugging Face Inference Endpoint | Not verified | Deferred by owner |
+| Hugging Face Inference Endpoint (`deploy/hf-endpoint.md`) | Not verified (experimental recipe) | Deferred by owner; no image, model or endpoint published |
+| NVIDIA L4, A10G, or any GPU other than RTX 4090 | Not verified | Image compiled for compute capability 8.6 and 8.9; run `tools/fidelity_gate_http.py` before research use |
 | Windows, macOS, Apple Metal inference | Not supported in v0.1 | — |
 
 ## Client environments
