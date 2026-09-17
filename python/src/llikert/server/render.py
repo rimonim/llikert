@@ -18,14 +18,15 @@ import jinja2
 import jinja2.ext
 import jinja2.sandbox
 
+from llikert.server.prompt import build_messages
 from llikert.server.task import Task
 
-RENDERER_VERSION = 1
+RENDERER_VERSION = 2  # 2: prompt formats from the task (docs/prompts.md)
 
 SENTINEL_OPEN = chr(0xE000) + "LLK"
 SENTINEL_CLOSE = chr(0xE001)
 
-PREVIEW_EXAMPLE_TEXT = "This is an example text used only to preview the prompt."
+PREVIEW_EXAMPLE_ITEM = "This is an example item used only to preview the prompt."
 
 
 class RenderError(ValueError):
@@ -38,24 +39,8 @@ class Segment:
     text: str
 
 
-def system_message(task: Task) -> str:
-    lines = [task.instructions, "", "Response codes:"]
-    lines += [f"{c.response} = {c.label}" for c in task.categories]
-    lines += ["", "Answer with exactly one of the response codes listed above and nothing else."]
-    return "\n".join(lines)
-
-
-def user_message(text: str) -> str:
-    return f"Text:\n<text>\n{text}\n</text>"
-
-
-def messages_for(task: Task, text: str) -> list[dict[str, str]]:
-    messages = [{"role": "system", "content": system_message(task)}]
-    for example in task.examples:
-        messages.append({"role": "user", "content": user_message(example.text)})
-        messages.append({"role": "assistant", "content": task.category(example.category_id).response})
-    messages.append({"role": "user", "content": user_message(text)})
-    return messages
+def messages_for(task: Task, item: str) -> list[dict[str, str]]:
+    return build_messages(task.canonical(), item)
 
 
 def _environment() -> jinja2.sandbox.ImmutableSandboxedEnvironment:
@@ -89,8 +74,8 @@ class Renderer:
         except jinja2.TemplateError as exc:
             raise RenderError(f"chat template failed to render: {type(exc).__name__}") from None
 
-    def segments(self, task: Task, text: str) -> list[Segment]:
-        messages = messages_for(task, text)
+    def segments(self, task: Task, item: str) -> list[Segment]:
+        messages = messages_for(task, item)
         placeholders = [f"{SENTINEL_OPEN}{i}{SENTINEL_CLOSE}" for i in range(len(messages))]
         rendered = self._render([{"role": m["role"], "content": s} for m, s in zip(messages, placeholders)])
 
@@ -112,8 +97,8 @@ class Renderer:
             raise RenderError("chat template output depends on message content")
         return [s for s in segments if s.text]
 
-    def prompt_text(self, task: Task, text: str) -> str:
-        return "".join(s.text for s in self.segments(task, text))
+    def prompt_text(self, task: Task, item: str) -> str:
+        return "".join(s.text for s in self.segments(task, item))
 
     @staticmethod
     def tail(segments: list[Segment]) -> str:

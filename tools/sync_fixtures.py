@@ -12,7 +12,7 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[1]
 SOURCE = REPO / "tests" / "fixtures"
 TARGET = REPO / "r" / "llikert" / "tests" / "testthat" / "fixtures"
-SHARED = ["protocol", "runs", "tasks", "checkpoints"]
+SHARED = ["protocol", "runs", "tasks", "checkpoints", "prompts", "canonical"]
 
 
 def files(root: pathlib.Path) -> set[pathlib.Path]:

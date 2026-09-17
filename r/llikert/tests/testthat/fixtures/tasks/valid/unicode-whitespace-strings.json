@@ -51,8 +51,16 @@
       }
     ],
     "ordered": false,
-    "examples": []
+    "examples": [],
+    "prompt": {
+      "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+      "user": "Text:\n<text>\n{item}\n</text>",
+      "scale": "Response codes:\n{codes}",
+      "code": "{response} = {label}",
+      "code_separator": "\n",
+      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"Beschreibung ✎ \",\"response\":\" A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Line one\\nLine two\\ttab\",\"name\":\"Ünïcode  name\",\"ordered\":false,\"schema_version\":1}",
-  "task_hash": "sha256:8efc22d148beb19975cea0fd26f0c6afa11c65a1fb007f1f4aecdc5a5f3e1000"
+  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"Beschreibung ✎ \",\"response\":\" A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Line one\\nLine two\\ttab\",\"name\":\"Ünïcode  name\",\"ordered\":false,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\\n\\n{answer_instruction}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\"},\"schema_version\":1}",
+  "task_hash": "sha256:65a901edf6c49e4a10be4f5896601d14fa78509cba382a90b394d8e7d317f771"
 }

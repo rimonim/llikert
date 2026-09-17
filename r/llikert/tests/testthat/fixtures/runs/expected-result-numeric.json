@@ -1,7 +1,7 @@
 {
  "result_schema_version": 1,
  "protocol_version": 1,
- "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+ "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
  "engine": {
   "fingerprint_version": 1,
   "model_and_execution": {
@@ -14,7 +14,7 @@
    "name": "fake-chatml",
    "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
   },
-  "renderer_version": 1,
+  "renderer_version": 2,
   "boundary_policy": "tail-suffix-v1",
   "postprocessing_version": 1,
   "prepared_schema_version": 1,
@@ -68,13 +68,21 @@
    "ordered": true,
    "examples": [
     {
-     "text": "I love it.",
+     "item": "I love it.",
      "category_id": "very positive"
     }
-   ]
+   ],
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+   }
   },
-  "task_hash": "sha256:09ccaf13f957cbed77d8ecf976eab3062eb65ffa2bb117e4261f6bfef9e0d69c",
-  "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+  "task_hash": "sha256:3e3776e65d100f371d00d40f4d246281e15ec84409f39493d9783980e1752110",
+  "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
   "profile": {
    "name": "fake-chatml",
    "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
@@ -129,7 +137,7 @@
     "token_piece": "5"
    }
   ],
-  "prepared_hash": "sha256:8bd56c08cce45cccff68813023043c887bbb3a0d54cf8cd73a1c8cb4f1773b61"
+  "prepared_hash": "sha256:648f442d5e854b00e51b0768d4a7a98fcc5112f3175616e680df32173cc0d840"
  },
  "category_ids": [
   "very negative",
@@ -243,7 +251,7 @@
    "status": "missing_input",
    "error": {
     "code": "missing_input",
-    "message": "text is missing"
+    "message": "item is missing"
    },
    "candidate_log_probs": [
     null,
@@ -345,7 +353,7 @@
    "status": "empty_input",
    "error": {
     "code": "empty_input",
-    "message": "text is empty"
+    "message": "item is empty"
    },
    "candidate_log_probs": [
     null,
@@ -672,7 +680,7 @@
    "warnings": [
     {
      "code": "reserved_marker_text",
-     "message": "text contains special-token text, scored as ordinary text"
+     "message": "item contains special-token text, scored as ordinary text"
     }
    ],
    "expected_value": 3.3599854146846138,

@@ -11,7 +11,7 @@ Every response carries the header `LLikert-Protocol: 1`. Request bodies must be 
 | `GET /health` | never | `200 {"status":"ready"}` once the model is loaded and the smoke check has passed; otherwise `503` with `Retry-After` |
 | `GET /v1/info` | yes | Protocol version, engine fingerprint and identity, execution details, limits |
 | `POST /v1/prepare` | yes | Validate a task against the loaded model; returns the portable prepared artifact |
-| `POST /v1/score` | yes | Score one chunk of identified texts with a prepared artifact |
+| `POST /v1/score` | yes | Score one chunk of identified items with a prepared artifact |
 
 ## Task (`task.v1.json`)
 
@@ -26,7 +26,15 @@ Every response carries the header `LLikert-Protocol: 1`. Request bodies must be 
     {"id": "request",     "label": "request",     "response": "C", "value": null}
   ],
   "ordered": false,
-  "examples": [{"text": "Where is it?", "category_id": "question"}]
+  "examples": [{"item": "Where is it?", "category_id": "question"}],
+  "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+  }
 }
 ```
 
@@ -34,7 +42,8 @@ Every response carries the header `LLikert-Protocol: 1`. Request bodies must be 
 - **`id`:** unique; `id` and `expected_value` are reserved.
 - **`response`:** nonempty and unique; whitespace counts.
 - **`value`:** a finite number for every category or null for all of them.
-- **Strings:** never trimmed or Unicode-normalized.
+- **Strings:** never trimmed or Unicode-normalized. `instructions` may be empty.
+- **`prompt`:** optional; missing fields take the defaults shown. `system` may be null for no system message. Templates, placeholders and validation rules are in `docs/prompts.md`; invalid formats are `422 invalid_task`.
 - **Identity:** the task hash is the SHA-256 of the RFC 8785 (JCS) canonical form with defaults filled in, written `sha256:<hex>`. Fixtures are in `tests/fixtures/tasks/`.
 
 ## Prepare
@@ -53,8 +62,8 @@ On `200` the response contains:
   - `boundary_policy`, `tail_tokens`
   - `categories[] {id, label, response, value, token_id, token_piece}`
   - `prepared_hash`
-- **`diagnostics`:** `n_prompt_tokens_without_text`, `n_ctx`, `max_text_tokens_approx`, `warnings[]`
-- **`preview`:** `example {prompt, n_prompt_tokens}` rendered with a harmless example text, plus `text` only when `preview_text` was sent. Previews are never logged and never part of the artifact.
+- **`diagnostics`:** `n_prompt_tokens_without_item`, `n_ctx`, `max_item_tokens_approx`, `warnings[]` (prompt-format warnings: `unused_instructions`, `empty_instructions`, `unused_answer_instruction`, `scale_not_in_prompt`; `response_whitespace`)
+- **`preview`:** `example {messages, prompt, n_prompt_tokens}` rendered with a made-up example item, plus `text` only when `preview_text` was sent. `messages` are the chat messages (`role`, `content`), and `prompt` is the exact text in the model's chat format. Previews are never logged and never part of the artifact.
 - **`request_id`**
 
 On `422 invalid_response_codes`, `error.details` holds:
@@ -105,7 +114,7 @@ Response `200`:
     },
     {
       "id": "r2", "status": "missing_input",
-      "error": {"code": "missing_input", "message": "text is missing"},
+      "error": {"code": "missing_input", "message": "item is missing"},
       "candidate_log_probs": [null, null, null], "candidate_probs": [null, null, null],
       "probabilities": [null, null, null], "log_coverage": null, "coverage": null,
       "n_prompt_tokens": null, "prompt_token_sha256": null, "warnings": []
@@ -123,8 +132,8 @@ Response `200`:
 | Item status | Meaning |
 |---|---|
 | `ok` | Scored |
-| `missing_input` | `text` was null |
-| `empty_input` | `text` was `""`; whitespace-only text is scored |
+| `missing_input` | `text` (the item) was null |
+| `empty_input` | `text` was `""`; a whitespace-only item is scored |
 | `invalid_encoding` | `text` contained a lone surrogate |
 | `context_limit` | The rendered prompt is longer than `n_ctx`; `n_prompt_tokens` gives the length |
 | `boundary_error` | The item's prompt does not end at the prepared answer boundary |

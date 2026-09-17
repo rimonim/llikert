@@ -1,0 +1,98 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Questionnaire",
+    "instructions": "You are completing a personality questionnaire. Rate how well each statement describes you.",
+    "categories": [
+      {
+        "id": "s1",
+        "label": "very negative",
+        "response": "1",
+        "value": 1.0
+      },
+      {
+        "id": "s2",
+        "label": "negative",
+        "response": "2",
+        "value": 2.0
+      },
+      {
+        "id": "s3",
+        "label": "neutral",
+        "response": "3",
+        "value": 3.0
+      },
+      {
+        "id": "s4",
+        "label": "positive",
+        "response": "4",
+        "value": 4.0
+      },
+      {
+        "id": "s5",
+        "label": "very positive",
+        "response": "5",
+        "value": 5.0
+      }
+    ],
+    "ordered": true,
+    "examples": [],
+    "prompt": {
+      "system": "{instructions}\n{scale}\n{answer_instruction}",
+      "user": "{item}",
+      "scale": "{codes}",
+      "code": "{response} = {label}",
+      "code_separator": "; ",
+      "answer_instruction": "Reply with the number only."
+    }
+  },
+  "canonical": {
+    "schema_version": 1,
+    "name": "Questionnaire",
+    "instructions": "You are completing a personality questionnaire. Rate how well each statement describes you.",
+    "categories": [
+      {
+        "id": "s1",
+        "label": "very negative",
+        "response": "1",
+        "value": 1.0
+      },
+      {
+        "id": "s2",
+        "label": "negative",
+        "response": "2",
+        "value": 2.0
+      },
+      {
+        "id": "s3",
+        "label": "neutral",
+        "response": "3",
+        "value": 3.0
+      },
+      {
+        "id": "s4",
+        "label": "positive",
+        "response": "4",
+        "value": 4.0
+      },
+      {
+        "id": "s5",
+        "label": "very positive",
+        "response": "5",
+        "value": 5.0
+      }
+    ],
+    "ordered": true,
+    "examples": [],
+    "prompt": {
+      "system": "{instructions}\n{scale}\n{answer_instruction}",
+      "user": "{item}",
+      "scale": "{codes}",
+      "code": "{response} = {label}",
+      "code_separator": "; ",
+      "answer_instruction": "Reply with the number only."
+    }
+  },
+  "canonical_jcs": "{\"categories\":[{\"id\":\"s1\",\"label\":\"very negative\",\"response\":\"1\",\"value\":1},{\"id\":\"s2\",\"label\":\"negative\",\"response\":\"2\",\"value\":2},{\"id\":\"s3\",\"label\":\"neutral\",\"response\":\"3\",\"value\":3},{\"id\":\"s4\",\"label\":\"positive\",\"response\":\"4\",\"value\":4},{\"id\":\"s5\",\"label\":\"very positive\",\"response\":\"5\",\"value\":5}],\"examples\":[],\"instructions\":\"You are completing a personality questionnaire. Rate how well each statement describes you.\",\"name\":\"Questionnaire\",\"ordered\":true,\"prompt\":{\"answer_instruction\":\"Reply with the number only.\",\"code\":\"{response} = {label}\",\"code_separator\":\"; \",\"scale\":\"{codes}\",\"system\":\"{instructions}\\n{scale}\\n{answer_instruction}\",\"user\":\"{item}\"},\"schema_version\":1}",
+  "task_hash": "sha256:a92f4e616fc19eb1a586f6d03d3127bb4ad1029d3963a6797f6ba394619e0585"
+}

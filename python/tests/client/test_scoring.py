@@ -83,9 +83,9 @@ def test_redirects_are_not_followed(connect, mock):
 
 def test_prepare_returns_portable_prepared_task(connect, tmp_path):
     scorer = connect()
-    prepared = scorer.prepare(quickstart_nominal(), preview_text="Where?")
+    prepared = scorer.prepare(quickstart_nominal(), preview_item="Where?")
     assert [(c["id"], c["response"]) for c in prepared.mapping] == [("description", "A"), ("question", "B"), ("request", "C")]
-    assert "Where?" in prepared.preview_prompt("text")
+    assert "Where?" in prepared.preview_prompt("item")
     assert "request" in repr(prepared)
     prepared.save(tmp_path / "prepared.json")
     loaded = PreparedTask.load(tmp_path / "prepared.json")

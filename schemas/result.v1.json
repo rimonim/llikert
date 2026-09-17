@@ -75,14 +75,14 @@
           "title": "Category Id",
           "type": "string"
         },
-        "text": {
+        "item": {
           "minLength": 1,
-          "title": "Text",
+          "title": "Item",
           "type": "string"
         }
       },
       "required": [
-        "text",
+        "item",
         "category_id"
       ],
       "title": "Example",
@@ -225,6 +225,52 @@
       "title": "PreparedTask",
       "type": "object"
     },
+    "PromptFormat": {
+      "additionalProperties": false,
+      "description": "Templates for turning the task and one item into chat messages (docs/prompts.md).",
+      "properties": {
+        "answer_instruction": {
+          "default": "Answer with exactly one of the response codes listed above and nothing else.",
+          "title": "Answer Instruction",
+          "type": "string"
+        },
+        "code": {
+          "default": "{response} = {label}",
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "code_separator": {
+          "default": "\n",
+          "title": "Code Separator",
+          "type": "string"
+        },
+        "scale": {
+          "default": "Response codes:\n{codes}",
+          "title": "Scale",
+          "type": "string"
+        },
+        "system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+          "title": "System"
+        },
+        "user": {
+          "default": "Text:\n<text>\n{item}\n</text>",
+          "title": "User",
+          "type": "string"
+        }
+      },
+      "title": "PromptFormat",
+      "type": "object"
+    },
     "ResultItem": {
       "additionalProperties": false,
       "properties": {
@@ -365,7 +411,7 @@
               "type": "null"
             }
           ],
-          "description": "SHA-256 (hex) of the UTF-8 text; null for missing text",
+          "description": "SHA-256 (hex) of the item's UTF-8 text; null for a missing item",
           "title": "Text Sha256"
         },
         "warnings": {
@@ -412,7 +458,6 @@
           "type": "array"
         },
         "instructions": {
-          "minLength": 1,
           "title": "Instructions",
           "type": "string"
         },
@@ -425,6 +470,9 @@
           "default": false,
           "title": "Ordered",
           "type": "boolean"
+        },
+        "prompt": {
+          "$ref": "#/$defs/PromptFormat"
         },
         "schema_version": {
           "const": 1,

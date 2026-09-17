@@ -80,9 +80,9 @@ TASKS = {
         ],
         "ordered": True,
         "examples": [
-            {"text": "The concert was a complete disaster.", "category_id": "s1"},
-            {"text": "Lunch was fine, nothing special.", "category_id": "s3"},
-            {"text": "The holiday was absolutely wonderful.", "category_id": "s5"},
+            {"item": "The concert was a complete disaster.", "category_id": "s1"},
+            {"item": "Lunch was fine, nothing special.", "category_id": "s3"},
+            {"item": "The holiday was absolutely wonderful.", "category_id": "s5"},
         ],
     },
     "topic-10": {

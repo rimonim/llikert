@@ -1,7 +1,7 @@
 import pytest
 
 from llikert.server.fake_adapter import FAKE_CHAT_TEMPLATE
-from llikert.server.render import Renderer, RenderError, messages_for, system_message
+from llikert.server.render import Renderer, RenderError, messages_for
 from llikert.server.task import parse_task
 
 from .conftest import task_dict
@@ -14,11 +14,11 @@ def test_segments_alternate_and_reconstruct_prompt():
     assert [s.kind for s in segs] == ["template", "content", "template", "content", "template"]
     assert segs[-1].text == "<|im_end|>\n<|im_start|>assistant\n"
     assert segs[3].text == "Text:\n<text>\nHello\n</text>"
-    assert "A = description\nB = question\nC = request" in system_message(task)
+    assert "A = description\nB = question\nC = request" in messages_for(task, "Hello")[0]["content"]
 
 
 def test_examples_become_turns_in_order():
-    task = parse_task(task_dict(examples=[{"text": "Why?", "category_id": "question"}, {"text": "Do it.", "category_id": "request"}]))
+    task = parse_task(task_dict(examples=[{"item": "Why?", "category_id": "question"}, {"item": "Do it.", "category_id": "request"}]))
     roles = [(m["role"], m["content"]) for m in messages_for(task, "x")]
     assert roles[1:5] == [
         ("user", "Text:\n<text>\nWhy?\n</text>"), ("assistant", "B"),

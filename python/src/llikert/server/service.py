@@ -18,7 +18,7 @@ from llikert.server.errors import ItemStatus, ServiceError, conflict, invalid, u
 from llikert.server.numerics import POSTPROCESSING_VERSION, NonFiniteLogits, score_candidates
 from llikert.server.prepare import BOUNDARY_POLICY, PREPARED_SCHEMA_VERSION, Preparer
 from llikert.server.profiles import PROFILES, TemplateProfile, template_sha256
-from llikert.server.render import PREVIEW_EXAMPLE_TEXT, RENDERER_VERSION, Renderer, RenderError
+from llikert.server.render import PREVIEW_EXAMPLE_ITEM, RENDERER_VERSION, Renderer, RenderError
 from llikert.server.task import Task, check_utf8, parse_task
 
 FINGERPRINT_VERSION = 1
@@ -136,7 +136,7 @@ class ScoringService:
         self._require_healthy()
         task = parse_task(task_obj)
         artifact = self._prepared_for(task)
-        preview = {"example": self.preparer.preview(task, PREVIEW_EXAMPLE_TEXT)}
+        preview = {"example": self.preparer.preview(task, PREVIEW_EXAMPLE_ITEM)}
         if preview_text is not None:
             _require_text(preview_text, "preview_text")
             preview["text"] = self.preparer.preview(task, preview_text)
@@ -219,18 +219,18 @@ class ScoringService:
             return out
 
         if text is None:
-            return failure(ItemStatus.MISSING_INPUT, "text is missing")
+            return failure(ItemStatus.MISSING_INPUT, "item is missing")
         if text == "":
-            return failure(ItemStatus.EMPTY_INPUT, "text is empty")
+            return failure(ItemStatus.EMPTY_INPUT, "item is empty")
         try:
             check_utf8(text)
         except ValueError:
-            return failure(ItemStatus.INVALID_ENCODING, "text is not valid Unicode")
+            return failure(ItemStatus.INVALID_ENCODING, "item is not valid Unicode")
 
         try:
             tokens, _ = self.preparer.prompt_tokens(task, text)
         except RenderError:
-            return failure(ItemStatus.BOUNDARY_ERROR, "the chat template did not render this text consistently")
+            return failure(ItemStatus.BOUNDARY_ERROR, "the chat template did not render this item consistently")
         tail = artifact["tail_tokens"]
         if tokens[-len(tail) :] != tail:
             return failure(ItemStatus.BOUNDARY_ERROR, "the prompt does not end at the prepared answer boundary")
@@ -251,7 +251,7 @@ class ScoringService:
 
         warnings = []
         if self.preparer.reserved_markers_in(text):
-            warnings.append({"code": "reserved_marker_text", "message": "text contains special-token text, scored as ordinary text"})
+            warnings.append({"code": "reserved_marker_text", "message": "item contains special-token text, scored as ordinary text"})
         out = {
             "id": item_id,
             "status": ItemStatus.OK.value,

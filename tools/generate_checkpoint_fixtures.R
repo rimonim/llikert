@@ -19,5 +19,5 @@ crash <- function(req, body) {
   mock$score(body)
 }
 for (i in 1:3) mock$push("/v1/score", crash)
-try(score_texts(d$texts, d$ids, task = prepared, engine = engine, chunk_size = 5L, checkpoint = out, progress = FALSE), silent = TRUE)
+try(score_items(d$texts, d$ids, task = prepared, engine = engine, chunk_size = 5L, checkpoint = out, progress = FALSE), silent = TRUE)
 cat("wrote", out, list.files(file.path(out, "chunks")), "\n")

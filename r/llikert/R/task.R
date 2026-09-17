@@ -1,12 +1,36 @@
 #' Define a scoring task
 #'
-#' A task names the construct, the instructions shown to the model, and the
-#' categories with their response codes. Response codes must each be a single
-#' token for the service's model; [prepare_task()] checks this before any
-#' dataset is scored.
+#' A task describes what the model should do with each item: the instructions,
+#' the categories with their response codes, optional worked examples, and the
+#' prompt format that combines these into the messages the model reads.
+#'
+#' An **item** is whatever the model responds to: a text to classify (an open
+#' survey answer, a post), a questionnaire statement the model answers itself,
+#' and so on.
+#'
+#' @section How the prompt is built:
+#' With the default [prompt_format()], the model receives for every item:
+#'
+#' * a **system** message: your `instructions`, a blank line, `Response
+#'   codes:` followed by one line per category (`A = description`, ...), a
+#'   blank line, and `Answer with exactly one of the response codes listed
+#'   above and nothing else.`
+#' * for each example: a **user** message with the example item and an
+#'   **assistant** message with its response code;
+#' * a **user** message: `Text:`, then the item between `<text>` and `</text>`.
+#'
+#' The model's probabilities for your response codes are read at the start of
+#' its reply. Use [task_messages()] to see the exact messages for any item,
+#' and `prompt = prompt_format(...)` to change the wording, the order
+#' (instructions before or after the item), how the scale is described, or the
+#' answer instruction.
+#'
+#' Response codes must each be a single token for the service's model;
+#' [prepare_task()] checks this before any items are scored.
 #'
 #' @param name Human-readable task name.
-#' @param instructions Construct definition and decision instructions.
+#' @param instructions What you would tell a human coder or respondent. May be
+#'   `""` if your prompt format does not use `{instructions}`.
 #' @param categories Character vector of category labels, in order.
 #' @param responses Character vector of response codes (for example `"A"`,
 #'   `"B"`), one per category. Whitespace is meaningful.
@@ -15,11 +39,13 @@
 #' @param ordered Whether the categories are ordinal.
 #' @param ids Category ids used for columns and joins. Defaults to the labels,
 #'   which must then be unique.
-#' @param examples Optional few-shot examples: a data frame with columns `text`
+#' @param examples Optional worked examples: a data frame with columns `item`
 #'   and `category` (a category id), used in row order.
+#' @param prompt A [prompt_format()] describing how the prompt is assembled.
 #' @return An object of class `llikert_task`.
 #' @export
 #' @examples
+#' # coding texts
 #' task <- scoring_task(
 #'   name = "Communicative function",
 #'   instructions = "Classify the text's primary communicative function.",
@@ -27,10 +53,26 @@
 #'   responses = c("A", "B", "C")
 #' )
 #' task
+#' task_messages(task, "Where is the station?")
+#'
+#' # questionnaire items answered by the model
+#' questionnaire <- scoring_task(
+#'   name = "Extraversion items",
+#'   instructions = "You are completing a personality questionnaire. Rate how well each statement describes you.",
+#'   categories = c("disagree strongly", "disagree", "neutral", "agree", "agree strongly"),
+#'   responses = c("1", "2", "3", "4", "5"),
+#'   values = 1:5,
+#'   ordered = TRUE,
+#'   prompt = prompt_format(user = "{item}", answer_instruction = "Reply with the number only.")
+#' )
+#' task_messages(questionnaire, "I am the life of the party.")
 scoring_task <- function(name, instructions, categories, responses, values = NULL,
-                         ordered = FALSE, ids = categories, examples = NULL) {
+                         ordered = FALSE, ids = categories, examples = NULL, prompt = prompt_format()) {
   check_string(name, "name")
-  check_string(instructions, "instructions")
+  if (!rlang::is_string(instructions) || is.na(instructions)) {
+    llikert_abort("`instructions` must be a single string (it may be empty).", "invalid_task")
+  }
+  if (!inherits(prompt, "llikert_prompt_format")) llikert_abort("`prompt` must be created with prompt_format().", "invalid_task")
   check_character(categories, "categories")
   check_character(responses, "responses")
   check_character(ids, "ids")
@@ -52,15 +94,15 @@ scoring_task <- function(name, instructions, categories, responses, values = NUL
   })
   exs <- list()
   if (!is.null(examples)) {
-    if (!is.data.frame(examples) || !all(c("text", "category") %in% names(examples))) {
-      llikert_abort("`examples` must be a data frame with columns `text` and `category`.", "invalid_task")
+    if (!is.data.frame(examples) || !all(c("item", "category") %in% names(examples))) {
+      llikert_abort("`examples` must be a data frame with columns `item` and `category`.", "invalid_task")
     }
     exs <- lapply(seq_len(nrow(examples)), function(i) {
-      list(text = as.character(examples$text[[i]]), category_id = as.character(examples$category[[i]]))
+      list(item = as.character(examples$item[[i]]), category_id = as.character(examples$category[[i]]))
     })
   }
   new_task(list(schema_version = 1L, name = name, instructions = instructions,
-                categories = cats, ordered = ordered, examples = exs))
+                categories = cats, ordered = ordered, examples = exs, prompt = unclass(prompt)))
 }
 
 new_task <- function(x) {
@@ -70,12 +112,11 @@ new_task <- function(x) {
 
 validate_task <- function(x) {
   fail <- function(msg) llikert_abort(msg, "invalid_task", call = rlang::caller_env(2))
-  allowed <- c("schema_version", "name", "instructions", "categories", "ordered", "examples")
+  allowed <- c("schema_version", "name", "instructions", "categories", "ordered", "examples", "prompt")
   if (length(setdiff(names(x), allowed))) fail(sprintf("Unknown task fields: %s.", paste(setdiff(names(x), allowed), collapse = ", ")))
   if (!identical(as.integer(x$schema_version), 1L)) fail("Unsupported task schema_version.")
-  for (field in c("name", "instructions")) {
-    if (!rlang::is_string(x[[field]]) || !nzchar(x[[field]]) || !valid_utf8(x[[field]])) fail(sprintf("`%s` must be a nonempty string.", field))
-  }
+  if (!rlang::is_string(x$name) || !nzchar(x$name) || !valid_utf8(x$name)) fail("`name` must be a nonempty string.")
+  if (!rlang::is_string(x$instructions) || !valid_utf8(x$instructions)) fail("`instructions` must be a string.")
   cats <- x$categories
   if (!is.list(cats) || length(cats) < 2L) fail("A task needs at least two categories.")
   for (c in cats) {
@@ -98,9 +139,21 @@ validate_task <- function(x) {
   if (any(has_value) && !all(has_value)) fail("Values must be supplied for every category or for none.")
   if (!rlang::is_bool(x$ordered)) fail("`ordered` must be TRUE or FALSE.")
   for (e in x$examples) {
-    if (!rlang::is_string(e$text) || !nzchar(e$text) || !rlang::is_string(e$category_id)) fail("Examples need nonempty text and a category id.")
+    if (length(setdiff(names(e), c("item", "category_id")))) fail("Examples have the fields `item` and `category_id`.")
+    if (!rlang::is_string(e$item) || !nzchar(e$item) || !rlang::is_string(e$category_id)) fail("Examples need a nonempty item and a category id.")
     if (!e$category_id %in% ids) fail(sprintf("Example category `%s` is not a category id.", e$category_id))
   }
+  prompt <- x$prompt
+  prompt_names <- c("system", "user", "scale", "code", "code_separator", "answer_instruction")
+  if (!is.list(prompt) || length(setdiff(names(prompt), prompt_names)) || !all(prompt_names %in% names(prompt))) {
+    fail("`prompt` must have the fields system, user, scale, code, code_separator and answer_instruction.")
+  }
+  for (field in prompt_names) {
+    value <- prompt[[field]]
+    ok <- if (field == "system") is.null(value) || rlang::is_string(value) else rlang::is_string(value)
+    if (!ok || (!is.null(value) && !valid_utf8(value))) fail(sprintf("`prompt$%s` must be a string%s.", field, if (field == "system") " or NULL" else ""))
+  }
+  validate_prompt_format(prompt, has_values = any(has_value), call = rlang::caller_env(2))
   invisible(x)
 }
 
@@ -118,13 +171,22 @@ task_as_list <- function(task) {
   out <- unclass(task)
   out$schema_version <- 1L
   out$categories <- lapply(out$categories, function(c) list(id = c$id, label = c$label, response = c$response, value = c$value))
-  out$examples <- lapply(out$examples, function(e) list(text = e$text, category_id = e$category_id))
-  out[c("schema_version", "name", "instructions", "categories", "ordered", "examples")]
+  out$examples <- lapply(out$examples, function(e) list(item = e$item, category_id = e$category_id))
+  p <- out$prompt
+  out$prompt <- list(system = p$system, user = p$user, scale = p$scale, code = p$code,
+                     code_separator = p$code_separator, answer_instruction = p$answer_instruction)
+  out[c("schema_version", "name", "instructions", "categories", "ordered", "examples", "prompt")]
 }
 
 task_from_list <- function(x) {
   x$ordered <- x$ordered %||% FALSE
   x$examples <- x$examples %||% list()
+  defaults <- unclass(prompt_format())
+  given <- x$prompt %||% list()
+  unknown <- setdiff(names(given), names(defaults))
+  if (length(unknown)) llikert_abort(sprintf("Unknown prompt fields: %s.", paste(unknown, collapse = ", ")), "invalid_task")
+  # an explicit `"system": null` means no system message; a missing field means the default
+  x$prompt <- lapply(stats::setNames(names(defaults), names(defaults)), function(n) if (n %in% names(given)) given[[n]] else defaults[[n]])
   x$categories <- lapply(x$categories, function(c) {
     # `c$value <- NULL` would delete the element; keep an explicit null value
     # integers from JSON become doubles; anything non-numeric is left for validation to reject
@@ -164,6 +226,8 @@ print.llikert_task <- function(x, ...) {
   )
   print(df, row.names = FALSE, right = FALSE)
   if (length(x$examples)) cat_line(cli::format_inline("{length(x$examples)} example{?s}"))
+  default <- identical(x$prompt, unclass(prompt_format()))
+  cat_line("Prompt format: ", if (default) "default" else "custom", " (see task_messages() for the messages the model receives)")
   invisible(x)
 }
 

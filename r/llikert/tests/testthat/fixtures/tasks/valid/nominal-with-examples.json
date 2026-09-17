@@ -26,11 +26,11 @@
     "ordered": false,
     "examples": [
       {
-        "text": "Where is it?",
+        "item": "Where is it?",
         "category_id": "question"
       },
       {
-        "text": "Close the door.",
+        "item": "Close the door.",
         "category_id": "request"
       }
     ]
@@ -62,15 +62,23 @@
     "ordered": false,
     "examples": [
       {
-        "text": "Where is it?",
+        "item": "Where is it?",
         "category_id": "question"
       },
       {
-        "text": "Close the door.",
+        "item": "Close the door.",
         "category_id": "request"
       }
-    ]
+    ],
+    "prompt": {
+      "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+      "user": "Text:\n<text>\n{item}\n</text>",
+      "scale": "Response codes:\n{codes}",
+      "code": "{response} = {label}",
+      "code_separator": "\n",
+      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[{\"category_id\":\"question\",\"text\":\"Where is it?\"},{\"category_id\":\"request\",\"text\":\"Close the door.\"}],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"schema_version\":1}",
-  "task_hash": "sha256:01dc5e18ef5bff064ae56b60bad7c5dc5b5597f5f8dca79921a43578ae11f1c4"
+  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[{\"category_id\":\"question\",\"item\":\"Where is it?\"},{\"category_id\":\"request\",\"item\":\"Close the door.\"}],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\\n\\n{answer_instruction}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\"},\"schema_version\":1}",
+  "task_hash": "sha256:b7a072f071f16996c3a5eaa6aa70de1c3d529f9553e820a7c9663b49a87c8f7f"
 }

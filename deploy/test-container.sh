@@ -82,7 +82,7 @@ task <- scoring_task("Communicative function", "Classify the text'"'"'s primary 
                      c("description", "question", "request"), c("A", "B", "C"))
 engine <- scorer_connect(wait = 60)
 texts <- c("Where is the station?", "Please close the door.", NA, "", "CONTAINER-LOG-CANARY The museum opens at ten.")
-result <- score_texts(texts, task = prepare_task(task, engine), engine = engine, checkpoint = "build/container-test/r-run", progress = FALSE)
+result <- score_items(texts, task = prepare_task(task, engine), engine = engine, checkpoint = "build/container-test/r-run", progress = FALSE)
 write_result(result, "build/container-test/r-result.json")
 print(table(llikert_result_diagnostics(result)$status))
 ' > "$OUT/r-client.log" 2>&1

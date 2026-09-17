@@ -77,15 +77,21 @@ class Warning_(_Strict):
     message: str
 
 
+class ChatMessage(_Strict):
+    role: Literal["system", "user", "assistant"]
+    content: str
+
+
 class Preview(_Strict):
+    messages: list[ChatMessage]
     prompt: str
     n_prompt_tokens: int
 
 
 class PrepareDiagnostics(_Strict):
-    n_prompt_tokens_without_text: int
+    n_prompt_tokens_without_item: int
     n_ctx: int
-    max_text_tokens_approx: int
+    max_item_tokens_approx: int
     warnings: list[Warning_]
 
 
@@ -177,7 +183,7 @@ ResultItemStatus = Literal[
 
 class ResultItem(ItemResult):
     status: ResultItemStatus
-    text_sha256: str | None = Field(description="SHA-256 (hex) of the UTF-8 text; null for missing text")
+    text_sha256: str | None = Field(description="SHA-256 (hex) of the item's UTF-8 text; null for a missing item")
 
 
 class ClientInfo(_Strict):

@@ -7,7 +7,7 @@
 read_checkpoint(path, allow_incomplete = FALSE)
 }
 \arguments{
-\item{path}{Checkpoint directory given to \code{\link[=score_texts]{score_texts()}}.}
+\item{path}{Checkpoint directory given to \code{\link[=score_items]{score_items()}}.}
 
 \item{allow_incomplete}{If \code{TRUE}, items not yet scored appear with status
 \code{"pending"}; otherwise an incomplete checkpoint is an error.}

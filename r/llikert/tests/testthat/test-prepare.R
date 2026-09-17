@@ -1,11 +1,11 @@
 test_that("prepare returns a portable prepared task", {
   mock <- local_mock()
   engine <- scorer_connect("http://mock")
-  prepared <- prepare_task(quickstart_nominal(), engine, preview_text = "Where?")
+  prepared <- prepare_task(quickstart_nominal(), engine, preview_item = "Where?")
   map <- llikert:::prepared_mapping(prepared$artifact)
   expect_identical(map$response, c("A", "B", "C"))
   expect_output(print(prepared), "token_piece")
-  expect_output(preview_prompt(prepared, "text"), "Where?")
+  expect_output(preview_prompt(prepared, "item"), "Where?")
   path <- withr::local_tempfile(fileext = ".json")
   write_prepared_task(prepared, path)
   expect_equal(read_prepared_task(path)$artifact, prepared$artifact, tolerance = 0)

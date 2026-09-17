@@ -75,8 +75,16 @@
       }
     ],
     "ordered": true,
-    "examples": []
+    "examples": [],
+    "prompt": {
+      "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+      "user": "Text:\n<text>\n{item}\n</text>",
+      "scale": "Response codes:\n{codes}",
+      "code": "{response} = {label}",
+      "code_separator": "\n",
+      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"s1\",\"label\":\"very negative\",\"response\":\"1\",\"value\":1},{\"id\":\"s2\",\"label\":\"negative\",\"response\":\"2\",\"value\":2},{\"id\":\"s3\",\"label\":\"neutral\",\"response\":\"3\",\"value\":3},{\"id\":\"s4\",\"label\":\"positive\",\"response\":\"4\",\"value\":4},{\"id\":\"s5\",\"label\":\"very positive\",\"response\":\"5\",\"value\":5}],\"examples\":[],\"instructions\":\"Rate the sentiment.\",\"name\":\"Sentiment\",\"ordered\":true,\"schema_version\":1}",
-  "task_hash": "sha256:79c42d983588bde8e8c4eec0d0c5ce952b6077a6f16a5bdf09c57e08936ba226"
+  "canonical_jcs": "{\"categories\":[{\"id\":\"s1\",\"label\":\"very negative\",\"response\":\"1\",\"value\":1},{\"id\":\"s2\",\"label\":\"negative\",\"response\":\"2\",\"value\":2},{\"id\":\"s3\",\"label\":\"neutral\",\"response\":\"3\",\"value\":3},{\"id\":\"s4\",\"label\":\"positive\",\"response\":\"4\",\"value\":4},{\"id\":\"s5\",\"label\":\"very positive\",\"response\":\"5\",\"value\":5}],\"examples\":[],\"instructions\":\"Rate the sentiment.\",\"name\":\"Sentiment\",\"ordered\":true,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\\n\\n{answer_instruction}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\"},\"schema_version\":1}",
+  "task_hash": "sha256:f431c7e117e20087dc5d8aa6ac5cab8806571d0cf138ed026a706f20ef7938f4"
 }

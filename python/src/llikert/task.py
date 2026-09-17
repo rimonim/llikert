@@ -6,8 +6,10 @@ from __future__ import annotations
 import json
 import math
 import os
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from typing import Any, Iterable, Mapping, Sequence
+
+from llikert import _prompt
 
 TASK_SCHEMA_VERSION = 1
 RESERVED_CATEGORY_IDS = frozenset({"id", "expected_value"})
@@ -48,12 +50,48 @@ class Category:
 
 @dataclass(frozen=True)
 class Example:
-    text: str
+    """A worked example shown to the model before each item: an item and its category id."""
+
+    item: str
     category_id: str
 
     def __post_init__(self):
-        _check_string(self.text, "example text")
+        _check_string(self.item, "example item")
         _check_string(self.category_id, "example category_id")
+
+
+@dataclass(frozen=True)
+class PromptFormat:
+    """How a task and one item become chat messages. See docs/prompts.md.
+
+    Each item produces: a system message from ``system`` (omitted when ``None``), one
+    user/assistant pair per example, and a user message from ``user``. Placeholders:
+
+    - ``system`` and ``user``: ``{instructions}``, ``{scale}``, ``{answer_instruction}``;
+      ``{item}`` only in ``user``, exactly once
+    - ``scale``: ``{codes}``, the category lines joined with ``code_separator``
+    - ``code``, one line per category: ``{response}`` (required), ``{label}``, ``{value}``, ``{id}``
+
+    Write ``{{`` and ``}}`` for literal braces. Placeholders are filled in one pass, so
+    braces inside instructions, labels, or items are never treated as placeholders.
+    """
+
+    system: str | None = "{instructions}\n\n{scale}\n\n{answer_instruction}"
+    user: str = "Text:\n<text>\n{item}\n</text>"
+    scale: str = "Response codes:\n{codes}"
+    code: str = "{response} = {label}"
+    code_separator: str = "\n"
+    answer_instruction: str = "Answer with exactly one of the response codes listed above and nothing else."
+
+    def __post_init__(self):
+        if self.system is not None:
+            _check_string(self.system, "prompt system", allow_empty=True)
+        for name in ("user", "scale", "code", "code_separator", "answer_instruction"):
+            _check_string(getattr(self, name), f"prompt {name}", allow_empty=name != "code")
+        _prompt.validate({**asdict(self)}, has_values=True)
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass(frozen=True, init=False)
@@ -75,6 +113,7 @@ class ScoringTask:
     categories: tuple[Category, ...]
     ordered: bool
     examples: tuple[Example, ...] = field(default=())
+    prompt: PromptFormat = field(default_factory=PromptFormat)
     schema_version: int = TASK_SCHEMA_VERSION
 
     def __init__(
@@ -87,9 +126,10 @@ class ScoringTask:
         ordered: bool = False,
         ids: Sequence[str] | None = None,
         examples: Iterable[Example | tuple[str, str] | Mapping[str, str]] | None = None,
+        prompt: PromptFormat | None = None,
     ):
         _check_string(name, "name")
-        _check_string(instructions, "instructions")
+        _check_string(instructions, "instructions", allow_empty=True)
         if not isinstance(ordered, bool):
             raise TypeError("ordered must be True or False")
         categories = list(categories)
@@ -126,20 +166,27 @@ class ScoringTask:
             if isinstance(ex, Example):
                 parsed_examples.append(ex)
             elif isinstance(ex, Mapping):
-                parsed_examples.append(Example(text=ex["text"], category_id=ex["category_id"]))
+                parsed_examples.append(Example(item=ex["item"], category_id=ex["category_id"]))
             else:
-                text, category_id = ex
-                parsed_examples.append(Example(text=text, category_id=category_id))
+                item, category_id = ex
+                parsed_examples.append(Example(item=item, category_id=category_id))
         known = {c.id for c in records}
         for ex in parsed_examples:
             if ex.category_id not in known:
                 raise ValueError(f"example category_id {ex.category_id!r} does not name a category")
+
+        prompt = prompt if prompt is not None else PromptFormat()
+        if not isinstance(prompt, PromptFormat):
+            raise TypeError("prompt must be a PromptFormat")
+        if "value" in _prompt.fields(_prompt.parse_template(prompt.code, _prompt.CODE_FIELDS, "prompt.code")) and records[0].value is None:
+            raise ValueError("prompt.code uses {value}, but the categories have no values")
 
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "instructions", instructions)
         object.__setattr__(self, "categories", tuple(records))
         object.__setattr__(self, "ordered", ordered)
         object.__setattr__(self, "examples", tuple(parsed_examples))
+        object.__setattr__(self, "prompt", prompt)
         object.__setattr__(self, "schema_version", TASK_SCHEMA_VERSION)
 
     @property
@@ -153,12 +200,22 @@ class ScoringTask:
             "instructions": self.instructions,
             "categories": [{"id": c.id, "label": c.label, "response": c.response, "value": c.value} for c in self.categories],
             "ordered": self.ordered,
-            "examples": [{"text": e.text, "category_id": e.category_id} for e in self.examples],
+            "examples": [{"item": e.item, "category_id": e.category_id} for e in self.examples],
+            "prompt": self.prompt.to_dict(),
         }
+
+    def messages(self, item: str) -> list[dict[str, str]]:
+        """The chat messages the model receives for ``item``, built locally (no service needed).
+
+        The model then sees these messages in its own chat format; ``PreparedTask.preview_prompt()``
+        shows that exact text after preparation.
+        """
+        _check_string(item, "item", allow_empty=True)
+        return _prompt.build_messages(self.to_dict(), item)
 
     @classmethod
     def from_dict(cls, obj: Mapping[str, Any]) -> ScoringTask:
-        allowed = {"schema_version", "name", "instructions", "categories", "ordered", "examples"}
+        allowed = {"schema_version", "name", "instructions", "categories", "ordered", "examples", "prompt"}
         unknown = set(obj) - allowed
         if unknown:
             raise ValueError(f"unknown task fields: {sorted(unknown)}")
@@ -176,6 +233,7 @@ class ScoringTask:
             categories=records,
             ordered=obj.get("ordered", False),
             examples=obj.get("examples", []),
+            prompt=_prompt_from_dict(obj.get("prompt")),
         )
 
     def to_json(self, path: str | os.PathLike) -> None:
@@ -187,3 +245,12 @@ class ScoringTask:
     def from_json(cls, path: str | os.PathLike) -> ScoringTask:
         with open(path, encoding="utf-8") as f:
             return cls.from_dict(json.load(f))
+
+
+def _prompt_from_dict(obj: Mapping[str, Any] | None) -> PromptFormat:
+    if obj is None:
+        return PromptFormat()
+    unknown = set(obj) - {"system", "user", "scale", "code", "code_separator", "answer_instruction"}
+    if unknown:
+        raise ValueError(f"unknown prompt fields: {sorted(unknown)}")
+    return PromptFormat(**obj)

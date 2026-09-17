@@ -7,9 +7,9 @@ import math
 import numbers
 from typing import Any, Sequence
 
-MISSING_MESSAGE = "text is missing"
-EMPTY_MESSAGE = "text is empty"
-ENCODING_MESSAGE = "text is not valid Unicode"
+MISSING_MESSAGE = "item is missing"
+EMPTY_MESSAGE = "item is empty"
+ENCODING_MESSAGE = "item is not valid Unicode"
 MAX_EXACT_INTEGER = 2**53
 
 
@@ -18,7 +18,7 @@ def normalize_ids(ids: Sequence[Any] | None, n: int) -> list[str]:
         return [str(i) for i in range(1, n + 1)]
     ids = list(ids)
     if len(ids) != n:
-        raise ValueError(f"ids has length {len(ids)} but texts has length {n}")
+        raise ValueError(f"ids has length {len(ids)} but items has length {n}")
     out = []
     for i, value in enumerate(ids):
         if isinstance(value, str):
@@ -50,17 +50,17 @@ def is_missing(value: Any) -> bool:
     return type(value).__name__ == "NAType"  # pandas.NA without importing pandas
 
 
-def normalize_texts(texts: Sequence[Any]) -> list[str | None]:
-    if isinstance(texts, (str, bytes)):
-        raise TypeError("texts must be a sequence of strings, not a single string")
+def normalize_items(items: Sequence[Any]) -> list[str | None]:
+    if isinstance(items, (str, bytes)):
+        raise TypeError("items must be a sequence of strings, not a single string")
     out = []
-    for i, value in enumerate(texts):
+    for i, value in enumerate(items):
         if is_missing(value):
             out.append(None)
         elif isinstance(value, str):
             out.append(value)
         else:
-            raise TypeError(f"texts[{i}] must be a string or missing, not {type(value).__name__}")
+            raise TypeError(f"items[{i}] must be a string or missing, not {type(value).__name__}")
     return out
 
 

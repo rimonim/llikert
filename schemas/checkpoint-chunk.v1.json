@@ -169,7 +169,7 @@
               "type": "null"
             }
           ],
-          "description": "SHA-256 (hex) of the UTF-8 text; null for missing text",
+          "description": "SHA-256 (hex) of the item's UTF-8 text; null for a missing item",
           "title": "Text Sha256"
         },
         "warnings": {

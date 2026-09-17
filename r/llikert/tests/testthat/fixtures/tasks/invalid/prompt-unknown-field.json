@@ -1,0 +1,33 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "description",
+        "label": "description",
+        "response": "A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": [],
+    "prompt": {
+      "assistant": "x"
+    }
+  },
+  "error_code": "invalid_task"
+}

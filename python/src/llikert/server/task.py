@@ -7,6 +7,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
+from llikert.server import prompt as prompts
 from llikert.server.canonical import identity_hash
 from llikert.server.errors import ServiceError, invalid
 
@@ -55,22 +56,39 @@ class Category(StrictModel):
 
 
 class Example(StrictModel):
-    text: str = Field(min_length=1)
+    item: str = Field(min_length=1)
     category_id: str = Field(min_length=1)
 
-    @field_validator("text", "category_id")
+    @field_validator("item", "category_id")
     @classmethod
     def _utf8(cls, v: str) -> str:
         return check_utf8(v)
 
 
+class PromptFormat(StrictModel):
+    """Templates for turning the task and one item into chat messages (docs/prompts.md)."""
+
+    system: str | None = prompts.DEFAULT_SYSTEM
+    user: str = prompts.DEFAULT_USER
+    scale: str = prompts.DEFAULT_SCALE
+    code: str = Field(default=prompts.DEFAULT_CODE, min_length=1)
+    code_separator: str = prompts.DEFAULT_CODE_SEPARATOR
+    answer_instruction: str = prompts.DEFAULT_ANSWER_INSTRUCTION
+
+    @field_validator("system", "user", "scale", "code", "code_separator", "answer_instruction")
+    @classmethod
+    def _utf8(cls, v: str | None) -> str | None:
+        return v if v is None else check_utf8(v)
+
+
 class Task(StrictModel):
     schema_version: Literal[1]
     name: str = Field(min_length=1)
-    instructions: str = Field(min_length=1)
+    instructions: str
     categories: list[Category] = Field(min_length=2)
     ordered: bool = False
     examples: list[Example] = Field(default_factory=list)
+    prompt: PromptFormat = Field(default_factory=PromptFormat)
 
     @field_validator("name", "instructions")
     @classmethod
@@ -92,6 +110,10 @@ class Task(StrictModel):
         for i, ex in enumerate(self.examples):
             if ex.category_id not in known:
                 raise ValueError(f"examples[{i}].category_id does not name a category")
+        try:
+            prompts.validate_prompt_format(self.prompt.model_dump(), has_values=n_values > 0)
+        except prompts.TemplateError as exc:
+            raise ValueError(str(exc)) from None
         return self
 
     @property
@@ -111,7 +133,8 @@ class Task(StrictModel):
                 {"id": c.id, "label": c.label, "response": c.response, "value": c.value} for c in self.categories
             ],
             "ordered": self.ordered,
-            "examples": [{"text": e.text, "category_id": e.category_id} for e in self.examples],
+            "examples": [{"item": e.item, "category_id": e.category_id} for e in self.examples],
+            "prompt": self.prompt.model_dump(),
         }
 
     def identity(self) -> str:

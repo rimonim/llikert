@@ -18,7 +18,7 @@ test_that("a Python checkpoint can be resumed", {
   dir.create(run)
   file.copy(list.files(python_partial(), full.names = TRUE), run, recursive = TRUE)
   d <- dataset()
-  result <- score_texts(d$texts, d$ids, task = prepare_task(quickstart_nominal(), engine), engine = engine,
+  result <- score_items(d$texts, d$ids, task = prepare_task(quickstart_nominal(), engine), engine = engine,
                         chunk_size = 5L, checkpoint = run, resume = TRUE, progress = FALSE)
   expect_identical(sum(lengths(mock$score_calls())), 11L)
   expect_equal(normalized_result(result), expected_result("nominal"), tolerance = 0)

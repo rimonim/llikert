@@ -49,13 +49,18 @@ TASKS = {
             for i, label in enumerate(["very negative", "negative", "neutral", "positive", "very positive"], start=1)
         ],
         "ordered": True,
-        "examples": [{"text": "I love it.", "category_id": "very positive"}],
+        "examples": [{"item": "I love it.", "category_id": "very positive"}],
     },
 }
 INVALID_CODES_TASK = {
     **TASKS["nominal"],
     "categories": [dict(c, response=c["label"]) for c in TASKS["nominal"]["categories"]],
 }
+# clients send canonical tasks (every field explicit, including the default prompt format)
+from llikert.server.task import parse_task  # noqa: E402
+
+TASKS = {name: parse_task(task).canonical() for name, task in TASKS.items()}
+INVALID_CODES_TASK = parse_task(INVALID_CODES_TASK).canonical()
 
 TEXTS = [
     "Where is the nearest train station?",

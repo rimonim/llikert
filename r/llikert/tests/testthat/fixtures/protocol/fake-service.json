@@ -6,7 +6,7 @@
    "name": "llikert",
    "version": "0.1.0.dev0"
   },
-  "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+  "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
   "engine": {
    "fingerprint_version": 1,
    "model_and_execution": {
@@ -19,7 +19,7 @@
     "name": "fake-chatml",
     "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
    },
-   "renderer_version": 1,
+   "renderer_version": 2,
    "boundary_policy": "tail-suffix-v1",
    "postprocessing_version": 1,
    "prepared_schema_version": 1,
@@ -77,7 +77,15 @@
      }
     ],
     "ordered": false,
-    "examples": []
+    "examples": [],
+    "prompt": {
+     "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+     "user": "Text:\n<text>\n{item}\n</text>",
+     "scale": "Response codes:\n{codes}",
+     "code": "{response} = {label}",
+     "code_separator": "\n",
+     "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    }
    },
    "prepare_response": {
     "protocol_version": 1,
@@ -108,10 +116,18 @@
        }
       ],
       "ordered": false,
-      "examples": []
+      "examples": [],
+      "prompt": {
+       "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+       "user": "Text:\n<text>\n{item}\n</text>",
+       "scale": "Response codes:\n{codes}",
+       "code": "{response} = {label}",
+       "code_separator": "\n",
+       "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+      }
      },
-     "task_hash": "sha256:d01e1ea7be5d759397093b55241e3f98c60272d0e9f29e0f1a253a54b83681c7",
-     "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+     "task_hash": "sha256:f52902ec1e5ba08ba7562d4343c3aecf9afd247fbd0cc0bd74cf8097821eee40",
+     "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
      "profile": {
       "name": "fake-chatml",
       "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
@@ -150,17 +166,27 @@
        "token_piece": "C"
       }
      ],
-     "prepared_hash": "sha256:c296106417be6ec57750a28321c65e4c80869ece7920eab5f5e42d5a0584ff11"
+     "prepared_hash": "sha256:d5dda56737312cc2f0c94666c2ec8219491798719f252b79a4b78c8a76ac7ffc"
     },
     "diagnostics": {
-     "n_prompt_tokens_without_text": 165,
+     "n_prompt_tokens_without_item": 165,
      "n_ctx": 512,
-     "max_text_tokens_approx": 347,
+     "max_item_tokens_approx": 347,
      "warnings": []
     },
     "preview": {
      "example": {
-      "prompt": "<|im_start|>system\nClassify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else.<|im_end|>\n<|im_start|>user\nText:\n<text>\nThis is an example text used only to preview the prompt.\n</text><|im_end|>\n<|im_start|>assistant\n",
+      "messages": [
+       {
+        "role": "system",
+        "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       },
+       {
+        "role": "user",
+        "content": "Text:\n<text>\nThis is an example item used only to preview the prompt.\n</text>"
+       }
+      ],
+      "prompt": "<|im_start|>system\nClassify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else.<|im_end|>\n<|im_start|>user\nText:\n<text>\nThis is an example item used only to preview the prompt.\n</text><|im_end|>\n<|im_start|>assistant\n",
       "n_prompt_tokens": 221
      }
     },
@@ -247,7 +273,7 @@
      "status": "missing_input",
      "error": {
       "code": "missing_input",
-      "message": "text is missing"
+      "message": "item is missing"
      },
      "candidate_log_probs": [
       null,
@@ -325,7 +351,7 @@
      "status": "empty_input",
      "error": {
       "code": "empty_input",
-      "message": "text is empty"
+      "message": "item is empty"
      },
      "candidate_log_probs": [
       null,
@@ -574,7 +600,7 @@
      "warnings": [
       {
        "code": "reserved_marker_text",
-       "message": "text contains special-token text, scored as ordinary text"
+       "message": "item contains special-token text, scored as ordinary text"
       }
      ]
     },
@@ -807,10 +833,18 @@
     "ordered": true,
     "examples": [
      {
-      "text": "I love it.",
+      "item": "I love it.",
       "category_id": "very positive"
      }
-    ]
+    ],
+    "prompt": {
+     "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+     "user": "Text:\n<text>\n{item}\n</text>",
+     "scale": "Response codes:\n{codes}",
+     "code": "{response} = {label}",
+     "code_separator": "\n",
+     "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    }
    },
    "prepare_response": {
     "protocol_version": 1,
@@ -855,13 +889,21 @@
       "ordered": true,
       "examples": [
        {
-        "text": "I love it.",
+        "item": "I love it.",
         "category_id": "very positive"
        }
-      ]
+      ],
+      "prompt": {
+       "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+       "user": "Text:\n<text>\n{item}\n</text>",
+       "scale": "Response codes:\n{codes}",
+       "code": "{response} = {label}",
+       "code_separator": "\n",
+       "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+      }
      },
-     "task_hash": "sha256:09ccaf13f957cbed77d8ecf976eab3062eb65ffa2bb117e4261f6bfef9e0d69c",
-     "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
+     "task_hash": "sha256:3e3776e65d100f371d00d40f4d246281e15ec84409f39493d9783980e1752110",
+     "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
      "profile": {
       "name": "fake-chatml",
       "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
@@ -916,17 +958,35 @@
        "token_piece": "5"
       }
      ],
-     "prepared_hash": "sha256:8bd56c08cce45cccff68813023043c887bbb3a0d54cf8cd73a1c8cb4f1773b61"
+     "prepared_hash": "sha256:648f442d5e854b00e51b0768d4a7a98fcc5112f3175616e680df32173cc0d840"
     },
     "diagnostics": {
-     "n_prompt_tokens_without_text": 216,
+     "n_prompt_tokens_without_item": 216,
      "n_ctx": 512,
-     "max_text_tokens_approx": 296,
+     "max_item_tokens_approx": 296,
      "warnings": []
     },
     "preview": {
      "example": {
-      "prompt": "<|im_start|>system\nRate the overall sentiment of the text.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else.<|im_end|>\n<|im_start|>user\nText:\n<text>\nI love it.\n</text><|im_end|>\n<|im_start|>assistant\n5<|im_end|>\n<|im_start|>user\nText:\n<text>\nThis is an example text used only to preview the prompt.\n</text><|im_end|>\n<|im_start|>assistant\n",
+      "messages": [
+       {
+        "role": "system",
+        "content": "Rate the overall sentiment of the text.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       },
+       {
+        "role": "user",
+        "content": "Text:\n<text>\nI love it.\n</text>"
+       },
+       {
+        "role": "assistant",
+        "content": "5"
+       },
+       {
+        "role": "user",
+        "content": "Text:\n<text>\nThis is an example item used only to preview the prompt.\n</text>"
+       }
+      ],
+      "prompt": "<|im_start|>system\nRate the overall sentiment of the text.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else.<|im_end|>\n<|im_start|>user\nText:\n<text>\nI love it.\n</text><|im_end|>\n<|im_start|>assistant\n5<|im_end|>\n<|im_start|>user\nText:\n<text>\nThis is an example item used only to preview the prompt.\n</text><|im_end|>\n<|im_start|>assistant\n",
       "n_prompt_tokens": 272
      }
     },
@@ -1034,7 +1094,7 @@
      "status": "missing_input",
      "error": {
       "code": "missing_input",
-      "message": "text is missing"
+      "message": "item is missing"
      },
      "candidate_log_probs": [
       null,
@@ -1133,7 +1193,7 @@
      "status": "empty_input",
      "error": {
       "code": "empty_input",
-      "message": "text is empty"
+      "message": "item is empty"
      },
      "candidate_log_probs": [
       null,
@@ -1451,7 +1511,7 @@
      "warnings": [
       {
        "code": "reserved_marker_text",
-       "message": "text contains special-token text, scored as ordinary text"
+       "message": "item contains special-token text, scored as ordinary text"
       }
      ],
      "expected_value": 3.3599854146846138
@@ -1721,7 +1781,15 @@
     }
    ],
    "ordered": false,
-   "examples": []
+   "examples": [],
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+   }
   },
   "error_response": {
    "status": 422,

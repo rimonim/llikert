@@ -16,7 +16,7 @@ from llikert._errors import (
     CheckpointError, FingerprintMismatch, ProtocolError, ServiceError, ServiceUnavailable, TransportError,
 )
 from llikert._http import RetryPolicy, Transport
-from llikert._items import client_failure, failure_record, normalize_ids, normalize_texts, text_sha256
+from llikert._items import client_failure, failure_record, normalize_ids, normalize_items, text_sha256
 from llikert._version import PROTOCOL_VERSION
 from llikert.checkpoint import Checkpoint
 from llikert.result import ScoreResult, client_block, utc_now
@@ -54,10 +54,24 @@ class PreparedTask:
     def mapping(self) -> list[dict[str, Any]]:
         return [dict(c) for c in self.artifact["categories"]]
 
+    def _preview(self, which: str) -> dict[str, Any]:
+        key = {"example": "example", "item": "text"}.get(which)
+        if key is None:
+            raise ValueError('which must be "example" or "item"')
+        if not self.preview or key not in self.preview:
+            raise KeyError(f"no {which!r} preview; prepare with preview_item=... to preview one of your items")
+        return self.preview[key]
+
     def preview_prompt(self, which: str = "example") -> str:
-        if not self.preview or which not in self.preview:
-            raise KeyError(f"no {which!r} preview; prepare with preview_text=... to preview a real text")
-        return self.preview[which]["prompt"]
+        """The exact text the model reads, in its own chat format, ending where it would answer.
+
+        ``which="example"`` uses a made-up item; ``which="item"`` uses ``preview_item`` from ``prepare()``.
+        """
+        return self._preview(which)["prompt"]
+
+    def preview_messages(self, which: str = "example") -> list[dict[str, str]]:
+        """The chat messages (role and content) before the model's chat format is applied."""
+        return [dict(m) for m in self._preview(which)["messages"]]
 
     def save(self, path: str | os.PathLike) -> None:
         from llikert.result import write_json_atomic
@@ -154,12 +168,13 @@ class Scorer:
         return f"<Scorer {self._transport.url} engine {self.engine_fingerprint[:19]}…>"
 
     # -- preparation --------------------------------------------------------------------------
-    def prepare(self, task: ScoringTask, preview_text: str | None = None) -> PreparedTask:
+    def prepare(self, task: ScoringTask, preview_item: str | None = None) -> PreparedTask:
+        """Check the task against the service's model; ``preview_item`` renders one of your items."""
         if not isinstance(task, ScoringTask):
             raise TypeError("prepare() takes a ScoringTask")
         body: dict[str, Any] = {"protocol_version": PROTOCOL_VERSION, "task": task.to_dict()}
-        if preview_text is not None:
-            body["preview_text"] = preview_text
+        if preview_item is not None:
+            body["preview_text"] = preview_item
         out = self._transport.request("POST", "/v1/prepare", body)
         prepared = PreparedTask(out["prepared"], out.get("diagnostics"), out.get("preview"))
         if prepared.engine_fingerprint != self.engine_fingerprint:
@@ -169,7 +184,7 @@ class Scorer:
     # -- scoring ------------------------------------------------------------------------------
     def score(
         self,
-        texts: Sequence[str | None],
+        items: Sequence[str | None],
         ids: Sequence[Any] | None = None,
         *,
         task: PreparedTask,
@@ -179,9 +194,10 @@ class Scorer:
         progress: bool | Callable[[int, int, int], None] = True,
         force_unlock: bool = False,
     ) -> ScoreResult:
-        """Score texts with a prepared task, in input order.
+        """Score items with a prepared task, in input order.
 
-        Missing and empty texts become diagnostic rows without being sent. With
+        An item is whatever fills ``{item}`` in the prompt: a text to classify, a questionnaire
+        statement, and so on. Missing and empty items become diagnostic rows without being sent. With
         ``checkpoint``, completed chunks are committed to that directory and a rerun with
         ``resume=True`` scores only what is left.
         """
@@ -191,7 +207,7 @@ class Scorer:
             raise TypeError("task must be a PreparedTask")
         if not isinstance(chunk_size, int) or chunk_size < 1:
             raise ValueError("chunk_size must be a positive integer")
-        texts = normalize_texts(texts)
+        texts = normalize_items(items)
         item_ids = normalize_ids(ids, len(texts))
         if task.engine_fingerprint != self.engine_fingerprint:
             raise FingerprintMismatch(
@@ -205,7 +221,7 @@ class Scorer:
         report = progress if callable(progress) else (_stderr_progress if progress else None)
 
         if checkpoint is None and len(texts) > CHECKPOINT_HINT_THRESHOLD:
-            warnings.warn("scoring more than 200 texts without checkpoint=...; an interruption would lose completed work", stacklevel=2)
+            warnings.warn("scoring more than 200 items without checkpoint=...; an interruption would lose completed work", stacklevel=2)
 
         store = None
         if checkpoint is not None:

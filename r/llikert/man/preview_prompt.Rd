@@ -2,19 +2,21 @@
 % Please edit documentation in R/prepare.R
 \name{preview_prompt}
 \alias{preview_prompt}
-\title{Show the rendered prompt of a prepared task}
+\title{Show the exact prompt text of a prepared task}
 \usage{
-preview_prompt(prepared, which = c("example", "text"))
+preview_prompt(prepared, which = c("example", "item"))
 }
 \arguments{
 \item{prepared}{An \code{llikert_prepared} object.}
 
-\item{which}{\code{"example"} (a harmless example text) or \code{"text"} (the
-\code{preview_text} given to \code{\link[=prepare_task]{prepare_task()}}).}
+\item{which}{\code{"example"} (a made-up example item) or \code{"item"} (the
+\code{preview_item} given to \code{\link[=prepare_task]{prepare_task()}}).}
 }
 \value{
 The prompt string, invisibly; it is also printed.
 }
 \description{
-Show the rendered prompt of a prepared task
+Shows the text the model reads, in the model's own chat format (including
+its special markers), ending where the model's answer begins. For the same
+content as plain messages, use \code{\link[=task_messages]{task_messages()}}.
 }

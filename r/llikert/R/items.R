@@ -2,7 +2,7 @@
 
 normalize_ids <- function(ids, n, call = rlang::caller_env()) {
   if (is.null(ids)) return(as.character(seq_len(n)))
-  if (length(ids) != n) llikert_abort(sprintf("`ids` has length %d but `texts` has length %d.", length(ids), n), "invalid_argument", call = call)
+  if (length(ids) != n) llikert_abort(sprintf("`ids` has length %d but `items` has length %d.", length(ids), n), "invalid_argument", call = call)
   if (anyNA(ids)) llikert_abort("`ids` must not contain missing values.", "invalid_argument", call = call)
   out <- if (is.factor(ids)) {
     as.character(ids)
@@ -24,10 +24,10 @@ normalize_ids <- function(ids, n, call = rlang::caller_env()) {
   out
 }
 
-normalize_texts <- function(texts, call = rlang::caller_env()) {
-  if (is.factor(texts)) texts <- as.character(texts)
-  if (!is.character(texts)) llikert_abort("`texts` must be a character vector.", "invalid_argument", call = call)
-  texts
+normalize_items <- function(items, call = rlang::caller_env()) {
+  if (is.factor(items)) items <- as.character(items)
+  if (!is.character(items)) llikert_abort("`items` must be a character vector.", "invalid_argument", call = call)
+  items
 }
 
 # UTF-8 bytes; declared latin1/native strings are transcoded, invalid bytes are kept as-is
@@ -49,9 +49,9 @@ text_sha256 <- function(text) {
 }
 
 failure_messages <- c(
-  missing_input = "text is missing",
-  empty_input = "text is empty",
-  invalid_encoding = "text is not valid Unicode"
+  missing_input = "item is missing",
+  empty_input = "item is empty",
+  invalid_encoding = "item is not valid Unicode"
 )
 
 failure_record <- function(id, status, k, numeric, sha) {

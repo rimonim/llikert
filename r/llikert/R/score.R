@@ -1,19 +1,20 @@
-#' Score texts with a prepared task
+#' Score items with a prepared task
 #'
-#' Sends texts to the scoring service in chunks and returns one row per input,
-#' in input order. Missing (`NA`) and empty texts become diagnostic rows without
-#' being sent. With `checkpoint`, each completed chunk is committed to that
-#' directory; after an interruption, rerun with `resume = TRUE` to score only
-#' the remaining items.
+#' Sends items to the scoring service in chunks and returns one row per item,
+#' in input order. An item is whatever fills `{item}` in the prompt: a text to
+#' classify, a questionnaire statement, and so on. Missing (`NA`) and empty
+#' items become diagnostic rows without being sent. With `checkpoint`, each
+#' completed chunk is saved to that folder; after an interruption, run the same
+#' call with `resume = TRUE` to score only the remaining items.
 #'
-#' @param texts Character vector of texts.
+#' @param items Character vector of items.
 #' @param ids Optional unique ids (character, factor, or whole numbers); defaults
 #'   to row numbers.
 #' @param task An `llikert_prepared` object from [prepare_task()].
 #' @param engine An `llikert_engine` from [scorer_connect()].
 #' @param chunk_size Items per request (capped by the service limit).
-#' @param checkpoint Optional directory for checkpoint files. It contains ids,
-#'   text hashes, and scores, never texts or credentials.
+#' @param checkpoint Optional folder for checkpoint files. It contains ids,
+#'   item hashes, and scores, never the items themselves or credentials.
 #' @param resume Continue an existing checkpoint.
 #' @param progress Show a progress bar.
 #' @param force_unlock Remove a stale checkpoint lock left by a crashed session.
@@ -21,7 +22,7 @@
 #'   only), and one probability column per category id. See
 #'   [llikert_result_diagnostics()] for the other quantities.
 #' @export
-score_texts <- function(texts, ids = NULL, task, engine, chunk_size = 16L, checkpoint = NULL,
+score_items <- function(items, ids = NULL, task, engine, chunk_size = 16L, checkpoint = NULL,
                         resume = FALSE, progress = interactive(), force_unlock = FALSE) {
   if (inherits(task, "llikert_task")) {
     llikert_abort("`task` must be prepared first: `prepared <- prepare_task(task, engine)`.", "invalid_argument")
@@ -29,7 +30,7 @@ score_texts <- function(texts, ids = NULL, task, engine, chunk_size = 16L, check
   if (!inherits(task, "llikert_prepared")) llikert_abort("`task` must be an `llikert_prepared` object.", "invalid_argument")
   stopifnot(inherits(engine, "llikert_engine"))
   if (!rlang::is_scalar_integerish(chunk_size) || chunk_size < 1) llikert_abort("`chunk_size` must be a positive whole number.", "invalid_argument")
-  texts <- normalize_texts(texts)
+  texts <- normalize_items(items)
   ids <- normalize_ids(ids, length(texts))
   artifact <- task$artifact
   if (!identical(artifact$engine_fingerprint, engine_fingerprint(engine))) {
@@ -40,7 +41,7 @@ score_texts <- function(texts, ids = NULL, task, engine, chunk_size = 16L, check
   hashes <- lapply(texts, text_sha256)
 
   if (is.null(checkpoint) && length(texts) > 200L) {
-    cli::cli_inform(c(i = "Scoring more than 200 texts without {.arg checkpoint}; an interruption would lose completed work."),
+    cli::cli_inform(c(i = "Scoring more than 200 items without {.arg checkpoint}; an interruption would lose completed work."),
                     .frequency = "once", .frequency_id = "llikert_checkpoint_hint")
   }
 

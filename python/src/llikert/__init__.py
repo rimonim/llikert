@@ -20,10 +20,10 @@ from llikert._version import PROTOCOL_VERSION, __version__
 from llikert.checkpoint import read_checkpoint
 from llikert.client import PreparedTask, Scorer
 from llikert.result import ScoreResult
-from llikert.task import Category, Example, ScoringTask
+from llikert.task import Category, Example, PromptFormat, ScoringTask
 
 __all__ = [
     "AuthenticationError", "Category", "CheckpointError", "Example", "FingerprintMismatch", "LlikertError",
-    "PROTOCOL_VERSION", "PrepareError", "PreparedTask", "ProtocolError", "RetryPolicy", "ScoreResult", "Scorer",
+    "PROTOCOL_VERSION", "PrepareError", "PreparedTask", "PromptFormat", "ProtocolError", "RetryPolicy", "ScoreResult", "Scorer",
     "ScoringTask", "ServiceError", "ServiceUnavailable", "TransportError", "__version__", "read_checkpoint",
 ]

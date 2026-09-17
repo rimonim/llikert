@@ -1,6 +1,6 @@
 # llikert for R
 
-A step-by-step guide to scoring texts with a language model from R. You don't need a graphics card or any other software besides R. The model runs on your lab's scoring service.
+A step-by-step guide to scoring texts, or questionnaire items, with a language model from R. You don't need a graphics card or any other software besides R. The model runs on your lab's scoring service.
 
 ## 1. Install
 
@@ -61,7 +61,7 @@ sentiment <- scoring_task(
 )
 ```
 
-You can include a few worked examples, which the model sees before each text:
+You can include a few worked examples, which the model sees before each item:
 
 ```r
 task <- scoring_task(
@@ -70,10 +70,52 @@ task <- scoring_task(
   categories = c("description", "question", "request"),
   responses = c("A", "B", "C"),
   examples = data.frame(
-    text = c("Where is the library?", "Please close the door."),
+    item = c("Where is the library?", "Please close the door."),
     category = c("question", "request")
   )
 )
+```
+
+### See exactly what the model will read
+
+```r
+task_messages(task, "Where is the station?")
+```
+
+This shows the messages the model receives for one item, without connecting to anything. By default:
+- a **system** message holds your instructions, the list of response codes, and the sentence "Answer with exactly one of the response codes listed above and nothing else.";
+- each worked example appears as a user message and the model's answer;
+- the item comes last, in a user message.
+
+You can change the wording, the order and the layout with `prompt = prompt_format(...)`. For example, to put the instructions after the item:
+
+```r
+task <- scoring_task(
+  name = "Communicative function",
+  instructions = "Classify the text's primary communicative function.",
+  categories = c("description", "question", "request"),
+  responses = c("A", "B", "C"),
+  prompt = prompt_format(system = NULL, user = "Text: {item}\n\n{instructions}\n{scale}\n{answer_instruction}")
+)
+```
+
+[`docs/prompts.md`](https://github.com/rimonim/llikert/blob/main/docs/prompts.md) explains every part of the prompt, shows the exact text the model reads, and gives more examples. See also `?prompt_format`.
+
+### Questionnaire items
+
+The same functions let the model answer questionnaire items itself: the statements are the items, and a minimal prompt passes each one on its own:
+
+```r
+questionnaire <- scoring_task(
+  name = "Extraversion items",
+  instructions = "You are completing a personality questionnaire. Rate how well each statement describes you.",
+  categories = c("disagree strongly", "disagree a little", "neither agree nor disagree", "agree a little", "agree strongly"),
+  responses = c("1", "2", "3", "4", "5"),
+  values = 1:5,
+  ordered = TRUE,
+  prompt = prompt_format(user = "{item}", answer_instruction = "Reply with the number of one response option only.")
+)
+task_messages(questionnaire, "I am the life of the party.")
 ```
 
 ## 4. Connect and check your task
@@ -87,7 +129,7 @@ preview_prompt(prepared)
 
 - **`scorer_connect()`** uses the address and key you stored. If the service is just starting up, it waits for a few minutes.
 - **`prepare_task()`** checks that the model can use your answer codes. If a code doesn't work (for example `"10"` on a 10-point scale), you get an error that suggests codes that do.
-- **`preview_prompt()`** shows exactly what the model will read, using a made-up example text. Read it once: it is part of your method.
+- **`preview_prompt()`** shows the exact text the model reads, in the model's own format, using a made-up example item. Read it once: it is part of your method.
 
 ## 5. Score your data
 
@@ -96,8 +138,8 @@ Suppose your data frame `dat` has a column `id` and a column `text`:
 ```r
 dat$id <- as.character(dat$id)
 
-result <- score_texts(
-  texts = dat$text,
+result <- score_items(
+  items = dat$text,
   ids = dat$id,
   task = prepared,
   engine = engine,
@@ -106,21 +148,21 @@ result <- score_texts(
 result
 ```
 
-- **Progress:** a progress bar shows how far along the run is. On the verified setup, scoring runs at roughly 15 texts per second.
-- **`checkpoint`** names a folder where finished parts are saved as you go. If R crashes or you lose your connection, run the same command again with `resume = TRUE`. Only the unfinished texts are scored.
-- **Missing (`NA`) and empty texts** are kept in place and marked, not dropped.
+- **Progress:** a progress bar shows how far along the run is. On the verified setup, scoring runs at roughly 15 items per second.
+- **`checkpoint`** names a folder where finished parts are saved as you go. If R crashes or you lose your connection, run the same command again with `resume = TRUE`. Only the unfinished items are scored.
+- **Missing (`NA`) and empty items** are kept in place and marked, not dropped.
 
 ## 6. Read the results
 
-`result` is a table with one row per text, in the same order as your data:
+`result` is a table with one row per item, in the same order as your data:
 
 | id | description | question | request |
 |---|---|---|---|
 | p01 | 0.02 | 0.95 | 0.03 |
 
 - **Category columns:** the model's probability for each category, given that it chose one of your categories. Each row adds up to 1. For rating scales there is also an `expected_value` column.
-- **Details per text:** `llikert_result_diagnostics(result)` shows:
-  - `status`: `"ok"`, or the reason a text could not be scored, such as `"missing_input"` or `"context_limit"` (text too long);
+- **Details per item:** `llikert_result_diagnostics(result)` shows:
+  - `status`: `"ok"`, or the reason an item could not be scored, such as `"missing_input"` or `"context_limit"` (item too long);
   - `coverage`: how much of the model's attention went to your answer codes at all. Values close to 1 are typical. Low values (say below 0.5) mean the model often wanted to answer something else, so check your instructions and codes.
 
 Add the scores and diagnostics to your data:
@@ -137,14 +179,14 @@ write.csv(result, "scores-function.csv", row.names = FALSE)   # for spreadsheets
 write_result(result, "scores-function.json")                  # complete record, including model details
 ```
 
-The `.json` file keeps everything needed to describe the analysis in a paper: your task, the answer codes and the exact model and settings. Read it back later with `read_result("scores-function.json")`, with no connection to the service needed.
+The `.json` file keeps everything needed to describe the analysis in a paper: your task including its prompt format, the answer codes and the exact model and settings. Read it back later with `read_result("scores-function.json")`, with no connection to the service needed.
 
 ## Good practice for studies
 
 - **Test before the main run.** Try your task on 50–100 texts that humans have also coded, and compare. Adjust instructions and codes before scoring the main dataset, not after.
-- **Report what you did:** the model, your instructions, categories and answer codes, and how you handled texts that could not be scored. `llikert_result_manifest(result)` lists the model details.
+- **Report what you did:** the model, the prompt (from `task_messages()`), your categories and answer codes, and how you handled items that could not be scored. `llikert_result_manifest(result)` lists the model details.
 - **Treat the probabilities as the model's judgment,** not as a measure of truth. Low coverage tells you about the answer format; it is not a quality score.
-- **Remember where your texts go:** they are sent to the scoring service. Make sure that is allowed for your data.
+- **Remember where your data goes:** items are sent to the scoring service. Make sure that is allowed for your data.
 
 ## When something goes wrong
 
@@ -155,6 +197,7 @@ The `.json` file keeps everything needed to describe the analysis in a paper: yo
 | "invalid response codes" | Use the suggested codes in the error message, or single letters |
 | "different model or execution configuration" | The service was changed. Run `prepare_task()` again, and use a new checkpoint folder |
 | "Checkpoint ... already exists" | Add `resume = TRUE`, or choose a new folder name |
-| "belongs to a different run" | Your texts or task changed since the checkpoint was made; use a new folder name |
+| "belongs to a different run" | Your items or task (including its prompt format) changed since the checkpoint was made; use a new folder name |
+| "prompt.user must contain {item} exactly once" and similar | Your prompt format has a mistake; the message says which part. See `?prompt_format` |
 
-More help: [`docs/troubleshooting.md`](https://github.com/rimonim/llikert/blob/main/docs/troubleshooting.md). Every function has a help page, for example `?score_texts`.
+More help: [`docs/troubleshooting.md`](https://github.com/rimonim/llikert/blob/main/docs/troubleshooting.md). Every function has a help page, for example `?score_items`.

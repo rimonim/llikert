@@ -1,8 +1,8 @@
 {
  "checkpoint_schema_version": 1,
  "sequence": 2,
- "engine_fingerprint": "sha256:081cee337cfa747d63a3583944a85e53e40eaa34420f33bfeae43322cd36d8f4",
- "prepared_hash": "sha256:c296106417be6ec57750a28321c65e4c80869ece7920eab5f5e42d5a0584ff11",
+ "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
+ "prepared_hash": "sha256:d5dda56737312cc2f0c94666c2ec8219491798719f252b79a4b78c8a76ac7ffc",
  "results": [
   {
    "id": "r01",

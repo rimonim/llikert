@@ -113,7 +113,7 @@ checkpoint_commit <- function(store, records) {
 #'
 #' Builds a result from a checkpoint without contacting a service.
 #'
-#' @param path Checkpoint directory given to [score_texts()].
+#' @param path Checkpoint directory given to [score_items()].
 #' @param allow_incomplete If `TRUE`, items not yet scored appear with status
 #'   `"pending"`; otherwise an incomplete checkpoint is an error.
 #' @return An `llikert_result`.

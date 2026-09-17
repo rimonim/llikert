@@ -66,7 +66,7 @@ class MockService:
                 out = copy.deepcopy(entry["prepare_response"])
                 out["request_id"] = body.get("request_id") or out["request_id"]
                 if "preview_text" in body:
-                    out["preview"]["text"] = {"prompt": "…" + body["preview_text"] + "…", "n_prompt_tokens": 1}
+                    out["preview"]["text"] = {"messages": [{"role": "user", "content": body["preview_text"]}], "prompt": "…" + body["preview_text"] + "…", "n_prompt_tokens": 1}
                 return httpx.Response(200, json=out, headers=HEADERS)
         invalid = self.fixture["invalid_codes"]
         if body["task"] == invalid["task"]:

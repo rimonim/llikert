@@ -12,13 +12,15 @@ scoring_task(
   values = NULL,
   ordered = FALSE,
   ids = categories,
-  examples = NULL
+  examples = NULL,
+  prompt = prompt_format()
 )
 }
 \arguments{
 \item{name}{Human-readable task name.}
 
-\item{instructions}{Construct definition and decision instructions.}
+\item{instructions}{What you would tell a human coder or respondent. May be
+\code{""} if your prompt format does not use \code{{instructions}}.}
 
 \item{categories}{Character vector of category labels, in order.}
 
@@ -33,19 +35,47 @@ expected value. An ordinal declaration alone does not supply values.}
 \item{ids}{Category ids used for columns and joins. Defaults to the labels,
 which must then be unique.}
 
-\item{examples}{Optional few-shot examples: a data frame with columns \code{text}
+\item{examples}{Optional worked examples: a data frame with columns \code{item}
 and \code{category} (a category id), used in row order.}
+
+\item{prompt}{A \code{\link[=prompt_format]{prompt_format()}} describing how the prompt is assembled.}
 }
 \value{
 An object of class \code{llikert_task}.
 }
 \description{
-A task names the construct, the instructions shown to the model, and the
-categories with their response codes. Response codes must each be a single
-token for the service's model; \code{\link[=prepare_task]{prepare_task()}} checks this before any
-dataset is scored.
+A task describes what the model should do with each item: the instructions,
+the categories with their response codes, optional worked examples, and the
+prompt format that combines these into the messages the model reads.
 }
+\details{
+An \strong{item} is whatever the model responds to: a text to classify (an open
+survey answer, a post), a questionnaire statement the model answers itself,
+and so on.
+}
+\section{How the prompt is built}{
+
+With the default \code{\link[=prompt_format]{prompt_format()}}, the model receives for every item:
+\itemize{
+\item a \strong{system} message: your \code{instructions}, a blank line, \verb{Response codes:} followed by one line per category (\code{A = description}, ...), a
+blank line, and \verb{Answer with exactly one of the response codes listed above and nothing else.}
+\item for each example: a \strong{user} message with the example item and an
+\strong{assistant} message with its response code;
+\item a \strong{user} message: \verb{Text:}, then the item between \verb{<text>} and \verb{</text>}.
+}
+
+The model's probabilities for your response codes are read at the start of
+its reply. Use \code{\link[=task_messages]{task_messages()}} to see the exact messages for any item,
+and \code{prompt = prompt_format(...)} to change the wording, the order
+(instructions before or after the item), how the scale is described, or the
+answer instruction.
+
+Response codes must each be a single token for the service's model;
+\code{\link[=prepare_task]{prepare_task()}} checks this before any items are scored.
+}
+
 \examples{
+# coding texts
 task <- scoring_task(
   name = "Communicative function",
   instructions = "Classify the text's primary communicative function.",
@@ -53,4 +83,17 @@ task <- scoring_task(
   responses = c("A", "B", "C")
 )
 task
+task_messages(task, "Where is the station?")
+
+# questionnaire items answered by the model
+questionnaire <- scoring_task(
+  name = "Extraversion items",
+  instructions = "You are completing a personality questionnaire. Rate how well each statement describes you.",
+  categories = c("disagree strongly", "disagree", "neutral", "agree", "agree strongly"),
+  responses = c("1", "2", "3", "4", "5"),
+  values = 1:5,
+  ordered = TRUE,
+  prompt = prompt_format(user = "{item}", answer_instruction = "Reply with the number only.")
+)
+task_messages(questionnaire, "I am the life of the party.")
 }

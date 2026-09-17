@@ -18,7 +18,7 @@ The R and Python clients write the same two file formats and can each read what 
 | `category_ids` | Column order for every probability array |
 | `items` | One record per input, in input order |
 
-Each item record is the service's result record (see `docs/protocol.md`) plus `text_sha256`, the SHA-256 hex digest of the item's UTF-8 text, or null when the text is missing. An item that has not been scored yet has status `pending`; this appears only when an incomplete checkpoint is read with `allow_incomplete`.
+Each item record is the service's result record (see `docs/protocol.md`) plus `text_sha256`, the SHA-256 hex digest of the item's UTF-8 text, or null when the item is missing. An item that has not been scored yet has status `pending`; this appears only when an incomplete checkpoint is read with `allow_incomplete`.
 
 Numbers are written so that every double round-trips exactly. The R client uses `jsonlite` with `digits = I(17)`; the jsonlite default `digits = NA` keeps only 15 significant digits and would change values.
 

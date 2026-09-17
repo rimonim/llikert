@@ -8,15 +8,15 @@
 #'
 #' @param task An `llikert_task` from [scoring_task()].
 #' @param engine An `llikert_engine` from [scorer_connect()].
-#' @param preview_text Optional research text to render in the prompt preview.
-#'   Without it, the preview uses a harmless example text.
+#' @param preview_item Optional item (for example one of your texts) to render
+#'   in the prompt preview. Without it, the preview uses a made-up example item.
 #' @return An object of class `llikert_prepared`.
 #' @export
-prepare_task <- function(task, engine, preview_text = NULL) {
+prepare_task <- function(task, engine, preview_item = NULL) {
   if (!inherits(task, "llikert_task")) llikert_abort("`task` must be created with scoring_task().", "invalid_argument")
   stopifnot(inherits(engine, "llikert_engine"))
   body <- list(protocol_version = protocol_version, task = task_as_list(task))
-  if (!is.null(preview_text)) body$preview_text <- preview_text
+  if (!is.null(preview_item)) body$preview_text <- preview_item
   out <- engine_call(engine, "/v1/prepare", body)
   if (!identical(out$prepared$engine_fingerprint, engine_fingerprint(engine))) {
     llikert_abort("The service changed engines while preparing.", "engine_fingerprint_mismatch")
@@ -28,18 +28,22 @@ new_prepared <- function(artifact, diagnostics = NULL, preview = NULL) {
   structure(list(artifact = artifact, diagnostics = diagnostics, preview = preview), class = "llikert_prepared")
 }
 
-#' Show the rendered prompt of a prepared task
+#' Show the exact prompt text of a prepared task
+#'
+#' Shows the text the model reads, in the model's own chat format (including
+#' its special markers), ending where the model's answer begins. For the same
+#' content as plain messages, use [task_messages()].
 #'
 #' @param prepared An `llikert_prepared` object.
-#' @param which `"example"` (a harmless example text) or `"text"` (the
-#'   `preview_text` given to [prepare_task()]).
+#' @param which `"example"` (a made-up example item) or `"item"` (the
+#'   `preview_item` given to [prepare_task()]).
 #' @return The prompt string, invisibly; it is also printed.
 #' @export
-preview_prompt <- function(prepared, which = c("example", "text")) {
+preview_prompt <- function(prepared, which = c("example", "item")) {
   stopifnot(inherits(prepared, "llikert_prepared"))
   which <- match.arg(which)
-  prompt <- prepared$preview[[which]]$prompt
-  if (is.null(prompt)) llikert_abort(sprintf("No %s preview is available; prepare with `preview_text` to preview a text.", which), "invalid_argument")
+  prompt <- prepared$preview[[if (which == "item") "text" else "example"]]$prompt
+  if (is.null(prompt)) llikert_abort("No item preview is available; use `prepare_task(..., preview_item = ...)`.", "invalid_argument")
   cat(prompt, "\n", sep = "")
   invisible(prompt)
 }
@@ -88,7 +92,7 @@ print.llikert_prepared <- function(x, ...) {
   map$token_piece <- encodeString(map$token_piece, quote = "\"")
   print(as.data.frame(map), row.names = FALSE, right = FALSE)
   if (!is.null(x$diagnostics)) {
-    cat_line("Prompt without text: ", x$diagnostics$n_prompt_tokens_without_text, " tokens of ", x$diagnostics$n_ctx, ".")
+    cat_line("Prompt without the item: ", x$diagnostics$n_prompt_tokens_without_item, " tokens of ", x$diagnostics$n_ctx, ".")
     for (w in x$diagnostics$warnings) cat_line("! ", w$message)
   }
   invisible(x)

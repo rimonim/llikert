@@ -39,6 +39,30 @@
       "title": "Category",
       "type": "object"
     },
+    "ChatMessage": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "system",
+            "user",
+            "assistant"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "content"
+      ],
+      "title": "ChatMessage",
+      "type": "object"
+    },
     "Example": {
       "additionalProperties": false,
       "properties": {
@@ -47,14 +71,14 @@
           "title": "Category Id",
           "type": "string"
         },
-        "text": {
+        "item": {
           "minLength": 1,
-          "title": "Text",
+          "title": "Item",
           "type": "string"
         }
       },
       "required": [
-        "text",
+        "item",
         "category_id"
       ],
       "title": "Example",
@@ -63,16 +87,16 @@
     "PrepareDiagnostics": {
       "additionalProperties": false,
       "properties": {
-        "max_text_tokens_approx": {
-          "title": "Max Text Tokens Approx",
+        "max_item_tokens_approx": {
+          "title": "Max Item Tokens Approx",
           "type": "integer"
         },
         "n_ctx": {
           "title": "N Ctx",
           "type": "integer"
         },
-        "n_prompt_tokens_without_text": {
-          "title": "N Prompt Tokens Without Text",
+        "n_prompt_tokens_without_item": {
+          "title": "N Prompt Tokens Without Item",
           "type": "integer"
         },
         "warnings": {
@@ -84,9 +108,9 @@
         }
       },
       "required": [
-        "n_prompt_tokens_without_text",
+        "n_prompt_tokens_without_item",
         "n_ctx",
-        "max_text_tokens_approx",
+        "max_item_tokens_approx",
         "warnings"
       ],
       "title": "PrepareDiagnostics",
@@ -203,6 +227,13 @@
     "Preview": {
       "additionalProperties": false,
       "properties": {
+        "messages": {
+          "items": {
+            "$ref": "#/$defs/ChatMessage"
+          },
+          "title": "Messages",
+          "type": "array"
+        },
         "n_prompt_tokens": {
           "title": "N Prompt Tokens",
           "type": "integer"
@@ -213,10 +244,57 @@
         }
       },
       "required": [
+        "messages",
         "prompt",
         "n_prompt_tokens"
       ],
       "title": "Preview",
+      "type": "object"
+    },
+    "PromptFormat": {
+      "additionalProperties": false,
+      "description": "Templates for turning the task and one item into chat messages (docs/prompts.md).",
+      "properties": {
+        "answer_instruction": {
+          "default": "Answer with exactly one of the response codes listed above and nothing else.",
+          "title": "Answer Instruction",
+          "type": "string"
+        },
+        "code": {
+          "default": "{response} = {label}",
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "code_separator": {
+          "default": "\n",
+          "title": "Code Separator",
+          "type": "string"
+        },
+        "scale": {
+          "default": "Response codes:\n{codes}",
+          "title": "Scale",
+          "type": "string"
+        },
+        "system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+          "title": "System"
+        },
+        "user": {
+          "default": "Text:\n<text>\n{item}\n</text>",
+          "title": "User",
+          "type": "string"
+        }
+      },
+      "title": "PromptFormat",
       "type": "object"
     },
     "Task": {
@@ -238,7 +316,6 @@
           "type": "array"
         },
         "instructions": {
-          "minLength": 1,
           "title": "Instructions",
           "type": "string"
         },
@@ -251,6 +328,9 @@
           "default": false,
           "title": "Ordered",
           "type": "boolean"
+        },
+        "prompt": {
+          "$ref": "#/$defs/PromptFormat"
         },
         "schema_version": {
           "const": 1,

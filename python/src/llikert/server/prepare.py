@@ -15,7 +15,8 @@ from typing import Any
 from llikert.server.adapter import Adapter, TokenKind
 from llikert.server.canonical import identity_hash
 from llikert.server.errors import ServiceError, invalid
-from llikert.server.render import PREVIEW_EXAMPLE_TEXT, Renderer, RenderError, Segment
+from llikert.server.prompt import prompt_warnings
+from llikert.server.render import PREVIEW_EXAMPLE_ITEM, Renderer, RenderError, Segment, messages_for
 from llikert.server.task import Task
 
 BOUNDARY_POLICY = "tail-suffix-v1"
@@ -120,8 +121,8 @@ class Preparer:
         self.profile = profile
         self._specials = [s for s in adapter.special_token_texts() if s]
 
-    def prompt_tokens(self, task: Task, text: str) -> tuple[list[int], list[Segment]]:
-        segments = self.renderer.segments(task, text)
+    def prompt_tokens(self, task: Task, item: str) -> tuple[list[int], list[Segment]]:
+        segments = self.renderer.segments(task, item)
         return _segment_tokens(self.adapter, segments), segments
 
     def reserved_markers_in(self, text: str) -> bool:
@@ -130,7 +131,7 @@ class Preparer:
     def prepare(self, task: Task) -> dict[str, Any]:
         """Return the portable prepared artifact, or raise ``ServiceError`` (422)."""
         try:
-            tokens, segments = self.prompt_tokens(task, PREVIEW_EXAMPLE_TEXT)
+            tokens, segments = self.prompt_tokens(task, PREVIEW_EXAMPLE_ITEM)
             tail = Renderer.tail(segments)
         except RenderError as exc:
             raise invalid("render_error", str(exc)) from None
@@ -171,7 +172,7 @@ class Preparer:
         if len(tokens) > self.adapter.n_ctx:
             raise invalid(
                 "task_exceeds_context",
-                "the prompt without any dataset text already exceeds the context limit",
+                "the prompt without any item already exceeds the context limit",
                 {"n_prompt_tokens": len(tokens), "n_ctx": self.adapter.n_ctx},
             )
 
@@ -198,20 +199,20 @@ class Preparer:
         artifact["prepared_hash"] = identity_hash(artifact)
         return artifact
 
-    def preview(self, task: Task, text: str) -> dict[str, Any]:
-        tokens, segments = self.prompt_tokens(task, text)
-        return {"prompt": "".join(s.text for s in segments), "n_prompt_tokens": len(tokens)}
+    def preview(self, task: Task, item: str) -> dict[str, Any]:
+        tokens, segments = self.prompt_tokens(task, item)
+        return {"messages": messages_for(task, item), "prompt": "".join(s.text for s in segments), "n_prompt_tokens": len(tokens)}
 
     def diagnostics(self, task: Task) -> dict[str, Any]:
         tokens, _ = self.prompt_tokens(task, "")
-        warnings = []
+        warnings = prompt_warnings(task.canonical())
         if any(c.response != c.response.strip() for c in task.categories):
             warnings.append(
                 {"code": "response_whitespace", "message": "a response code has leading or trailing whitespace"}
             )
         return {
-            "n_prompt_tokens_without_text": len(tokens),
+            "n_prompt_tokens_without_item": len(tokens),
             "n_ctx": self.adapter.n_ctx,
-            "max_text_tokens_approx": self.adapter.n_ctx - len(tokens),
+            "max_item_tokens_approx": self.adapter.n_ctx - len(tokens),
             "warnings": warnings,
         }

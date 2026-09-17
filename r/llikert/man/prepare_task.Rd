@@ -4,15 +4,15 @@
 \alias{prepare_task}
 \title{Prepare a task against the service's model}
 \usage{
-prepare_task(task, engine, preview_text = NULL)
+prepare_task(task, engine, preview_item = NULL)
 }
 \arguments{
 \item{task}{An \code{llikert_task} from \code{\link[=scoring_task]{scoring_task()}}.}
 
 \item{engine}{An \code{llikert_engine} from \code{\link[=scorer_connect]{scorer_connect()}}.}
 
-\item{preview_text}{Optional research text to render in the prompt preview.
-Without it, the preview uses a harmless example text.}
+\item{preview_item}{Optional item (for example one of your texts) to render
+in the prompt preview. Without it, the preview uses a made-up example item.}
 }
 \value{
 An object of class \code{llikert_prepared}.

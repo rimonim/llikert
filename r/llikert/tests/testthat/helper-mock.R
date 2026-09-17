@@ -57,7 +57,7 @@ new_mock <- function(token = NULL) {
     for (entry in mock$fixture$tasks) {
       if (isTRUE(all.equal(body$task, entry$task, tolerance = 0))) {
         out <- entry$prepare_response
-        if (!is.null(body$preview_text)) out$preview$text <- list(prompt = paste0("...", body$preview_text, "..."), n_prompt_tokens = 1L)
+        if (!is.null(body$preview_text)) out$preview$text <- list(messages = list(list(role = "user", content = body$preview_text)), prompt = paste0("...", body$preview_text, "..."), n_prompt_tokens = 1L)
         return(json_response(200, out))
       }
     }
@@ -115,7 +115,7 @@ quickstart_numeric <- function() {
     responses = c("1", "2", "3", "4", "5"),
     values = 1:5,
     ordered = TRUE,
-    examples = data.frame(text = "I love it.", category = "very positive")
+    examples = data.frame(item = "I love it.", category = "very positive")
   )
 }
 
@@ -140,6 +140,6 @@ expected_result <- function(name) load_fixture(sprintf("runs/expected-result-%s.
 
 score_dataset <- function(task, engine, ...) {
   d <- dataset()
-  score_texts(d$texts, d$ids, task = prepare_task(task, engine), engine = engine, progress = FALSE, ...)
+  score_items(d$texts, d$ids, task = prepare_task(task, engine), engine = engine, progress = FALSE, ...)
 }
 

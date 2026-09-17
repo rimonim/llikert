@@ -2,7 +2,7 @@
 
 **Rate texts with a language model, and get probabilities instead of a single answer.**
 
-LLikert is for researchers who want a language model to code or rate text data: open-ended survey answers, diary entries, interview excerpts, social media posts. Think of a coding scheme ("Is this a question, a request, or a description?") or a rating scale ("How positive is this, from 1 to 5?").
+LLikert is for researchers who want a language model to code or rate text data: open-ended survey answers, diary entries, interview excerpts, social media posts. Think of a coding scheme ("Is this a question, a request, or a description?") or a rating scale ("How positive is this, from 1 to 5?"). It can also have the model answer questionnaire items itself.
 
 A chatbot gives you one answer per text. LLikert instead reports **how likely the model considered each possible answer**. For every text you get something like:
 
@@ -18,8 +18,10 @@ It works from **R** or **Python**, on datasets of any size, and it can pick up w
 ## How it works, briefly
 
 1. You write short instructions and list your categories, each with a one-character answer code such as `A`, `B`, `C`.
-2. For each text, the model reads your instructions and the text.
+2. For each item (a text, or a questionnaire statement), the model reads your instructions, the list of codes, and the item.
 3. Instead of letting the model write an answer, LLikert looks at the probability the model gives to each of your answer codes as its very next word.
+
+You can see exactly what the model reads before scoring anything, and change its wording and layout. See [`docs/prompts.md`](docs/prompts.md).
 
 The language model runs on a separate computer with a powerful graphics card, called the **scoring service**. Usually one person in a lab (or the lab's IT support) sets it up once. Everyone else only needs R or Python, the service's web address, and an access key.
 
@@ -49,9 +51,9 @@ pip install "llikert @ git+https://github.com/rimonim/llikert.git#subdirectory=p
 ## Before you use the numbers in a study
 
 - **These are the model's probabilities, not the truth.** A probability of 0.9 means the model strongly favored that answer, not that the answer is 90% likely to be correct. Check the scores against human ratings on a sample of your data before relying on them.
-- **Small changes can change the results.** Different instructions, category labels, answer codes, order of categories or model can shift the scores. Decide these before scoring your main data, and report them in your paper.
-- **LLikert records what you used.** Every saved result includes your task, the answer codes and the exact model and settings, so you can report and reproduce them.
-- **Privacy:** your texts are sent to the scoring service. If that service runs outside your institution (for example on a cloud provider), check that your ethics approval and data agreements allow it. LLikert does not store texts on the service or in its log files.
+- **Small changes can change the results.** Different instructions, prompt layout, category labels, answer codes, order of categories or model can shift the scores. Decide these before scoring your main data, and report them in your paper.
+- **LLikert records what you used.** Every saved result includes your task and its prompt format, the answer codes and the exact model and settings, so you can report and reproduce them.
+- **Privacy:** your items are sent to the scoring service. If that service runs outside your institution (for example on a cloud provider), check that your ethics approval and data agreements allow it. LLikert does not store texts on the service or in its log files.
 
 ## For the person running the service
 

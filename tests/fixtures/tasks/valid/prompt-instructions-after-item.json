@@ -1,0 +1,70 @@
+{
+  "input": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "description",
+        "label": "description",
+        "response": "A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": [],
+    "prompt": {
+      "system": null,
+      "user": "{item}\n\n{instructions}\n{scale}\n{answer_instruction}"
+    }
+  },
+  "canonical": {
+    "schema_version": 1,
+    "name": "Communicative function",
+    "instructions": "Classify the text's primary communicative function.",
+    "categories": [
+      {
+        "id": "description",
+        "label": "description",
+        "response": "A",
+        "value": null
+      },
+      {
+        "id": "question",
+        "label": "question",
+        "response": "B",
+        "value": null
+      },
+      {
+        "id": "request",
+        "label": "request",
+        "response": "C",
+        "value": null
+      }
+    ],
+    "ordered": false,
+    "examples": [],
+    "prompt": {
+      "system": null,
+      "user": "{item}\n\n{instructions}\n{scale}\n{answer_instruction}",
+      "scale": "Response codes:\n{codes}",
+      "code": "{response} = {label}",
+      "code_separator": "\n",
+      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    }
+  },
+  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":null,\"user\":\"{item}\\n\\n{instructions}\\n{scale}\\n{answer_instruction}\"},\"schema_version\":1}",
+  "task_hash": "sha256:bb8b1e38c2d3ef19e98ac5d4aca55647290ef872f76a4bce56fdad3a31e3b80f"
+}

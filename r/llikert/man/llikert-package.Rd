@@ -4,16 +4,24 @@
 \name{llikert-package}
 \alias{llikert}
 \alias{llikert-package}
-\title{llikert: Candidate-Token Probability Scoring Client}
+\title{llikert: Likert scales and Multiple Choice with Next-Token Probabilities}
 \description{
-Client for an LLikert scoring service. Defines scoring tasks with explicit response codes, prepares them against the service's language model, and scores text datasets to next-token probabilities for each response code, both as original probability mass and conditional on choosing one of the codes. Supports checkpointing and resume, and saves self-describing results. The client needs no Python or local inference runtime.
+Reproducibly rate texts on ordinal or categorical scales using next-token probabilities from an open-weights language model with llama.cpp. Supports local inference through Python and remote inference through Hugging Face Inference Endpoints.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/rimonim/llikert}
+  \item Report bugs at \url{https://github.com/rimonim/llikert/issues}
+}
+
 }
 \author{
-\strong{Maintainer}: The LLikert authors \email{louis@teitelbaum.us}
+\strong{Maintainer}: Louis Teitelbaum \email{louis@teitelbaum.us}
 
 Authors:
 \itemize{
-  \item The LLikert authors \email{louis@teitelbaum.us}
+  \item Louis Teitelbaum \email{louis@teitelbaum.us}
 }
 
 }

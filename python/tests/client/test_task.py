@@ -1,4 +1,5 @@
 import json
+import re
 
 import pytest
 
@@ -40,7 +41,7 @@ def test_records_and_explicit_ids():
     assert [c.id for c in t.categories] == ["a", "b"]
     t2 = ScoringTask(name="n", instructions="i", categories=["same", "same"], responses=["A", "B"], ids=["x", "y"])
     assert [c.id for c in t2.categories] == ["x", "y"]
-    t3 = ScoringTask(name="n", instructions="i", categories=["a", "b"], responses=["A", "B"], examples=[Example("t", "a"), {"text": "u", "category_id": "b"}])
+    t3 = ScoringTask(name="n", instructions="i", categories=["a", "b"], responses=["A", "B"], examples=[Example("t", "a"), {"item": "u", "category_id": "b"}])
     assert len(t3.examples) == 2
 
 
@@ -87,3 +88,55 @@ def test_shared_fixtures_agree_with_client_validation():
     for path in sorted((FIXTURES / "tasks" / "invalid").glob("*.json")):
         with pytest.raises((ValueError, TypeError, KeyError)):
             ScoringTask.from_dict(json.loads(path.read_text())["input"])
+
+
+def test_offline_messages_match_the_service():
+    from llikert import PromptFormat  # noqa: F401
+
+    fixture = load_fixture("prompts/messages.json")
+    for case in fixture["cases"]:
+        task_input = json.loads((FIXTURES / "tasks" / "valid" / f"{case['task']}.json").read_text())["input"]
+        obj = dict(task_input)
+        obj.setdefault("ordered", False)
+        obj.setdefault("examples", [])
+        task = ScoringTask.from_dict(obj)
+        for entry in case["items"]:
+            assert task.messages(entry["item"]) == entry["messages"], (case["task"], entry["item"])
+
+
+def test_prompt_format_arguments():
+    from llikert import PromptFormat
+
+    task = ScoringTask(
+        name="Questionnaire", instructions="Rate how well each statement describes you.",
+        categories=["disagree", "neutral", "agree"], responses=["1", "2", "3"], values=[1, 2, 3], ordered=True,
+        prompt=PromptFormat(system="{instructions} {scale} {answer_instruction}", user="{item}", scale="{codes}",
+                            code="{response} ({label})", code_separator=", ", answer_instruction="Reply with one number."),
+    )
+    assert task.messages("I like parties.") == [
+        {"role": "system", "content": "Rate how well each statement describes you. 1 (disagree), 2 (neutral), 3 (agree) Reply with one number."},
+        {"role": "user", "content": "I like parties."},
+    ]
+    assert ScoringTask.from_dict(task.to_dict()) == task
+
+
+@pytest.mark.parametrize("kwargs,fragment", [
+    (dict(user="no placeholder"), "{item} exactly once"),
+    (dict(system="{item}", user="{item}"), "must not contain {item}"),
+    (dict(user="{item} {text}"), "unknown placeholder {text}"),
+    (dict(user="{item} }"), "unmatched brace"),
+    (dict(scale="none"), "{codes} exactly once"),
+    (dict(code="{label}"), "{response}"),
+])
+def test_prompt_format_validation(kwargs, fragment):
+    from llikert import PromptFormat
+
+    with pytest.raises(ValueError, match=re.escape(fragment)):
+        PromptFormat(**kwargs)
+
+
+def test_value_placeholder_needs_values():
+    from llikert import PromptFormat
+
+    with pytest.raises(ValueError, match="no values"):
+        ScoringTask(name="n", instructions="i", categories=["a", "b"], responses=["A", "B"], prompt=PromptFormat(code="{response} {value}"))

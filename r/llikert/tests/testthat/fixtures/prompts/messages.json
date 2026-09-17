@@ -1,0 +1,633 @@
+{
+ "description": "Chat messages built by the service for each valid task fixture and item; client previews must match exactly.",
+ "cases": [
+  {
+   "task": "nominal-minimal-defaults",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "nominal-with-examples",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is it?\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "B"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nClose the door.\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "C"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is it?\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "B"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nClose the door.\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "C"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is it?\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "B"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nClose the door.\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "C"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is it?\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "B"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nClose the door.\n</text>"
+      },
+      {
+       "role": "assistant",
+       "content": "C"
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "numeric-ordered",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "numeric-noninteger-negative",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "unicode-whitespace-strings",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "long-labels-letter-codes",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "prompt-instructions-after-item",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "user",
+       "content": "Where is the station?\n\nClassify the text's primary communicative function.\nResponse codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "user",
+       "content": " leading space and trailing newline\n\n\nClassify the text's primary communicative function.\nResponse codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "user",
+       "content": "Grüße aus Köln — naïve café ✓\n\nClassify the text's primary communicative function.\nResponse codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "user",
+       "content": "Literal {scale} and {item} and {{braces}}\n\nClassify the text's primary communicative function.\nResponse codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "prompt-questionnaire-minimal",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+      },
+      {
+       "role": "user",
+       "content": "Where is the station?"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+      },
+      {
+       "role": "user",
+       "content": " leading space and trailing newline\n"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+      },
+      {
+       "role": "user",
+       "content": "Grüße aus Köln — naïve café ✓"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+      },
+      {
+       "role": "user",
+       "content": "Literal {scale} and {item} and {{braces}}"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "prompt-values-ids-braces",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "{Item} Where is the station?"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "{Item}  leading space and trailing newline\n"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "{Item} Grüße aus Köln — naïve café ✓"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "{Item} Literal {scale} and {item} and {{braces}}"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "prompt-empty-instructions",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Response codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Where is the station?"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Response codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": " leading space and trailing newline\n"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Response codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Grüße aus Köln — naïve café ✓"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Response codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Literal {scale} and {item} and {{braces}}"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
