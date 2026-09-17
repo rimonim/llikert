@@ -6,7 +6,13 @@ Written for: operators setting up a LLikert service on a Linux machine with an N
 
 Before you start, know the unavoidable local costs: the model file (16 GB for the supported F32 profile), a GPU with at least 24 GB of memory, and a native library build that takes a few minutes.
 
-## 1. Python environment
+## 1. Code and Python environment
+
+```bash
+git clone https://github.com/rimonim/llikert.git
+cd llikert
+```
+
 
 Use a distribution or python.org CPython 3.10 or newer, **not a conda Python**. Conda's bundled `libstdc++` prevents the CUDA backend from loading.
 
@@ -28,7 +34,9 @@ Set `CUDA_HOME` to the toolkit you mean to use. The script pins CMake to it, bec
 
 ## 3. Model file
 
-No official F32 GGUF exists, so convert the official weights with the converter from the same llama.cpp tag. The conversion is deterministic.
+The simplest way is `deploy/prepare-model.sh models`: it runs the download and conversion in a container and verifies the checksum. The manual equivalent follows.
+
+No official F32 GGUF exists, so convert the official weights with the converter from the same llama.cpp tag. The conversion is deterministic, but the name of the weights folder and any extra files in it (for example a model card) become metadata in the file. Use a folder named `Qwen3-4B-Instruct-2507` containing only the files below.
 
 ```bash
 # Qwen/Qwen3-4B-Instruct-2507 at revision cdbee75f17c01a7cc42f958dc650907174af0554

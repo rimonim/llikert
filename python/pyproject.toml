@@ -12,6 +12,10 @@ license = "MIT"
 authors = [{ name = "The LLikert authors" }]
 dependencies = ["httpx>=0.27"]
 
+[project.urls]
+Homepage = "https://github.com/rimonim/llikert"
+Issues = "https://github.com/rimonim/llikert/issues"
+
 [project.optional-dependencies]
 # llama-cpp-python is deliberately absent: the service needs the pinned source build
 # against llama.cpp v0.4.1 (see docs/decisions/0002-m0-findings.md). PyPI wheels of the

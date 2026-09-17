@@ -7,6 +7,8 @@ Description: Reproducibly rate texts on ordinal or categorical scales using
     Supports local inference through Python and remote inference through Hugging 
     Face Inference Endpoints.
 License: MIT + file LICENSE
+URL: https://github.com/rimonim/llikert
+BugReports: https://github.com/rimonim/llikert/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0

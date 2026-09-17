@@ -1,53 +1,96 @@
-# llikert (Python)
+# llikert for Python
 
-Written for: researchers scoring text datasets from Python against an LLikert scoring service, and operators running that service.
+A step-by-step guide to scoring texts with a language model from Python, for example in a Jupyter notebook. You don't need a graphics card; the model runs on your lab's scoring service.
 
-- **`pip install llikert`**: the HTTP client. It depends only on `httpx`.
-- **`pip install "llikert[server]"`**: the scoring service. It also needs the pinned llama.cpp build; see `docs/local-service.md`.
+## 1. Install
 
-## Client quickstart
+You need Python 3.10 or newer. In a terminal, or in a notebook cell starting with `%`, run:
 
-Set `LLIKERT_URL` and, if the service needs one, `LLIKERT_TOKEN` in the environment, not in source code.
+```bash
+pip install "llikert @ git+https://github.com/rimonim/llikert.git#subdirectory=python"
+```
+
+This installs only the small client. To update later, run the same command with `--upgrade`.
+
+## 2. Store the service address and access key
+
+Whoever runs the scoring service gives you a web address and an access key (token). Treat the key like a password and keep it out of notebooks you share. One way is to set environment variables before starting Python or Jupyter:
+
+```bash
+export LLIKERT_URL=https://the-address-you-were-given
+export LLIKERT_TOKEN=the-access-key-you-were-given
+```
+
+On Windows PowerShell, use `$env:LLIKERT_URL = "..."` and `$env:LLIKERT_TOKEN = "..."` instead.
+
+## 3. Describe your coding scheme
 
 ```python
-from llikert import Scorer, ScoringTask
+from llikert import ScoringTask
 
 task = ScoringTask(
     name="Communicative function",
     instructions="Classify the text's primary communicative function.",
     categories=["description", "question", "request"],
     responses=["A", "B", "C"],
-    ordered=False,
 )
+```
 
-with Scorer.connect() as engine:          # waits while a hosted endpoint starts up
-    prepared = engine.prepare(task)        # checks that A, B, C are single tokens for this model
-    print(prepared)                        # category -> response -> token mapping
-    print(prepared.preview_prompt())       # the exact prompt, shown with a harmless example text
+- **`categories`:** the names of your categories, which become the column names of your results.
+- **`responses`:** the short answer code for each category. Single capital letters or single digits work best.
+
+For a rating scale, add `values=[1, 2, 3, 4, 5]` and `ordered=True` to get an expected score per text. For worked examples the model sees before each text, add `examples=[("Where is the library?", "question")]`.
+
+## 4. Connect, check, and score
+
+```python
+import pandas as pd
+from llikert import Scorer
+
+df = pd.read_csv("my_texts.csv")          # columns: id, text
+
+with Scorer.connect() as engine:
+    prepared = engine.prepare(task)        # checks that the model can use your answer codes
+    print(prepared)                        # the categories and codes
+    print(prepared.preview_prompt())       # exactly what the model reads (with a made-up text)
     result = engine.score(
-        texts, ids=ids, task=prepared,
-        checkpoint="runs/function-scoring", resume=True,
+        df["text"], ids=df["id"].astype(str),
+        task=prepared,
+        checkpoint="scores-function",      # saves progress; rerun with resume=True after an interruption
     )
 
-print(result)                    # status counts and coverage
-result.probabilities             # rows in input order, columns in result.category_ids
-result.expected_values           # None: this nominal task has no numeric values
-result.diagnostics               # status, coverage, warnings per text
-result.save("function-scores.json")
-df = result.to_pandas()          # optional; same columns as the R client's tibble
+print(result)
 ```
 
-- **Missing (`None` or NaN) and empty texts** keep their positions as diagnostic rows, and are not sent to the service.
-- **Invalid response codes** raise `PrepareError`. Its `.problems` lists the codes that failed, and its `.suggestions` offers alternatives. Nothing is remapped automatically.
-- **Coverage:** the total original probability of your codes. It is a response-format diagnostic, not a validity score.
+- **Missing and empty texts** are kept in place and marked, not dropped.
+- **Invalid answer codes** raise an error that suggests codes that work.
 
-Result and checkpoint files use the same format as the R client (`docs/checkpoint-format.md`), so a run started in one language can be resumed in the other.
+## 5. Read and save the results
 
-## Service quickstart
+```python
+scores = result.to_pandas()                     # id, then one probability column per category
+details = pd.DataFrame(result.diagnostics)      # status and coverage per text
+df_scored = df.assign(id=df["id"].astype(str)).merge(scores, on="id").merge(details[["id", "status", "coverage"]], on="id")
 
-```bash
-llikert selfcheck --model models/qwen3-4b-instruct-2507-f32.gguf
-llikert serve --model models/qwen3-4b-instruct-2507-f32.gguf
+scores.to_csv("scores-function.csv", index=False)
+result.save("scores-function.json")             # complete record, including model details
 ```
 
-See `docs/local-service.md` for the pinned native build, model conversion, and authentication.
+- **Probabilities:** each row adds up to 1. They show how the model divided its preference among your categories.
+- **`coverage`:** how much of the model's attention went to your answer codes at all. Low values mean the model often wanted to answer something else, so check the instructions.
+- **Rating scales:** `result.expected_values` holds the expected score per text.
+
+`.to_pandas()` needs pandas (`pip install pandas`); the rest of the package does not. Result files are the same format as in the R package, so a colleague using R can open them.
+
+## Good practice for studies
+
+- **Test first:** compare the scores against human coding on a sample before scoring your main data, and fix your instructions and codes in advance.
+- **Report** the model, instructions, categories and codes. `result.manifest` lists the model details.
+- **Treat the probabilities as the model's judgment,** not as a measure of truth.
+- **Privacy:** your texts are sent to the scoring service. Make sure that is allowed for your data.
+
+Common problems and solutions: [`docs/troubleshooting.md`](https://github.com/rimonim/llikert/blob/main/docs/troubleshooting.md).
+
+## For the person running the service
+
+This package also contains the scoring service itself (`pip install "llikert[server] @ git+https://github.com/rimonim/llikert.git#subdirectory=python"`). It needs a specially built native library, and a model file; see [`deploy/README.md`](https://github.com/rimonim/llikert/blob/main/deploy/README.md) (container, recommended) or [`docs/local-service.md`](https://github.com/rimonim/llikert/blob/main/docs/local-service.md).

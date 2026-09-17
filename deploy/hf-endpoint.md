@@ -14,6 +14,7 @@ Written for: the lab operator who will deploy one LLikert endpoint for collabora
 ## 1. Publish the image
 
 ```bash
+git clone https://github.com/rimonim/llikert.git && cd llikert
 docker build -f deploy/Dockerfile.cuda -t llikert-service:0.1.0.dev0-cuda12.9 --build-arg SOURCE_REVISION=$(git rev-parse HEAD) .
 docker tag llikert-service:0.1.0.dev0-cuda12.9 <registry>/<namespace>/llikert-service:0.1.0.dev0-cuda12.9
 docker push <registry>/<namespace>/llikert-service:0.1.0.dev0-cuda12.9
@@ -24,7 +25,7 @@ Deploy by digest (`…@sha256:…`), not by tag, so the endpoint cannot change u
 
 ## 2. Put the model file in a model repository
 
-Create a **private** model repository and upload `qwen3-4b-instruct-2507-f32.gguf`, converted as described in `docs/local-service.md` (SHA-256 `a5733d5a…e357`). The source model is Apache-2.0, which permits redistribution; keep its license and model card in the repository.
+Create a **private** model repository and upload `qwen3-4b-instruct-2507-f32.gguf`, prepared with `deploy/prepare-model.sh` (SHA-256 `a5733d5a…e357`). The source model is Apache-2.0, which permits redistribution; keep its license and model card in the repository.
 
 Hugging Face mounts the selected repository at `/repository`. Put only this one GGUF there (plus license and README), and name the file explicitly in `LLIKERT_MODEL`.
 
