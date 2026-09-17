@@ -32,7 +32,7 @@
 
 ## Evidence (2026-09-17, RTX 4090, driver 575.51.03)
 
-- **Image:** `llikert-service:0.1.0.dev0-cuda12.9`, image id `sha256:08efc067e80f…`, 5.0 GB. A rebuild after a source-only change reused the cached native stage and took 7 s.
+- **Image:** `llikert-service:0.1.0.dev0-cuda12.9`, 5.0 GB. The acceptance test ran on image id `sha256:08efc067e80f…`. After the commit, the image was rebuilt only to set the revision label to `116cef8`, giving id `sha256:89bf6a14596b…`; all layers are otherwise cached and identical. A rebuild after a source-only change reuses the cached native stage and takes about 7 s.
 - **`deploy/test-container.sh`:** 16 of 16 checks passed.
   - **Startup:** a missing `LLIKERT_MODEL`, `LLIKERT_AUTH=none` on 0.0.0.0 and a short token are all refused. A wrong `LLIKERT_MODEL_SHA256` exits with status 3 and a message.
   - **Readiness:** `/health` is not 200 before the service is ready, and becomes ready after 15 s (hashing, loading, warm-up, smoke check). It needs no credentials and returns only `{"status":"ready"}`.
