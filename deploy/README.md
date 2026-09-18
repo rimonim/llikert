@@ -80,6 +80,7 @@ After about 20 seconds it is ready:
 
 ```bash
 curl http://127.0.0.1:8080/health     # prints {"status":"ready"}
+deploy/service.sh status              # the same check, plus graphics memory and activity
 ```
 
 If it never becomes ready, look at `docker logs llikert`. When the model file is wrong or the graphics card is unusable, the service stops with an explanation instead of hanging.
@@ -102,6 +103,33 @@ LLIKERT_TOKEN="$(cat llikert-access-key.txt)" check-env/bin/python tools/fidelit
 
 The check takes about a minute. The output starts with `"passed": true` if the setup is fine. Keep `fidelity-check.json`: it records the exact setup (the engine fingerprint) that was checked. If it prints `"passed": false`, do not use the service for research, and report the file to the LLikert maintainers.
 
+## Stopping the service (and freeing the graphics card)
+
+**While the container runs, it holds about 17 GB of graphics memory, even when nobody is scoring.** Stop it whenever you need the card for something else.
+
+```bash
+deploy/service.sh stop      # stop the service and free the graphics card
+deploy/service.sh start     # start it again and wait until it is ready
+deploy/service.sh status    # running? ready? how much graphics memory? recent activity?
+deploy/service.sh restart   # after a reboot or a configuration change
+deploy/service.sh logs 100  # the last 100 log lines
+```
+
+The plain Docker equivalents, if you prefer them:
+
+```bash
+docker stop llikert
+docker start llikert
+docker ps --filter name=llikert
+nvidia-smi                 # confirm the memory is free
+```
+
+Things worth knowing:
+- **Stopping is safe.** The service stores nothing. Researchers who are scoring will see a "did not become ready" or connection error; work saved in their checkpoints resumes when you start the service again.
+- **`status` shows recent activity,** so you can check whether anyone is scoring before you stop it. `stop` also warns you if there were requests in the last five minutes.
+- **The service stays stopped** until you start it again, including across reboots, because `docker stop` overrides the `--restart unless-stopped` setting.
+- **Starting takes about 20 seconds** for the model file to be hashed, loaded and warmed up.
+
 ## 7. Give researchers access
 
 Send each researcher:
@@ -113,14 +141,15 @@ Send each researcher:
 
 | Task | Command |
 |---|---|
-| See whether it is running | `docker ps --filter name=llikert` and `curl http://127.0.0.1:8080/health` |
-| Look at the log | `docker logs --tail 50 llikert` (the log never contains research texts or keys) |
-| Stop / start | `docker stop llikert` / `docker start llikert` |
+| See whether it is running and ready | `deploy/service.sh status` |
+| Stop it and free the graphics card | `deploy/service.sh stop` |
+| Start it again | `deploy/service.sh start` |
+| Look at the log | `deploy/service.sh logs 50` (the log never contains research texts or keys) |
 | Change the access key | Create a new key (step 4), then `docker rm -f llikert` and repeat step 5 |
 | Update to a new version | `git pull`, rebuild (step 3), `docker rm -f llikert`, start (step 5), check (step 6) |
 
 Things to know:
-- **Give the service the graphics card to itself.** Another program taking graphics memory while it runs can make it crash. Researchers' saved progress is not lost; they can resume after a restart.
+- **Give the service the graphics card to itself.** Another program taking graphics memory while it runs can make it crash, and the service holds its own memory until you stop it (see above). Researchers' saved progress is not lost; they can resume after a restart.
 - **Settings are fixed on purpose.** The settings that affect results are built into the image. Changing the model file or the image changes the setup, and researchers will be told to re-prepare their tasks.
 - **Several researchers can use the service at once.** Requests wait in a short queue, and researchers' packages retry automatically when it is busy.
 - **Speed:** roughly 15 texts per second on an RTX 4090, one request at a time.
