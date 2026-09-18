@@ -30,3 +30,25 @@ test_that("prepare needs a task object", {
   engine <- scorer_connect("http://mock")
   expect_error(prepare_task(list(), engine), class = "llikert_error_invalid_argument")
 })
+
+test_that("a 422 from the service lists the field problems", {
+  details <- list(errors = list(
+    list(loc = list("answer_instruction"), type = "extra_forbidden", message = "Extra inputs are not permitted")
+  ))
+  err <- tryCatch(llikert:::service_error(422L, "invalid_task", "task failed validation", details),
+                  llikert_error = identity)
+  message <- paste(conditionMessage(err), collapse = "\n")
+  expect_match(message, "answer_instruction", fixed = TRUE)
+  expect_match(message, "Extra inputs are not permitted", fixed = TRUE)
+  # an unknown field means the service is older than the package; say so
+  expect_match(message, "older version of llikert", fixed = TRUE)
+
+  other <- tryCatch(llikert:::service_error(
+    422L, "invalid_task", "task failed validation",
+    list(errors = list(list(loc = list("categories", 0, "label"), type = "string_too_short",
+                            message = "String should have at least 1 character")))),
+    llikert_error = identity)
+  message <- paste(conditionMessage(other), collapse = "\n")
+  expect_match(message, "categories.0.label", fixed = TRUE)
+  expect_false(grepl("older version", message, fixed = TRUE))
+})

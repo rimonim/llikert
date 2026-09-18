@@ -9,11 +9,31 @@ class LlikertError(Exception):
     """Base class for llikert client errors."""
 
 
+def _describe(status: int, code: str, message: str, details: dict[str, Any] | None) -> str:
+    """The error line, followed by the field-level problems of a 422. A field the service
+    rejects as unknown means it is older than this package, which is worth saying outright."""
+    text = f"[{status} {code}] {message}"
+    errors = (details or {}).get("errors") or []
+    if not isinstance(errors, list):
+        return text
+    for err in errors[:5]:
+        where = ".".join(str(part) for part in err.get("loc", ()))
+        text += f"\n  - {where + ': ' if where else ''}{err.get('message') or err.get('type') or 'invalid'}"
+    if len(errors) > 5:
+        text += f"\n  - {len(errors) - 5} more problem(s) not shown"
+    unknown = sorted({".".join(str(p) for p in e.get("loc", ())) for e in errors if e.get("type") == "extra_forbidden"})
+    if unknown:
+        text += (f"\n  The service does not know the field {', '.join(unknown)}, which this package sends. "
+                 "It is probably running an older version of llikert; ask whoever runs the scoring service "
+                 "to update and restart it.")
+    return text
+
+
 class ServiceError(LlikertError):
     """The service answered with a protocol error envelope (or an unparseable error)."""
 
     def __init__(self, status: int, code: str, message: str, details: dict[str, Any] | None = None, request_id: str | None = None):
-        super().__init__(f"[{status} {code}] {message}")
+        super().__init__(_describe(status, code, message, details))
         self.status = status
         self.code = code
         self.message = message

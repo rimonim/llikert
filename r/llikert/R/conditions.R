@@ -26,7 +26,8 @@ service_error <- function(status, code, message, details = NULL, request_id = NU
   if (!is.null(details$suggestions)) extra$suggestions <- suggestions_table(details$suggestions)
   if (!is.null(details$problems)) extra$problems <- problems_table(details$problems)
   rlang::abort(
-    c(sprintf("The scoring service returned %s (%s).", status, code), i = message),
+    c(sprintf("The scoring service returned %s (%s).", status, code), i = message,
+      validation_bullets(details)),
     class = c(paste0("llikert_error_", code), group, "llikert_service_error", "llikert_error"),
     status = status,
     code = code,
@@ -35,6 +36,34 @@ service_error <- function(status, code, message, details = NULL, request_id = NU
     !!!extra,
     call = call
   )
+}
+
+# Field-level validation errors from a 422, as bullets. A field the service rejects as
+# unknown means it is older than this package, which is worth saying outright.
+validation_bullets <- function(details, max_shown = 5L) {
+  errors <- details$errors
+  if (!length(errors)) return(character())
+  location <- function(e) paste(unlist(e$loc), collapse = ".")
+  shown <- errors[seq_len(min(length(errors), max_shown))]
+  bullets <- vapply(shown, function(e) {
+    where <- location(e)
+    paste0(if (nzchar(where)) paste0("`", where, "`: ") else "", e$message %||% e$type %||% "invalid")
+  }, character(1))
+  names(bullets) <- rep("x", length(bullets))
+  if (length(errors) > max_shown) {
+    bullets <- c(bullets, i = sprintf("%d more problem%s not shown.", length(errors) - max_shown,
+                                      if (length(errors) - max_shown > 1L) "s" else ""))
+  }
+  unknown <- vapply(errors, function(e) identical(e$type, "extra_forbidden"), logical(1))
+  if (any(unknown)) {
+    fields <- unique(vapply(errors[unknown], location, character(1)))
+    bullets <- c(bullets, i = sprintf(
+      paste("The service does not know the field %s, which this package sends.",
+            "It is probably running an older version of llikert;",
+            "ask whoever runs the scoring service to update and restart it."),
+      paste0("`", fields, "`", collapse = ", ")))
+  }
+  bullets
 }
 
 problems_table <- function(problems) {

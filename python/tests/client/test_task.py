@@ -168,3 +168,20 @@ def test_examples_name_their_category_by_id_or_response_code():
     assert both.examples[0].category_id == "y"
     with pytest.raises(ValueError, match="not one of this task's categories"):
         task("quesiton")
+
+
+def test_service_validation_errors_are_shown_in_the_message():
+    from llikert import ServiceError
+
+    err = ServiceError(422, "invalid_task", "task failed validation",
+                       {"errors": [{"loc": ["answer_instruction"], "type": "extra_forbidden",
+                                    "message": "Extra inputs are not permitted"}]})
+    assert "answer_instruction: Extra inputs are not permitted" in str(err)
+    # an unknown field means the service is older than the package; say so
+    assert "older version of llikert" in str(err)
+
+    other = ServiceError(422, "invalid_task", "task failed validation",
+                         {"errors": [{"loc": ["categories", 0, "label"], "type": "string_too_short",
+                                      "message": "String should have at least 1 character"}]})
+    assert "categories.0.label: String should have at least 1 character" in str(other)
+    assert "older version" not in str(other)
