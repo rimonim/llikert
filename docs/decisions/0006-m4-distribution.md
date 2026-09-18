@@ -16,19 +16,20 @@
 
    Local wheel builds were previously pulling unpinned build tools through pip's isolated environment. The locked tools now apply to the image build, and local builds can use them with `PIP_WHEEL_ARGS=--no-build-isolation`.
 3. **The image build compiles its own native wheel** instead of copying the developer's wheel. A rebuilt native library is a different engine build, so the image is verified on its own with the HTTP fidelity gate.
-4. **Configuration by environment** (`deploy/entrypoint.sh`):
+4. **One operator interface: `deploy/service.sh`** (`start`, `stop`, `restart`, `recreate`, `status`, `logs`, `selfcheck`). It creates the container on first `start`, reads optional settings from `deploy/llikert.env`, waits for readiness, and reports graphics memory and recent scoring activity. The guide uses only this script, so there is one documented way to run the service; `docker run` appears in the guide only for the NVIDIA prerequisite check.
+5. **Configuration by environment** (`deploy/entrypoint.sh`), which `service.sh` sets:
    - Required: `LLIKERT_MODEL`. Recommended: `LLIKERT_MODEL_SHA256`.
    - Optional: `LLIKERT_AUTH` (default `token`), `LLIKERT_API_TOKEN`, `LLIKERT_PORT`, `LLIKERT_N_CTX`, `LLIKERT_MAX_ITEMS`, `LLIKERT_QUEUE`.
    - Numerics-affecting execution settings are not configurable in the image.
    - Passing arguments runs `llikert <args>`, for example `selfcheck`.
    - `NVIDIA_TF32_OVERRIDE=0` is also set in the image, in addition to the service setting it itself.
-5. **A failed startup exits the process** (status 3) after the error is logged. The HTTP server still answers `/health` with 503 while loading, but a model hash mismatch, missing library, unsupported template or memory failure no longer leaves a server that is never ready. A container supervisor or endpoint platform sees the failed start in its logs. The underlying `create_app()` keeps the process alive by default, for embedding and tests.
-6. **`tools/fidelity_gate_http.py`** runs the D24 gate against any running service, over HTTP, using only the base client. Prompt-token parity with the reference is checked remotely through `prompt_token_sha256`. It is the verification step for containers and hosted endpoints on their own hardware.
-7. **Hugging Face recipe** (`deploy/hf-endpoint.md`) is marked **experimental and not executed**:
+6. **A failed startup exits the process** (status 3) after the error is logged. The HTTP server still answers `/health` with 503 while loading, but a model hash mismatch, missing library, unsupported template or memory failure no longer leaves a server that is never ready. A container supervisor or endpoint platform sees the failed start in its logs. The underlying `create_app()` keeps the process alive by default, for embedding and tests.
+7. **`tools/fidelity_gate_http.py`** runs the D24 gate against any running service, over HTTP, using only the base client. Prompt-token parity with the reference is checked remotely through `prompt_token_sha256`. It is the verification step for containers and hosted endpoints on their own hardware.
+8. **Hugging Face recipe** (`deploy/hf-endpoint.md`) is marked **experimental and not executed**:
    - a protected endpoint with `LLIKERT_AUTH=platform`, the image deployed by digest, the model in a private repository mounted at `/repository`, max 1 replica until the gate passes;
    - collaborators connect with their Hugging Face token and `scale_up_timeout`;
    - a nine-item verification checklist and cost-control steps.
-8. **Release artifacts** (`tools/build-release.sh` → `dist/`, not committed): Python sdist and wheel, R source package, `SHA256SUMS`, and `release-manifest.json` linking the artifacts to the source revision, lockfile hashes, image id, pinned stack and supported model hash. Versions stay at development numbers (`0.1.0.dev0`, `0.1.0.9000`) until the M5 release review.
+9. **Release artifacts** (`tools/build-release.sh` → `dist/`, not committed): Python sdist and wheel, R source package, `SHA256SUMS`, and `release-manifest.json` linking the artifacts to the source revision, lockfile hashes, image id, pinned stack and supported model hash. Versions stay at development numbers (`0.1.0.dev0`, `0.1.0.9000`) until the M5 release review.
 
 ## Evidence (2026-09-17, RTX 4090, driver 575.51.03)
 

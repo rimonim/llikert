@@ -62,30 +62,25 @@ python3 -c "import secrets; print(secrets.token_hex(32))" > llikert-access-key.t
 chmod 600 llikert-access-key.txt
 ```
 
-Anyone with this key can use the service. Share it only with the researchers who should have access. To revoke access, create a new key and restart the service (step 5).
+Anyone with this key can use the service. Share it only with the researchers who should have access. To revoke access, create a new key and run `deploy/service.sh recreate`.
 
 ## 5. Start the service
 
 ```bash
-docker run -d --name llikert --restart unless-stopped --gpus all \
-  -p 127.0.0.1:8080:8080 \
-  -v "$PWD/models:/repository:ro" \
-  -e LLIKERT_MODEL=/repository/qwen3-4b-instruct-2507-f32.gguf \
-  -e LLIKERT_MODEL_SHA256=a5733d5a25e8b824e1ef9d7e75449ffd8f8ec582de8ac253420e4423a7f0e357 \
-  -e LLIKERT_API_TOKEN="$(cat llikert-access-key.txt)" \
-  llikert-service:0.1.0.dev0-cuda12.9
+deploy/service.sh start
 ```
 
-After about 20 seconds it is ready:
+The first time, this creates the container; afterwards it just starts it again. It waits until the service is ready, which takes about 20 seconds, and prints the address:
 
-```bash
-curl http://127.0.0.1:8080/health     # prints {"status":"ready"}
-deploy/service.sh status              # the same check, plus graphics memory and activity
+```
+created container 'llikert' from llikert-service:0.1.0.dev0-cuda12.9
+starting 'llikert' (loading the model takes about 20 seconds)
+ready after 21s; address: http://127.0.0.1:8080
 ```
 
-If it never becomes ready, look at `docker logs llikert`. When the model file is wrong or the graphics card is unusable, the service stops with an explanation instead of hanging.
+`deploy/service.sh` is the only command you need for running the service; the sections below use it throughout. If the service never becomes ready, run `deploy/service.sh logs`. When the model file is wrong or the graphics card is unusable, the service stops with an explanation instead of hanging.
 
-**Letting researchers reach it.** The command above accepts connections only from this machine (`127.0.0.1`). Choose one option:
+**Letting researchers reach it.** By default the service accepts connections only from this machine (`127.0.0.1`). Choose one option:
 - **Researchers work on this machine:** nothing more to do. The address is `http://127.0.0.1:8080`.
 - **Researchers connect from their own computers:** put the service behind your institution's HTTPS reverse proxy, the same way you would publish any internal web application, and give researchers the `https://` address. The service does not encrypt traffic itself, so don't publish port 8080 directly on a network.
 - **A quick test from another computer:** use an SSH tunnel (`ssh -L 8080:127.0.0.1:8080 user@this-machine`); the address is then `http://127.0.0.1:8080` on that computer.
@@ -111,23 +106,12 @@ The check takes about a minute. The output starts with `"passed": true` if the s
 deploy/service.sh stop      # stop the service and free the graphics card
 deploy/service.sh start     # start it again and wait until it is ready
 deploy/service.sh status    # running? ready? how much graphics memory? recent activity?
-deploy/service.sh restart   # after a reboot or a configuration change
-deploy/service.sh logs 100  # the last 100 log lines
-```
-
-The plain Docker equivalents, if you prefer them:
-
-```bash
-docker stop llikert
-docker start llikert
-docker ps --filter name=llikert
-nvidia-smi                 # confirm the memory is free
 ```
 
 Things worth knowing:
 - **Stopping is safe.** The service stores nothing. Researchers who are scoring will see a "did not become ready" or connection error; work saved in their checkpoints resumes when you start the service again.
 - **`status` shows recent activity,** so you can check whether anyone is scoring before you stop it. `stop` also warns you if there were requests in the last five minutes.
-- **The service stays stopped** until you start it again, including across reboots, because `docker stop` overrides the `--restart unless-stopped` setting.
+- **The service stays stopped** until you run `deploy/service.sh start` again, including across reboots. While it is running, it restarts by itself after a reboot or a crash.
 - **Starting takes about 20 seconds** for the model file to be hashed, loaded and warmed up.
 
 ## 7. Give researchers access
@@ -144,9 +128,12 @@ Send each researcher:
 | See whether it is running and ready | `deploy/service.sh status` |
 | Stop it and free the graphics card | `deploy/service.sh stop` |
 | Start it again | `deploy/service.sh start` |
+| Restart it | `deploy/service.sh restart` |
 | Look at the log | `deploy/service.sh logs 50` (the log never contains research texts or keys) |
-| Change the access key | Create a new key (step 4), then `docker rm -f llikert` and repeat step 5 |
-| Update to a new version | `git pull`, rebuild (step 3), `docker rm -f llikert`, start (step 5), check (step 6) |
+| Apply a new key, image or setting | `deploy/service.sh recreate` |
+| Change the access key | Create a new key (step 4), then `deploy/service.sh recreate` |
+| Update to a new version | `git pull`, rebuild (step 3), `deploy/service.sh recreate`, then check again (step 6) |
+| Check the model and graphics card without serving | `deploy/service.sh selfcheck` |
 
 Things to know:
 - **Give the service the graphics card to itself.** Another program taking graphics memory while it runs can make it crash, and the service holds its own memory until you stop it (see above). Researchers' saved progress is not lost; they can resume after a restart.
@@ -156,22 +143,21 @@ Things to know:
 
 ## Settings reference
 
-| Variable | Default | Meaning |
+The defaults suit the setup in this guide. To change one, copy `deploy/llikert.env.example` to `deploy/llikert.env`, edit it, and run `deploy/service.sh recreate`.
+
+| Setting | Default | Meaning |
 |---|---|---|
-| `LLIKERT_MODEL` | required | Model file path inside the container |
-| `LLIKERT_MODEL_SHA256` | none | Expected checksum of the model file; the service refuses to start on a mismatch |
-| `LLIKERT_API_TOKEN` | required | Access key (at least 16 characters) |
-| `LLIKERT_AUTH` | `token` | Set to `platform` only on hosting platforms that check access themselves (see `hf-endpoint.md`) |
+| `LLIKERT_MODELS_DIR` | `./models` | Folder holding the model file |
+| `LLIKERT_MODEL_FILE` | `qwen3-4b-instruct-2507-f32.gguf` | The model file to load |
+| `LLIKERT_MODEL_SHA256` | the verified checksum | The service refuses to start if the file does not match |
+| `LLIKERT_KEY_FILE` | `./llikert-access-key.txt` | File holding the access key |
+| `LLIKERT_PORT` | `8080` | Port on this machine |
+| `LLIKERT_BIND` | `127.0.0.1` | Which addresses may connect; use `0.0.0.0` only behind an HTTPS reverse proxy |
 | `LLIKERT_N_CTX` | `4096` | Longest prompt, in tokens (about 3,000 words). Raising it changes the setup and uses more graphics memory |
-| `LLIKERT_MAX_ITEMS` | `64` | Texts per request |
-| `LLIKERT_QUEUE` | `4` | Requests allowed to wait before clients are asked to retry |
+| `LLIKERT_IMAGE` | `llikert-service:0.1.0.dev0-cuda12.9` | Image to run |
+| `LLIKERT_CONTAINER` | `llikert` | Container name, if you run more than one service |
 
-Diagnostics without starting the service:
-
-```bash
-docker run --rm --gpus all -v "$PWD/models:/repository:ro" llikert-service:0.1.0.dev0-cuda12.9 \
-  selfcheck --model /repository/qwen3-4b-instruct-2507-f32.gguf
-```
+Settings that would change the scores (graphics card use, batch size, attention and precision) are fixed in the image and cannot be changed here.
 
 ## Privacy and security
 

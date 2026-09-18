@@ -13,3 +13,5 @@ dist/
 .Rhistory
 r/llikert/*.tar.gz
 r/llikert.Rcheck/
+llikert-access-key.txt
+deploy/llikert.env
