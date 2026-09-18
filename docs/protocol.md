@@ -20,6 +20,7 @@ Every response carries the header `LLikert-Protocol: 1`. Request bodies must be 
   "schema_version": 1,
   "name": "Communicative function",
   "instructions": "Classify the text's primary communicative function.",
+  "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
   "categories": [
     {"id": "description", "label": "description", "response": "A", "value": null},
     {"id": "question",    "label": "question",    "response": "B", "value": null},
@@ -28,12 +29,11 @@ Every response carries the header `LLikert-Protocol: 1`. Request bodies must be 
   "ordered": false,
   "examples": [{"item": "Where is it?", "category_id": "question"}],
   "prompt": {
-    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
-    "user": "Text:\n<text>\n{item}\n</text>",
+    "system": "{instructions}\n\n{scale}",
+    "user": "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}",
     "scale": "Response codes:\n{codes}",
     "code": "{response} = {label}",
-    "code_separator": "\n",
-    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+    "code_separator": "\n"
   }
 }
 ```
@@ -42,7 +42,7 @@ Every response carries the header `LLikert-Protocol: 1`. Request bodies must be 
 - **`id`:** unique; `id` and `expected_value` are reserved.
 - **`response`:** nonempty and unique; whitespace counts.
 - **`value`:** a finite number for every category or null for all of them.
-- **Strings:** never trimmed or Unicode-normalized. `instructions` may be empty.
+- **Strings:** never trimmed or Unicode-normalized. `instructions` and `answer_instruction` may be empty; both are shown to the model only where a prompt template uses their placeholder.
 - **`prompt`:** optional; missing fields take the defaults shown. `system` may be null for no system message. Templates, placeholders and validation rules are in `docs/prompts.md`; invalid formats are `422 invalid_task`.
 - **Identity:** the task hash is the SHA-256 of the RFC 8785 (JCS) canonical form with defaults filled in, written `sha256:<hex>`. Fixtures are in `tests/fixtures/tasks/`.
 

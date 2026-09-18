@@ -17,9 +17,10 @@
 #' @section Placeholders:
 #' Templates contain placeholders in curly braces, which are replaced by:
 #'
-#' * in `system` and `user`: `{instructions}` (the task's instructions),
-#'   `{scale}` (the filled-in `scale` template) and `{answer_instruction}`;
-#'   `{item}` (the item being scored) is allowed only in `user`, exactly once;
+#' * in `system` and `user`: `{instructions}` and `{answer_instruction}` (the
+#'   task's `instructions` and `answer_instruction`, from [scoring_task()]) and
+#'   `{scale}` (the filled-in `scale` template); `{item}` (the item being
+#'   scored) is allowed only in `user`, exactly once;
 #' * in `scale`: `{codes}`, the category lines joined by `code_separator`;
 #' * in `code`, once per category: `{response}` (required), `{label}`,
 #'   `{value}` (only when the task has values) and `{id}`.
@@ -34,13 +35,11 @@
 #' @param scale Template describing the response codes; must contain `{codes}`.
 #' @param code Template for one category's line; must contain `{response}`.
 #' @param code_separator Text placed between category lines.
-#' @param answer_instruction Text inserted at `{answer_instruction}`, usually
-#'   asking the model to answer with one of the codes only. Use `""` to omit.
 #' @return An object of class `llikert_prompt_format`.
 #' @export
 #' @examples
-#' # the default: instructions, codes and answer instruction in the system
-#' # message; the item in the user message
+#' # the default: instructions and codes in the system message; the item and
+#' # the answer instruction in the user message
 #' prompt_format()
 #'
 #' # instructions after the item, all in one user message
@@ -51,27 +50,24 @@
 #'
 #' # questionnaire items: the item alone, the scale on one line
 #' prompt_format(
-#'   system = "{instructions}\n{scale}\n{answer_instruction}",
-#'   user = "{item}",
+#'   system = "{instructions}\n{scale}",
+#'   user = "{item}\n\n{answer_instruction}",
 #'   scale = "{codes}",
 #'   code = "{response} = {label}",
-#'   code_separator = "; ",
-#'   answer_instruction = "Reply with the number only."
+#'   code_separator = "; "
 #' )
-prompt_format <- function(system = "{instructions}\n\n{scale}\n\n{answer_instruction}",
-                          user = "Text:\n<text>\n{item}\n</text>",
+prompt_format <- function(system = "{instructions}\n\n{scale}",
+                          user = "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}",
                           scale = "Response codes:\n{codes}",
                           code = "{response} = {label}",
-                          code_separator = "\n",
-                          answer_instruction = "Answer with exactly one of the response codes listed above and nothing else.") {
+                          code_separator = "\n") {
   if (!is.null(system)) check_template_string(system, "system")
   check_template_string(user, "user")
   check_template_string(scale, "scale")
   check_template_string(code, "code", allow_empty = FALSE)
   check_template_string(code_separator, "code_separator")
-  check_template_string(answer_instruction, "answer_instruction")
   x <- list(system = system, user = user, scale = scale, code = code,
-            code_separator = code_separator, answer_instruction = answer_instruction)
+            code_separator = code_separator)
   validate_prompt_format(x, has_values = TRUE)
   structure(x, class = "llikert_prompt_format")
 }
@@ -186,7 +182,7 @@ build_messages <- function(task, item) {
   values <- list(
     instructions = task$instructions,
     scale = fill_template(parse_template(prompt$scale, scale_fields, "scale"), list(codes = paste(lines, collapse = prompt$code_separator))),
-    answer_instruction = prompt$answer_instruction
+    answer_instruction = task$answer_instruction
   )
   user_parts <- parse_template(prompt$user, message_fields, "user")
   messages <- list()
@@ -241,6 +237,6 @@ print.llikert_prompt_format <- function(x, ...) {
     value <- x[[name]]
     cat_line(sprintf("  %-19s%s", paste0(name, ":"), if (is.null(value)) "NULL (no system message)" else encodeString(value, quote = "\"")))
   }
-  for (name in c("system", "user", "scale", "code", "code_separator", "answer_instruction")) show(name)
+  for (name in c("system", "user", "scale", "code", "code_separator")) show(name)
   invisible(x)
 }

@@ -12,8 +12,8 @@ from typing import Any
 
 from llikert.server.canonical import _number
 
-DEFAULT_SYSTEM = "{instructions}\n\n{scale}\n\n{answer_instruction}"
-DEFAULT_USER = "Text:\n<text>\n{item}\n</text>"
+DEFAULT_SYSTEM = "{instructions}\n\n{scale}"
+DEFAULT_USER = "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}"
 DEFAULT_SCALE = "Response codes:\n{codes}"
 DEFAULT_CODE = "{response} = {label}"
 DEFAULT_CODE_SEPARATOR = "\n"
@@ -107,7 +107,7 @@ def build_messages(task: dict[str, Any], item: str) -> list[dict[str, str]]:
     values = {
         "instructions": task["instructions"],
         "scale": scale_text(prompt, task["categories"]),
-        "answer_instruction": prompt["answer_instruction"],
+        "answer_instruction": task["answer_instruction"],
     }
     user_parts = parse_template(prompt["user"], MESSAGE_FIELDS, "prompt.user")
     messages: list[dict[str, str]] = []
@@ -133,8 +133,8 @@ def prompt_warnings(task: dict[str, Any]) -> list[dict[str, str]]:
         warnings.append({"code": "unused_instructions", "message": "the task has instructions, but no prompt template uses {instructions}"})
     if not task["instructions"] and "instructions" in used:
         warnings.append({"code": "empty_instructions", "message": "the prompt uses {instructions}, but the instructions are empty"})
-    if prompt["answer_instruction"] and "answer_instruction" not in used:
-        warnings.append({"code": "unused_answer_instruction", "message": "answer_instruction is set, but no prompt template uses {answer_instruction}"})
+    if task["answer_instruction"] and "answer_instruction" not in used:
+        warnings.append({"code": "unused_answer_instruction", "message": "the task has an answer_instruction, but no prompt template uses {answer_instruction}"})
     if "scale" not in used:
         warnings.append({
             "code": "scale_not_in_prompt",

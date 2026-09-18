@@ -10,11 +10,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+       "content": "Text:\n<text>\nWhere is the station?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -23,11 +23,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -36,11 +36,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -49,11 +49,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     }
@@ -68,11 +68,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is it?\n</text>"
+       "content": "Text:\n<text>\nWhere is it?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -80,7 +80,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nClose the door.\n</text>"
+       "content": "Text:\n<text>\nClose the door.\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -88,7 +88,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+       "content": "Text:\n<text>\nWhere is the station?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -97,11 +97,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is it?\n</text>"
+       "content": "Text:\n<text>\nWhere is it?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -109,7 +109,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nClose the door.\n</text>"
+       "content": "Text:\n<text>\nClose the door.\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -117,7 +117,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -126,11 +126,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is it?\n</text>"
+       "content": "Text:\n<text>\nWhere is it?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -138,7 +138,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nClose the door.\n</text>"
+       "content": "Text:\n<text>\nClose the door.\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -146,7 +146,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -155,11 +155,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is it?\n</text>"
+       "content": "Text:\n<text>\nWhere is it?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -167,7 +167,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nClose the door.\n</text>"
+       "content": "Text:\n<text>\nClose the door.\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       },
       {
        "role": "assistant",
@@ -175,7 +175,7 @@
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     }
@@ -190,11 +190,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+       "content": "Text:\n<text>\nWhere is the station?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -203,11 +203,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -216,11 +216,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -229,11 +229,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     }
@@ -248,11 +248,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+       "content": "Text:\n<text>\nWhere is the station?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -261,11 +261,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -274,11 +274,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -287,11 +287,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nResponse codes:\n1 = very negative\n2 = negative\n3 = neutral\n4 = positive\n5 = very positive"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     }
@@ -306,11 +306,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+       "content": "Text:\n<text>\nWhere is the station?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -319,11 +319,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -332,11 +332,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -345,11 +345,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Line one\nLine two\ttab\n\nResponse codes:\n A = Beschreibung ✎ \nB = question\nC = request"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     }
@@ -364,11 +364,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nWhere is the station?\n</text>"
+       "content": "Text:\n<text>\nWhere is the station?\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -377,11 +377,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>"
+       "content": "Text:\n<text>\n leading space and trailing newline\n\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -390,11 +390,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>"
+       "content": "Text:\n<text>\nGrüße aus Köln — naïve café ✓\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     },
@@ -403,11 +403,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = category number 0 with a long descriptive name\nB = category number 1 with a long descriptive name\nC = category number 2 with a long descriptive name\nD = category number 3 with a long descriptive name\nE = category number 4 with a long descriptive name\nF = category number 5 with a long descriptive name\nG = category number 6 with a long descriptive name\nH = category number 7 with a long descriptive name\nI = category number 8 with a long descriptive name\nJ = category number 9 with a long descriptive name\nK = category number 10 with a long descriptive name\nL = category number 11 with a long descriptive name"
       },
       {
        "role": "user",
-       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>"
+       "content": "Text:\n<text>\nLiteral {scale} and {item} and {{braces}}\n</text>\n\nAnswer with exactly one of the response codes listed above and nothing else."
       }
      ]
     }
@@ -464,11 +464,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive"
       },
       {
        "role": "user",
-       "content": "Where is the station?"
+       "content": "Where is the station?\n\nReply with the number only."
       }
      ]
     },
@@ -477,11 +477,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive"
       },
       {
        "role": "user",
-       "content": " leading space and trailing newline\n"
+       "content": " leading space and trailing newline\n\n\nReply with the number only."
       }
      ]
     },
@@ -490,11 +490,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive"
       },
       {
        "role": "user",
-       "content": "Grüße aus Köln — naïve café ✓"
+       "content": "Grüße aus Köln — naïve café ✓\n\nReply with the number only."
       }
      ]
     },
@@ -503,11 +503,11 @@
      "messages": [
       {
        "role": "system",
-       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only."
+       "content": "You are completing a personality questionnaire. Rate how well each statement describes you.\n1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive"
       },
       {
        "role": "user",
-       "content": "Literal {scale} and {item} and {{braces}}"
+       "content": "Literal {scale} and {item} and {{braces}}\n\nReply with the number only."
       }
      ]
     }
@@ -515,14 +515,16 @@
   },
   {
    "task": "prompt-values-ids-braces",
-   "warnings": [],
+   "warnings": [
+    "unused_answer_instruction"
+   ],
    "items": [
     {
      "item": "Where is the station?",
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]"
       },
       {
        "role": "user",
@@ -535,7 +537,7 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]"
       },
       {
        "role": "user",
@@ -548,7 +550,7 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]"
       },
       {
        "role": "user",
@@ -561,7 +563,7 @@
      "messages": [
       {
        "role": "system",
-       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]\n\nAnswer with exactly one of the response codes listed above and nothing else."
+       "content": "Rate the sentiment.\n\nScale {1-5}:\n1: very negative [-2.5|s1]\n2: negative [0|s2]\n3: neutral [0.1|s3]\n4: positive [1e+21|s4]\n5: very positive [0.3333333333333333|s5]"
       },
       {
        "role": "user",
@@ -620,6 +622,64 @@
       {
        "role": "system",
        "content": "Response codes:\nA = description\nB = question\nC = request\nAnswer with exactly one of the response codes listed above and nothing else."
+      },
+      {
+       "role": "user",
+       "content": "Literal {scale} and {item} and {{braces}}"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "task": "prompt-answer-instruction-empty",
+   "warnings": [],
+   "items": [
+    {
+     "item": "Where is the station?",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
+      },
+      {
+       "role": "user",
+       "content": "Where is the station?"
+      }
+     ]
+    },
+    {
+     "item": " leading space and trailing newline\n",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
+      },
+      {
+       "role": "user",
+       "content": " leading space and trailing newline\n"
+      }
+     ]
+    },
+    {
+     "item": "Grüße aus Köln — naïve café ✓",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
+      },
+      {
+       "role": "user",
+       "content": "Grüße aus Köln — naïve café ✓"
+      }
+     ]
+    },
+    {
+     "item": "Literal {scale} and {item} and {{braces}}",
+     "messages": [
+      {
+       "role": "system",
+       "content": "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
       },
       {
        "role": "user",

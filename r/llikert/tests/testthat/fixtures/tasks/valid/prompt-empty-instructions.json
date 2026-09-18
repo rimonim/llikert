@@ -34,6 +34,7 @@
     "schema_version": 1,
     "name": "Communicative function",
     "instructions": "",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
     "categories": [
       {
         "id": "description",
@@ -61,10 +62,9 @@
       "user": "{item}",
       "scale": "Response codes:\n{codes}",
       "code": "{response} = {label}",
-      "code_separator": "\n",
-      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+      "code_separator": "\n"
     }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"\",\"name\":\"Communicative function\",\"ordered\":false,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{scale}\\n{answer_instruction}\",\"user\":\"{item}\"},\"schema_version\":1}",
-  "task_hash": "sha256:ea6211bea7d3c24bb76555559cca64f06d3d780abc05ed9b1fced4e6b6d7b09e"
+  "canonical_jcs": "{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"\",\"name\":\"Communicative function\",\"ordered\":false,\"prompt\":{\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{scale}\\n{answer_instruction}\",\"user\":\"{item}\"},\"schema_version\":1}",
+  "task_hash": "sha256:772206bf40e8734f4a9ae35e6f30e30d697700646015a5da9ad09e4cf99c32fc"
 }

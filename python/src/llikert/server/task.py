@@ -73,9 +73,8 @@ class PromptFormat(StrictModel):
     scale: str = prompts.DEFAULT_SCALE
     code: str = Field(default=prompts.DEFAULT_CODE, min_length=1)
     code_separator: str = prompts.DEFAULT_CODE_SEPARATOR
-    answer_instruction: str = prompts.DEFAULT_ANSWER_INSTRUCTION
 
-    @field_validator("system", "user", "scale", "code", "code_separator", "answer_instruction")
+    @field_validator("system", "user", "scale", "code", "code_separator")
     @classmethod
     def _utf8(cls, v: str | None) -> str | None:
         return v if v is None else check_utf8(v)
@@ -85,12 +84,13 @@ class Task(StrictModel):
     schema_version: Literal[1]
     name: str = Field(min_length=1)
     instructions: str
+    answer_instruction: str = prompts.DEFAULT_ANSWER_INSTRUCTION
     categories: list[Category] = Field(min_length=2)
     ordered: bool = False
     examples: list[Example] = Field(default_factory=list)
     prompt: PromptFormat = Field(default_factory=PromptFormat)
 
-    @field_validator("name", "instructions")
+    @field_validator("name", "instructions", "answer_instruction")
     @classmethod
     def _utf8(cls, v: str) -> str:
         return check_utf8(v)
@@ -129,6 +129,7 @@ class Task(StrictModel):
             "schema_version": self.schema_version,
             "name": self.name,
             "instructions": self.instructions,
+            "answer_instruction": self.answer_instruction,
             "categories": [
                 {"id": c.id, "label": c.label, "response": c.response, "value": c.value} for c in self.categories
             ],

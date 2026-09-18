@@ -25,6 +25,7 @@
     "schema_version": 1,
     "name": "Communicative function",
     "instructions": "Classify the text's primary communicative function.",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
     "categories": [
       {
         "id": "description",
@@ -48,14 +49,13 @@
     "ordered": false,
     "examples": [],
     "prompt": {
-      "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
-      "user": "Text:\n<text>\n{item}\n</text>",
+      "system": "{instructions}\n\n{scale}",
+      "user": "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}",
       "scale": "Response codes:\n{codes}",
       "code": "{response} = {label}",
-      "code_separator": "\n",
-      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+      "code_separator": "\n"
     }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\\n\\n{answer_instruction}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\"},\"schema_version\":1}",
-  "task_hash": "sha256:f52902ec1e5ba08ba7562d4343c3aecf9afd247fbd0cc0bd74cf8097821eee40"
+  "canonical_jcs": "{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"categories\":[{\"id\":\"description\",\"label\":\"description\",\"response\":\"A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Classify the text's primary communicative function.\",\"name\":\"Communicative function\",\"ordered\":false,\"prompt\":{\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\\n\\n{answer_instruction}\"},\"schema_version\":1}",
+  "task_hash": "sha256:05efb6ae6f1c7d5c1c31f024796b8f7bd5f05d097669e856da4331a4de628507"
 }

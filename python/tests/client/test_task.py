@@ -110,12 +110,13 @@ def test_prompt_format_arguments():
     task = ScoringTask(
         name="Questionnaire", instructions="Rate how well each statement describes you.",
         categories=["disagree", "neutral", "agree"], responses=["1", "2", "3"], values=[1, 2, 3], ordered=True,
-        prompt=PromptFormat(system="{instructions} {scale} {answer_instruction}", user="{item}", scale="{codes}",
-                            code="{response} ({label})", code_separator=", ", answer_instruction="Reply with one number."),
+        answer_instruction="Reply with one number.",
+        prompt=PromptFormat(system="{instructions} {scale}", user="{item} {answer_instruction}", scale="{codes}",
+                            code="{response} ({label})", code_separator=", "),
     )
     assert task.messages("I like parties.") == [
-        {"role": "system", "content": "Rate how well each statement describes you. 1 (disagree), 2 (neutral), 3 (agree) Reply with one number."},
-        {"role": "user", "content": "I like parties."},
+        {"role": "system", "content": "Rate how well each statement describes you. 1 (disagree), 2 (neutral), 3 (agree)"},
+        {"role": "user", "content": "I like parties. Reply with one number."},
     ]
     assert ScoringTask.from_dict(task.to_dict()) == task
 
@@ -133,6 +134,19 @@ def test_prompt_format_validation(kwargs, fragment):
 
     with pytest.raises(ValueError, match=re.escape(fragment)):
         PromptFormat(**kwargs)
+
+
+def test_answer_instruction_belongs_to_the_task():
+    from llikert import PromptFormat
+
+    task = ScoringTask(name="n", instructions="i", categories=["a", "b"], responses=["A", "B"],
+                       answer_instruction="Reply with one letter.")
+    assert task.answer_instruction == "Reply with one letter."
+    assert task.messages("x")[1]["content"].endswith("\n\nReply with one letter.")
+    assert task.to_dict()["answer_instruction"] == "Reply with one letter."
+    assert ScoringTask.from_dict(task.to_dict()) == task
+    with pytest.raises(TypeError, match="unexpected keyword"):
+        PromptFormat(answer_instruction="Reply with one letter.")
 
 
 def test_value_placeholder_needs_values():

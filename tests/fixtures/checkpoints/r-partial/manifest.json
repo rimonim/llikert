@@ -1,13 +1,13 @@
 {
   "checkpoint_schema_version": 1,
-  "created_at": "2026-09-17T13:59:25Z",
+  "created_at": "2026-09-18T03:40:30Z",
   "client": {
     "language": "r",
     "package": "llikert",
     "version": "0.1.0.9000"
   },
   "protocol_version": 1,
-  "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
+  "engine_fingerprint": "sha256:a04f34ed77daccf43cf1075c3435cca170ca2781c77708e7eb073207ce167118",
   "engine": {
     "fingerprint_version": 1,
     "model_and_execution": {
@@ -20,7 +20,7 @@
       "name": "fake-chatml",
       "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
     },
-    "renderer_version": 2,
+    "renderer_version": 3,
     "boundary_policy": "tail-suffix-v1",
     "postprocessing_version": 1,
     "prepared_schema_version": 1,
@@ -39,6 +39,7 @@
       "schema_version": 1,
       "name": "Communicative function",
       "instructions": "Classify the text's primary communicative function.",
+      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
       "categories": [
         {
           "id": "description",
@@ -62,16 +63,15 @@
       "ordered": false,
       "examples": [],
       "prompt": {
-        "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
-        "user": "Text:\n<text>\n{item}\n<\/text>",
+        "system": "{instructions}\n\n{scale}",
+        "user": "Text:\n<text>\n{item}\n<\/text>\n\n{answer_instruction}",
         "scale": "Response codes:\n{codes}",
         "code": "{response} = {label}",
-        "code_separator": "\n",
-        "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+        "code_separator": "\n"
       }
     },
-    "task_hash": "sha256:f52902ec1e5ba08ba7562d4343c3aecf9afd247fbd0cc0bd74cf8097821eee40",
-    "engine_fingerprint": "sha256:74590e96929645dc463e78c8e49ea4c5d89ffc5b31bd2cd468780565e34e37e0",
+    "task_hash": "sha256:05efb6ae6f1c7d5c1c31f024796b8f7bd5f05d097669e856da4331a4de628507",
+    "engine_fingerprint": "sha256:a04f34ed77daccf43cf1075c3435cca170ca2781c77708e7eb073207ce167118",
     "profile": {
       "name": "fake-chatml",
       "template_sha256": "d059be686006844543cb0661f239f6d208766cf1962f8e6195fa57e990d7594a"
@@ -110,7 +110,7 @@
         "token_piece": "C"
       }
     ],
-    "prepared_hash": "sha256:d5dda56737312cc2f0c94666c2ec8219491798719f252b79a4b78c8a76ac7ffc"
+    "prepared_hash": "sha256:d516c8e075ace7a5b97174aadb44a6684ddf9dc96eb8d6aa16122640dd98b3a4"
   },
   "ids": [
     "r01",

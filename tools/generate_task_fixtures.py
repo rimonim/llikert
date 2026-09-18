@@ -73,14 +73,16 @@ VALID = {
     "prompt-questionnaire-minimal": numeric(
         name="Questionnaire",
         instructions="You are completing a personality questionnaire. Rate how well each statement describes you.",
-        prompt={"system": "{instructions}\n{scale}\n{answer_instruction}", "user": "{item}", "scale": "{codes}",
-                "code": "{response} = {label}", "code_separator": "; ", "answer_instruction": "Reply with the number only."},
+        answer_instruction="Reply with the number only.",
+        prompt={"system": "{instructions}\n{scale}", "user": "{item}\n\n{answer_instruction}", "scale": "{codes}",
+                "code": "{response} = {label}", "code_separator": "; "},
     ),
     "prompt-values-ids-braces": with_changes(
         numeric(prompt={"code": "{response}: {label} [{value}|{id}]", "scale": "Scale {{1-5}}:\n{codes}", "user": "{{Item}} {item}"}),
         lambda t: [c.update(value=v) for c, v in zip(t["categories"], [-2.5, 0, 0.1, 1e21, 1 / 3])],
     ),
     "prompt-empty-instructions": nominal(instructions="", prompt={"system": "{scale}\n{answer_instruction}", "user": "{item}"}),
+    "prompt-answer-instruction-empty": nominal(answer_instruction="", prompt={"system": "{instructions}\n\n{scale}", "user": "{item}"}),
 }
 
 INVALID = {
@@ -102,6 +104,7 @@ INVALID = {
     "prompt-code-without-response": nominal(prompt={"code": "{label}"}),
     "prompt-value-without-values": nominal(prompt={"code": "{response} = {value}"}),
     "prompt-unknown-field": nominal(prompt={"assistant": "x"}),
+    "prompt-answer-instruction-in-prompt": nominal(prompt={"answer_instruction": "Answer with one code."}),
 }
 
 ITEMS = ["Where is the station?", " leading space and trailing newline\n", "Grüße aus Köln — naïve café ✓", "Literal {scale} and {item} and {{braces}}"]

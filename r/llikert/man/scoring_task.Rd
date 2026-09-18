@@ -13,6 +13,7 @@ scoring_task(
   ordered = FALSE,
   ids = categories,
   examples = NULL,
+  answer_instruction = default_answer_instruction,
   prompt = prompt_format()
 )
 }
@@ -38,6 +39,11 @@ which must then be unique.}
 \item{examples}{Optional worked examples: a data frame with columns \code{item}
 and \code{category} (a category id), used in row order.}
 
+\item{answer_instruction}{The sentence asking the model to reply with one
+response code, shown after each item by default. A good place for a
+reminder of the task itself ("Reply with the number that best describes
+how you feel."). Use \code{""} to leave it out.}
+
 \item{prompt}{A \code{\link[=prompt_format]{prompt_format()}} describing how the prompt is assembled.}
 }
 \value{
@@ -45,8 +51,9 @@ An object of class \code{llikert_task}.
 }
 \description{
 A task describes what the model should do with each item: the instructions,
-the categories with their response codes, optional worked examples, and the
-prompt format that combines these into the messages the model reads.
+the categories with their response codes, the instruction to answer with one
+code, optional worked examples, and the prompt format that combines these
+into the messages the model reads.
 }
 \details{
 An \strong{item} is whatever the model responds to: a text to classify (an open
@@ -57,18 +64,17 @@ and so on.
 
 With the default \code{\link[=prompt_format]{prompt_format()}}, the model receives for every item:
 \itemize{
-\item a \strong{system} message: your \code{instructions}, a blank line, \verb{Response codes:} followed by one line per category (\code{A = description}, ...), a
-blank line, and \verb{Answer with exactly one of the response codes listed above and nothing else.}
+\item a \strong{system} message: your \code{instructions}, a blank line, and \verb{Response codes:} followed by one line per category (\code{A = description}, ...);
 \item for each example: a \strong{user} message with the example item and an
 \strong{assistant} message with its response code;
-\item a \strong{user} message: \verb{Text:}, then the item between \verb{<text>} and \verb{</text>}.
+\item a \strong{user} message: \verb{Text:}, the item between \verb{<text>} and \verb{</text>}, a
+blank line, and your \code{answer_instruction}.
 }
 
 The model's probabilities for your response codes are read at the start of
 its reply. Use \code{\link[=task_messages]{task_messages()}} to see the exact messages for any item,
 and \code{prompt = prompt_format(...)} to change the wording, the order
-(instructions before or after the item), how the scale is described, or the
-answer instruction.
+(instructions before or after the item) or how the scale is described.
 
 Response codes must each be a single token for the service's model;
 \code{\link[=prepare_task]{prepare_task()}} checks this before any items are scored.
@@ -93,7 +99,8 @@ questionnaire <- scoring_task(
   responses = c("1", "2", "3", "4", "5"),
   values = 1:5,
   ordered = TRUE,
-  prompt = prompt_format(user = "{item}", answer_instruction = "Reply with the number only.")
+  answer_instruction = "Reply with the number of one response option only.",
+  prompt = prompt_format(user = "{item}\n\n{answer_instruction}")
 )
 task_messages(questionnaire, "I am the life of the party.")
 }

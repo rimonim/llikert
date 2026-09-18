@@ -95,7 +95,7 @@ def build_messages(task: dict[str, Any], item: str) -> list[dict[str, str]]:
     values = {
         "instructions": task["instructions"],
         "scale": fill(parse_template(prompt["scale"], SCALE_FIELDS, "prompt.scale"), {"codes": prompt["code_separator"].join(lines)}),
-        "answer_instruction": prompt["answer_instruction"],
+        "answer_instruction": task["answer_instruction"],
     }
     user_parts = parse_template(prompt["user"], MESSAGE_FIELDS, "prompt.user")
     messages = []

@@ -42,6 +42,7 @@
     "schema_version": 1,
     "name": "Sentiment",
     "instructions": "Rate the sentiment.",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
     "categories": [
       {
         "id": "s1",
@@ -77,14 +78,13 @@
     "ordered": true,
     "examples": [],
     "prompt": {
-      "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
-      "user": "Text:\n<text>\n{item}\n</text>",
+      "system": "{instructions}\n\n{scale}",
+      "user": "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}",
       "scale": "Response codes:\n{codes}",
       "code": "{response} = {label}",
-      "code_separator": "\n",
-      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+      "code_separator": "\n"
     }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"s1\",\"label\":\"very negative\",\"response\":\"1\",\"value\":1},{\"id\":\"s2\",\"label\":\"negative\",\"response\":\"2\",\"value\":2},{\"id\":\"s3\",\"label\":\"neutral\",\"response\":\"3\",\"value\":3},{\"id\":\"s4\",\"label\":\"positive\",\"response\":\"4\",\"value\":4},{\"id\":\"s5\",\"label\":\"very positive\",\"response\":\"5\",\"value\":5}],\"examples\":[],\"instructions\":\"Rate the sentiment.\",\"name\":\"Sentiment\",\"ordered\":true,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\\n\\n{answer_instruction}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\"},\"schema_version\":1}",
-  "task_hash": "sha256:f431c7e117e20087dc5d8aa6ac5cab8806571d0cf138ed026a706f20ef7938f4"
+  "canonical_jcs": "{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"categories\":[{\"id\":\"s1\",\"label\":\"very negative\",\"response\":\"1\",\"value\":1},{\"id\":\"s2\",\"label\":\"negative\",\"response\":\"2\",\"value\":2},{\"id\":\"s3\",\"label\":\"neutral\",\"response\":\"3\",\"value\":3},{\"id\":\"s4\",\"label\":\"positive\",\"response\":\"4\",\"value\":4},{\"id\":\"s5\",\"label\":\"very positive\",\"response\":\"5\",\"value\":5}],\"examples\":[],\"instructions\":\"Rate the sentiment.\",\"name\":\"Sentiment\",\"ordered\":true,\"prompt\":{\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\\n\\n{answer_instruction}\"},\"schema_version\":1}",
+  "task_hash": "sha256:63d1ede666abc83884b031fc15fc8693b7fd0633e84b88ebee6e6239c0893c6f"
 }

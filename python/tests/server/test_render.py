@@ -6,6 +6,8 @@ from llikert.server.task import parse_task
 
 from .conftest import task_dict
 
+ANSWER = "\n\nAnswer with exactly one of the response codes listed above and nothing else."
+
 
 def test_segments_alternate_and_reconstruct_prompt():
     r = Renderer(FAKE_CHAT_TEMPLATE)
@@ -13,7 +15,7 @@ def test_segments_alternate_and_reconstruct_prompt():
     segs = r.segments(task, "Hello")
     assert [s.kind for s in segs] == ["template", "content", "template", "content", "template"]
     assert segs[-1].text == "<|im_end|>\n<|im_start|>assistant\n"
-    assert segs[3].text == "Text:\n<text>\nHello\n</text>"
+    assert segs[3].text == "Text:\n<text>\nHello\n</text>" + ANSWER
     assert "A = description\nB = question\nC = request" in messages_for(task, "Hello")[0]["content"]
 
 
@@ -21,8 +23,8 @@ def test_examples_become_turns_in_order():
     task = parse_task(task_dict(examples=[{"item": "Why?", "category_id": "question"}, {"item": "Do it.", "category_id": "request"}]))
     roles = [(m["role"], m["content"]) for m in messages_for(task, "x")]
     assert roles[1:5] == [
-        ("user", "Text:\n<text>\nWhy?\n</text>"), ("assistant", "B"),
-        ("user", "Text:\n<text>\nDo it.\n</text>"), ("assistant", "C"),
+        ("user", "Text:\n<text>\nWhy?\n</text>" + ANSWER), ("assistant", "B"),
+        ("user", "Text:\n<text>\nDo it.\n</text>" + ANSWER), ("assistant", "C"),
     ]
     # system + two example pairs + the item: 6 contents between 7 template segments
     assert len(Renderer(FAKE_CHAT_TEMPLATE).segments(task, "x")) == 13
@@ -37,7 +39,7 @@ def test_marker_text_stays_content():
 def test_sentinel_like_user_text_is_harmless():
     r = Renderer(FAKE_CHAT_TEMPLATE)
     text = chr(0xE000) + "LLK1" + chr(0xE001)
-    assert r.segments(parse_task(task_dict()), text)[3].text.endswith(text + "\n</text>")
+    assert r.segments(parse_task(task_dict()), text)[3].text.endswith(text + "\n</text>" + ANSWER)
 
 
 def test_content_dependent_template_rejected():

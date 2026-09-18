@@ -6,9 +6,9 @@ This page explains exactly what the language model reads for each item, and how 
 
 For every item, the model receives a short conversation:
 
-1. **A system message** with your instructions, the list of response codes, and a request to answer with one code only.
+1. **A system message** with your instructions and the list of response codes.
 2. **Your worked examples, if any.** Each is shown as an item from "the user" followed by the correct code as "the model's" answer.
-3. **A user message containing the item** being scored.
+3. **A user message containing the item** being scored, followed by your answer instruction: the sentence asking for one response code.
 
 LLikert then looks at the start of the model's reply and reads how likely each of your response codes is as its first word. The model does not actually write anything.
 
@@ -41,10 +41,12 @@ the model receives these four messages:
 
 | Role | Content |
 |---|---|
-| system | `Classify the text's primary communicative function.`<br><br>`Response codes:`<br>`A = description`<br>`B = question`<br>`C = request`<br><br>`Answer with exactly one of the response codes listed above and nothing else.` |
-| user | `Text:`<br>`<text>`<br>`Please close the window.`<br>`</text>` |
+| system | `Classify the text's primary communicative function.`<br><br>`Response codes:`<br>`A = description`<br>`B = question`<br>`C = request` |
+| user | `Text:`<br>`<text>`<br>`Please close the window.`<br>`</text>`<br><br>`Answer with exactly one of the response codes listed above and nothing else.` |
 | assistant | `C` |
-| user | `Text:`<br>`<text>`<br>`Where is the station?`<br>`</text>` |
+| user | `Text:`<br>`<text>`<br>`Where is the station?`<br>`</text>`<br><br>`Answer with exactly one of the response codes listed above and nothing else.` |
+
+The last line is the task's `answer_instruction`. It sits next to the item, just before the model answers, and it is repeated for each worked example because examples use the same user template.
 
 Language models read conversations in their own chat format, with special markers between messages. For the supported model (Qwen3-4B-Instruct-2507), this is the exact text, ending where the model's reply would begin:
 
@@ -55,21 +57,23 @@ Classify the text's primary communicative function.
 Response codes:
 A = description
 B = question
-C = request
-
-Answer with exactly one of the response codes listed above and nothing else.<|im_end|>
+C = request<|im_end|>
 <|im_start|>user
 Text:
 <text>
 Please close the window.
-</text><|im_end|>
+</text>
+
+Answer with exactly one of the response codes listed above and nothing else.<|im_end|>
 <|im_start|>assistant
 C<|im_end|>
 <|im_start|>user
 Text:
 <text>
 Where is the station?
-</text><|im_end|>
+</text>
+
+Answer with exactly one of the response codes listed above and nothing else.<|im_end|>
 <|im_start|>assistant
 
 ```
@@ -87,16 +91,23 @@ The messages built on your computer are exactly the ones the service builds; aut
 
 ## The building blocks
 
-A prompt format has six parts. Each is plain text in which `{placeholders}` are filled in.
+Three parts of the prompt belong to the **task**, because they are what you are asking for:
+
+| Task field | Default | Where it appears |
+|---|---|---|
+| `instructions` | none; you write them | at `{instructions}` |
+| `answer_instruction` | `Answer with exactly one of the response codes listed above and nothing else.` | at `{answer_instruction}`; use `""` to leave it out |
+| `categories`, `responses`, `values` | none; you write them | in the code lines, at `{codes}` |
+
+The **prompt format** decides where those go. It has five parts, each plain text in which `{placeholders}` are filled in:
 
 | Part | Default | Placeholders you can use |
 |---|---|---|
-| `system` | `{instructions}` *(blank line)* `{scale}` *(blank line)* `{answer_instruction}` | `{instructions}`, `{scale}`, `{answer_instruction}`. Use `NULL` (R) or `None` (Python) for no system message |
-| `user` | `Text:` *(new line)* `<text>` *(new line)* `{item}` *(new line)* `</text>` | `{item}` (required, exactly once), `{instructions}`, `{scale}`, `{answer_instruction}` |
+| `system` | `{instructions}` *(blank line)* `{scale}` | `{instructions}`, `{scale}`, `{answer_instruction}`. Use `NULL` (R) or `None` (Python) for no system message |
+| `user` | `Text:` *(new line)* `<text>` *(new line)* `{item}` *(new line)* `</text>` *(blank line)* `{answer_instruction}` | `{item}` (required, exactly once), `{instructions}`, `{scale}`, `{answer_instruction}` |
 | `scale` | `Response codes:` *(new line)* `{codes}` | `{codes}` (required, exactly once): one line per category, joined by `code_separator` |
 | `code` | `{response} = {label}` | `{response}` (required), `{label}`, `{value}` (if the task has values), `{id}` |
 | `code_separator` | a new line | none |
-| `answer_instruction` | `Answer with exactly one of the response codes listed above and nothing else.` | none; use `""` to leave it out |
 
 **Rules:**
 - Write `{{` and `}}` for literal curly braces in a template.
@@ -110,7 +121,7 @@ A prompt format has six parts. Each is plain text in which `{placeholders}` are 
 |---|---|
 | `unused_instructions` | You gave instructions, but no template contains `{instructions}` |
 | `empty_instructions` | A template contains `{instructions}`, but the instructions are empty |
-| `unused_answer_instruction` | `answer_instruction` is set, but no template contains `{answer_instruction}` |
+| `unused_answer_instruction` | The task has an `answer_instruction`, but no template contains `{answer_instruction}` |
 | `scale_not_in_prompt` | No template contains `{scale}`, so the model sees your response codes only if you wrote them in yourself |
 
 ## Common changes
@@ -167,9 +178,17 @@ Answer with exactly one of the response codes listed above and nothing else.
 
 ### Asking differently for a single code
 
-`answer_instruction` is the sentence asking the model to reply with a code only. For example:
-- `answer_instruction = "Reply with the letter only."`
-- `answer_instruction = ""`, to leave it out, for instance when your instructions already say so.
+`answer_instruction` is an argument of `scoring_task()` / `ScoringTask()`, not of the prompt format, because it is part of what you are asking for. By default it appears right after each item, which is a good place for a short reminder of the task itself:
+
+```r
+answer_instruction = "Reply with the number that best describes how well the statement fits you."
+```
+
+Other useful settings:
+- `answer_instruction = "Reply with the letter only."`, if the instructions already describe the task.
+- `answer_instruction = ""`, to leave it out entirely.
+
+To move it elsewhere, use `{answer_instruction}` in another template, for example `prompt_format(system = "{instructions}\n\n{scale}\n\n{answer_instruction}", user = "Text:\n<text>\n{item}\n</text>")` for the placement used before version 0.1.
 
 If the model often wants to reply with something else, `coverage` in the diagnostics will be low. That tells you the answer format isn't working well, not that the scores are wrong.
 
@@ -185,10 +204,10 @@ bfi_extraversion <- scoring_task(
   responses = c("1", "2", "3", "4", "5"),
   values = 1:5,
   ordered = TRUE,
+  answer_instruction = "Reply with the number of one response option only.",
   prompt = prompt_format(
-    user = "{item}",
-    scale = "Response options:\n{codes}",
-    answer_instruction = "Reply with the number of one response option only."
+    user = "{item}\n\n{answer_instruction}",
+    scale = "Response options:\n{codes}"
   )
 )
 
@@ -210,11 +229,11 @@ Response options:
 2 = disagree a little
 3 = neither agree nor disagree
 4 = agree a little
-5 = agree strongly
+5 = agree strongly<|im_end|>
+<|im_start|>user
+I am the life of the party.
 
 Reply with the number of one response option only.<|im_end|>
-<|im_start|>user
-I am the life of the party.<|im_end|>
 <|im_start|>assistant
 
 ```
@@ -230,4 +249,4 @@ Interpret such results with care. They describe how this model responds to these
 - **No hidden text.** The messages above are everything the model reads, apart from the markers of its chat format. Nothing is added to the start of the model's reply to steer it.
 - **Nothing is sampled or generated.** The probabilities come from one reading of the prompt.
 - **Your text is kept as written.** Items and instructions are not trimmed or rephrased. Text that looks like the model's special markers is treated as ordinary text, and the item gets a warning.
-- **The prompt format is part of the task's identity.** It is saved with the task, prepared tasks and results. Changing any part produces a different task, and a checkpoint started with one format cannot be resumed with another.
+- **The prompt is part of the task's identity.** The instructions, the answer instruction and the prompt format are saved with the task, prepared tasks and results. Changing any part produces a different task, and a checkpoint started with one prompt cannot be resumed with another.

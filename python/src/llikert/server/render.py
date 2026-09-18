@@ -21,7 +21,7 @@ import jinja2.sandbox
 from llikert.server.prompt import build_messages
 from llikert.server.task import Task
 
-RENDERER_VERSION = 2  # 2: prompt formats from the task (docs/prompts.md)
+RENDERER_VERSION = 3  # 2: prompt formats from the task; 3: answer_instruction is a task field, shown after the item (docs/prompts.md)
 
 SENTINEL_OPEN = chr(0xE000) + "LLK"
 SENTINEL_CLOSE = chr(0xE001)

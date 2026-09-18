@@ -1,5 +1,5 @@
 {
- "description": "Reference-fidelity fixture (decision D24): transformers float32 (TF32 off), eager attention, official weights; prompts rendered and tokenized by transformers.",
+ "description": "Reference-fidelity fixture (decision D24): transformers float32 (TF32 off), eager attention, official weights; prompts rendered and tokenized by transformers. Each task carries an explicit prompt format, so the recorded tokens stay valid when the default prompt changes (decision 0008).",
  "model": {
   "repo": "Qwen/Qwen3-4B-Instruct-2507",
   "revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
@@ -37,7 +37,15 @@
     }
    ],
    "ordered": false,
-   "examples": []
+   "examples": [],
+   "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n"
+   }
   },
   "sentiment-5": {
    "schema_version": 1,
@@ -89,7 +97,15 @@
      "item": "The holiday was absolutely wonderful.",
      "category_id": "s5"
     }
-   ]
+   ],
+   "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n"
+   }
   },
   "topic-10": {
    "schema_version": 1,
@@ -158,7 +174,15 @@
     }
    ],
    "ordered": false,
-   "examples": []
+   "examples": [],
+   "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n"
+   }
   }
  },
  "items": [

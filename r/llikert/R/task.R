@@ -1,8 +1,9 @@
 #' Define a scoring task
 #'
 #' A task describes what the model should do with each item: the instructions,
-#' the categories with their response codes, optional worked examples, and the
-#' prompt format that combines these into the messages the model reads.
+#' the categories with their response codes, the instruction to answer with one
+#' code, optional worked examples, and the prompt format that combines these
+#' into the messages the model reads.
 #'
 #' An **item** is whatever the model responds to: a text to classify (an open
 #' survey answer, a post), a questionnaire statement the model answers itself,
@@ -11,19 +12,17 @@
 #' @section How the prompt is built:
 #' With the default [prompt_format()], the model receives for every item:
 #'
-#' * a **system** message: your `instructions`, a blank line, `Response
-#'   codes:` followed by one line per category (`A = description`, ...), a
-#'   blank line, and `Answer with exactly one of the response codes listed
-#'   above and nothing else.`
+#' * a **system** message: your `instructions`, a blank line, and `Response
+#'   codes:` followed by one line per category (`A = description`, ...);
 #' * for each example: a **user** message with the example item and an
 #'   **assistant** message with its response code;
-#' * a **user** message: `Text:`, then the item between `<text>` and `</text>`.
+#' * a **user** message: `Text:`, the item between `<text>` and `</text>`, a
+#'   blank line, and your `answer_instruction`.
 #'
 #' The model's probabilities for your response codes are read at the start of
 #' its reply. Use [task_messages()] to see the exact messages for any item,
 #' and `prompt = prompt_format(...)` to change the wording, the order
-#' (instructions before or after the item), how the scale is described, or the
-#' answer instruction.
+#' (instructions before or after the item) or how the scale is described.
 #'
 #' Response codes must each be a single token for the service's model;
 #' [prepare_task()] checks this before any items are scored.
@@ -41,6 +40,10 @@
 #'   which must then be unique.
 #' @param examples Optional worked examples: a data frame with columns `item`
 #'   and `category` (a category id), used in row order.
+#' @param answer_instruction The sentence asking the model to reply with one
+#'   response code, shown after each item by default. A good place for a
+#'   reminder of the task itself ("Reply with the number that best describes
+#'   how you feel."). Use `""` to leave it out.
 #' @param prompt A [prompt_format()] describing how the prompt is assembled.
 #' @return An object of class `llikert_task`.
 #' @export
@@ -63,14 +66,20 @@
 #'   responses = c("1", "2", "3", "4", "5"),
 #'   values = 1:5,
 #'   ordered = TRUE,
-#'   prompt = prompt_format(user = "{item}", answer_instruction = "Reply with the number only.")
+#'   answer_instruction = "Reply with the number of one response option only.",
+#'   prompt = prompt_format(user = "{item}\n\n{answer_instruction}")
 #' )
 #' task_messages(questionnaire, "I am the life of the party.")
 scoring_task <- function(name, instructions, categories, responses, values = NULL,
-                         ordered = FALSE, ids = categories, examples = NULL, prompt = prompt_format()) {
+                         ordered = FALSE, ids = categories, examples = NULL,
+                         answer_instruction = default_answer_instruction,
+                         prompt = prompt_format()) {
   check_string(name, "name")
   if (!rlang::is_string(instructions) || is.na(instructions)) {
     llikert_abort("`instructions` must be a single string (it may be empty).", "invalid_task")
+  }
+  if (!rlang::is_string(answer_instruction) || is.na(answer_instruction)) {
+    llikert_abort("`answer_instruction` must be a single string (it may be empty).", "invalid_task")
   }
   if (!inherits(prompt, "llikert_prompt_format")) llikert_abort("`prompt` must be created with prompt_format().", "invalid_task")
   check_character(categories, "categories")
@@ -102,8 +111,11 @@ scoring_task <- function(name, instructions, categories, responses, values = NUL
     })
   }
   new_task(list(schema_version = 1L, name = name, instructions = instructions,
-                categories = cats, ordered = ordered, examples = exs, prompt = unclass(prompt)))
+                answer_instruction = answer_instruction, categories = cats, ordered = ordered,
+                examples = exs, prompt = unclass(prompt)))
 }
+
+default_answer_instruction <- "Answer with exactly one of the response codes listed above and nothing else."
 
 new_task <- function(x) {
   validate_task(x)
@@ -112,11 +124,12 @@ new_task <- function(x) {
 
 validate_task <- function(x) {
   fail <- function(msg) llikert_abort(msg, "invalid_task", call = rlang::caller_env(2))
-  allowed <- c("schema_version", "name", "instructions", "categories", "ordered", "examples", "prompt")
+  allowed <- c("schema_version", "name", "instructions", "answer_instruction", "categories", "ordered", "examples", "prompt")
   if (length(setdiff(names(x), allowed))) fail(sprintf("Unknown task fields: %s.", paste(setdiff(names(x), allowed), collapse = ", ")))
   if (!identical(as.integer(x$schema_version), 1L)) fail("Unsupported task schema_version.")
   if (!rlang::is_string(x$name) || !nzchar(x$name) || !valid_utf8(x$name)) fail("`name` must be a nonempty string.")
   if (!rlang::is_string(x$instructions) || !valid_utf8(x$instructions)) fail("`instructions` must be a string.")
+  if (!rlang::is_string(x$answer_instruction) || !valid_utf8(x$answer_instruction)) fail("`answer_instruction` must be a string.")
   cats <- x$categories
   if (!is.list(cats) || length(cats) < 2L) fail("A task needs at least two categories.")
   for (c in cats) {
@@ -144,9 +157,9 @@ validate_task <- function(x) {
     if (!e$category_id %in% ids) fail(sprintf("Example category `%s` is not a category id.", e$category_id))
   }
   prompt <- x$prompt
-  prompt_names <- c("system", "user", "scale", "code", "code_separator", "answer_instruction")
+  prompt_names <- c("system", "user", "scale", "code", "code_separator")
   if (!is.list(prompt) || length(setdiff(names(prompt), prompt_names)) || !all(prompt_names %in% names(prompt))) {
-    fail("`prompt` must have the fields system, user, scale, code, code_separator and answer_instruction.")
+    fail("`prompt` must have the fields system, user, scale, code and code_separator.")
   }
   for (field in prompt_names) {
     value <- prompt[[field]]
@@ -174,12 +187,13 @@ task_as_list <- function(task) {
   out$examples <- lapply(out$examples, function(e) list(item = e$item, category_id = e$category_id))
   p <- out$prompt
   out$prompt <- list(system = p$system, user = p$user, scale = p$scale, code = p$code,
-                     code_separator = p$code_separator, answer_instruction = p$answer_instruction)
-  out[c("schema_version", "name", "instructions", "categories", "ordered", "examples", "prompt")]
+                     code_separator = p$code_separator)
+  out[c("schema_version", "name", "instructions", "answer_instruction", "categories", "ordered", "examples", "prompt")]
 }
 
 task_from_list <- function(x) {
   x$ordered <- x$ordered %||% FALSE
+  x$answer_instruction <- x$answer_instruction %||% default_answer_instruction
   x$examples <- x$examples %||% list()
   defaults <- unclass(prompt_format())
   given <- x$prompt %||% list()

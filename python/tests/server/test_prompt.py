@@ -6,33 +6,36 @@ from llikert.server.task import parse_task
 
 from .conftest import numeric_task_dict, task_dict
 
-# renderer version 1 built exactly these strings; the default prompt format must not change them
-V1_SYSTEM = (
-    "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
-    "\n\nAnswer with exactly one of the response codes listed above and nothing else."
-)
+DEFAULT_SYSTEM = "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request"
+ANSWER = "Answer with exactly one of the response codes listed above and nothing else."
 
 
 def messages(task_obj, item="Where is it?"):
     return build_messages(parse_task(task_obj).canonical(), item)
 
 
-def test_default_format_reproduces_renderer_v1():
+def test_default_format_puts_the_answer_instruction_after_the_item():
     assert messages(task_dict()) == [
-        {"role": "system", "content": V1_SYSTEM},
-        {"role": "user", "content": "Text:\n<text>\nWhere is it?\n</text>"},
+        {"role": "system", "content": DEFAULT_SYSTEM},
+        {"role": "user", "content": "Text:\n<text>\nWhere is it?\n</text>\n\n" + ANSWER},
     ]
 
 
+def test_answer_instruction_comes_from_the_task():
+    msgs = messages(task_dict(answer_instruction="Reply with one letter."))
+    assert msgs[1]["content"].endswith("\n\nReply with one letter.")
+    assert messages(task_dict(answer_instruction=""))[1]["content"] == "Text:\n<text>\nWhere is it?\n</text>\n\n"
+
+
 def test_defaults_are_filled_in_canonical_task():
-    prompt = parse_task(task_dict()).canonical()["prompt"]
-    assert prompt == {
-        "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
-        "user": "Text:\n<text>\n{item}\n</text>",
+    canonical = parse_task(task_dict()).canonical()
+    assert canonical["answer_instruction"] == ANSWER
+    assert canonical["prompt"] == {
+        "system": "{instructions}\n\n{scale}",
+        "user": "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}",
         "scale": "Response codes:\n{codes}",
         "code": "{response} = {label}",
         "code_separator": "\n",
-        "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
     }
 
 
@@ -51,18 +54,18 @@ def test_questionnaire_style_minimal_prompt():
     task = numeric_task_dict(
         name="Big Five: extraversion",
         instructions="You are completing a personality questionnaire. Rate how well each statement describes you.",
+        answer_instruction="Reply with the number only.",
         prompt={
-            "system": "{instructions}\n{scale}\n{answer_instruction}",
-            "user": "{item}",
+            "system": "{instructions}\n{scale}",
+            "user": "{item}\n\n{answer_instruction}",
             "scale": "{codes}",
             "code": "{response} = {label}",
             "code_separator": "; ",
-            "answer_instruction": "Reply with the number only.",
         },
     )
     msgs = messages(task, "I am the life of the party.")
-    assert msgs[1] == {"role": "user", "content": "I am the life of the party."}
-    assert msgs[0]["content"].endswith("1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive\nReply with the number only.")
+    assert msgs[1] == {"role": "user", "content": "I am the life of the party.\n\nReply with the number only."}
+    assert msgs[0]["content"].endswith("1 = very negative; 2 = negative; 3 = neutral; 4 = positive; 5 = very positive")
 
 
 def test_value_and_id_placeholders_and_number_formatting():
@@ -101,6 +104,7 @@ def test_substitution_is_single_pass_and_braces_escape():
         ({"code": "{response} {value}"}, "no values"),
         ({"scale": "{codes} {item}"}, "unknown placeholder {item}"),
         ({"extra": "x"}, "Extra inputs"),
+        ({"answer_instruction": "Answer with one code."}, "Extra inputs"),
     ],
 )
 def test_invalid_prompt_formats(prompt, fragment):
@@ -124,6 +128,7 @@ def test_warnings_for_unused_parts():
 
 def test_prompt_format_changes_task_identity():
     assert parse_task(task_dict()).identity() != parse_task(task_dict(prompt={"code": "{response}: {label}"})).identity()
+    assert parse_task(task_dict()).identity() != parse_task(task_dict(answer_instruction="Reply with one letter.")).identity()
     assert parse_task(task_dict()).identity() == parse_task(task_dict(prompt={})).identity()
 
 

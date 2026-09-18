@@ -30,6 +30,7 @@
     "schema_version": 1,
     "name": "Ünïcode  name",
     "instructions": "Line one\nLine two\ttab",
+    "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
     "categories": [
       {
         "id": "description",
@@ -53,14 +54,13 @@
     "ordered": false,
     "examples": [],
     "prompt": {
-      "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
-      "user": "Text:\n<text>\n{item}\n</text>",
+      "system": "{instructions}\n\n{scale}",
+      "user": "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}",
       "scale": "Response codes:\n{codes}",
       "code": "{response} = {label}",
-      "code_separator": "\n",
-      "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else."
+      "code_separator": "\n"
     }
   },
-  "canonical_jcs": "{\"categories\":[{\"id\":\"description\",\"label\":\"Beschreibung ✎ \",\"response\":\" A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Line one\\nLine two\\ttab\",\"name\":\"Ünïcode  name\",\"ordered\":false,\"prompt\":{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\\n\\n{answer_instruction}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\"},\"schema_version\":1}",
-  "task_hash": "sha256:65a901edf6c49e4a10be4f5896601d14fa78509cba382a90b394d8e7d317f771"
+  "canonical_jcs": "{\"answer_instruction\":\"Answer with exactly one of the response codes listed above and nothing else.\",\"categories\":[{\"id\":\"description\",\"label\":\"Beschreibung ✎ \",\"response\":\" A\",\"value\":null},{\"id\":\"question\",\"label\":\"question\",\"response\":\"B\",\"value\":null},{\"id\":\"request\",\"label\":\"request\",\"response\":\"C\",\"value\":null}],\"examples\":[],\"instructions\":\"Line one\\nLine two\\ttab\",\"name\":\"Ünïcode  name\",\"ordered\":false,\"prompt\":{\"code\":\"{response} = {label}\",\"code_separator\":\"\\n\",\"scale\":\"Response codes:\\n{codes}\",\"system\":\"{instructions}\\n\\n{scale}\",\"user\":\"Text:\\n<text>\\n{item}\\n</text>\\n\\n{answer_instruction}\"},\"schema_version\":1}",
+  "task_hash": "sha256:cdd1d1738f7b0638b59d36a111a6544c64ae74bc902e34e675afbc0ecc98ea29"
 }

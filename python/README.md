@@ -48,7 +48,19 @@ for message in task.messages("Where is the station?"):
     print(message["role"], "::", message["content"])
 ```
 
-By default, a system message holds the instructions, the response codes and an instruction to answer with one code only, and a user message holds the item. Change the wording, order or layout with a `PromptFormat`. For example, to put the instructions after the item:
+By default, a system message holds the instructions and the response codes, and a user message holds the item followed by the task's `answer_instruction` ("Answer with exactly one of the response codes listed above and nothing else."). That sentence is an argument of `ScoringTask`, and a good place for a reminder of what you are asking:
+
+```python
+task = ScoringTask(
+    name="Communicative function",
+    instructions="Classify the text's primary communicative function.",
+    categories=["description", "question", "request"],
+    responses=["A", "B", "C"],
+    answer_instruction="Reply with the letter of the function this text serves.",
+)
+```
+
+Change the wording, order or layout with a `PromptFormat`. For example, to put the instructions after the item:
 
 ```python
 from llikert import PromptFormat
@@ -62,7 +74,7 @@ task = ScoringTask(
 )
 ```
 
-For questionnaire items answered by the model, pass the statements as items with a minimal prompt such as `PromptFormat(user="{item}", answer_instruction="Reply with the number of one response option only.")`. [`docs/prompts.md`](https://github.com/rimonim/llikert/blob/main/docs/prompts.md) explains every part of the prompt with full examples.
+For questionnaire items answered by the model, pass the statements as items with a minimal prompt such as `PromptFormat(user="{item}\n\n{answer_instruction}")` and an `answer_instruction` such as `"Reply with the number of one response option only."`. [`docs/prompts.md`](https://github.com/rimonim/llikert/blob/main/docs/prompts.md) explains every part of the prompt with full examples.
 
 ## 4. Connect, check, and score
 

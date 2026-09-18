@@ -83,9 +83,21 @@ task_messages(task, "Where is the station?")
 ```
 
 This shows the messages the model receives for one item, without connecting to anything. By default:
-- a **system** message holds your instructions, the list of response codes, and the sentence "Answer with exactly one of the response codes listed above and nothing else.";
+- a **system** message holds your instructions and the list of response codes;
 - each worked example appears as a user message and the model's answer;
-- the item comes last, in a user message.
+- the item comes last, in a user message, followed by the sentence "Answer with exactly one of the response codes listed above and nothing else."
+
+That last sentence is the task's `answer_instruction`, and it is a good place for a reminder of what you are asking:
+
+```r
+task <- scoring_task(
+  name = "Communicative function",
+  instructions = "Classify the text's primary communicative function.",
+  categories = c("description", "question", "request"),
+  responses = c("A", "B", "C"),
+  answer_instruction = "Reply with the letter of the function this text serves."
+)
+```
 
 You can change the wording, the order and the layout with `prompt = prompt_format(...)`. For example, to put the instructions after the item:
 
@@ -113,7 +125,8 @@ questionnaire <- scoring_task(
   responses = c("1", "2", "3", "4", "5"),
   values = 1:5,
   ordered = TRUE,
-  prompt = prompt_format(user = "{item}", answer_instruction = "Reply with the number of one response option only.")
+  answer_instruction = "Reply with the number of one response option only.",
+  prompt = prompt_format(user = "{item}\n\n{answer_instruction}")
 )
 task_messages(questionnaire, "I am the life of the party.")
 ```

@@ -54,6 +54,11 @@ def nominal_task():
     }
 
 
+# the M0 spike built its prompts before decision 0008 moved the answer instruction after the
+# item, so the spike comparison pins that placement instead of following the default
+M0_PROMPT = {"system": "{instructions}\n\n{scale}\n\n{answer_instruction}", "user": "Text:\n<text>\n{item}\n</text>"}
+
+
 def test_small_model_matches_m0_spike_and_independent_reduction(small):
     """Prompt tokens match the M0 spike exactly; probabilities match an independent scalar
     full-vocabulary reduction of the same final-position logits. (Spike probabilities were
@@ -69,6 +74,7 @@ def test_small_model_matches_m0_spike_and_independent_reduction(small):
         "t5": "This is the worst service I have ever received.",
     }
     task = nominal_task()
+    task["prompt"] = M0_PROMPT
     prepared = small.prepare(task)["prepared"]
     ids = [c["token_id"] for c in prepared["categories"]]
     assert ids == [32, 33, 34]

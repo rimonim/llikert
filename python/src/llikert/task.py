@@ -12,6 +12,7 @@ from typing import Any, Iterable, Mapping, Sequence
 from llikert import _prompt
 
 TASK_SCHEMA_VERSION = 1
+DEFAULT_ANSWER_INSTRUCTION = "Answer with exactly one of the response codes listed above and nothing else."
 RESERVED_CATEGORY_IDS = frozenset({"id", "expected_value"})
 
 
@@ -67,8 +68,9 @@ class PromptFormat:
     Each item produces: a system message from ``system`` (omitted when ``None``), one
     user/assistant pair per example, and a user message from ``user``. Placeholders:
 
-    - ``system`` and ``user``: ``{instructions}``, ``{scale}``, ``{answer_instruction}``;
-      ``{item}`` only in ``user``, exactly once
+    - ``system`` and ``user``: ``{instructions}``, ``{scale}``, ``{answer_instruction}``
+      (the task's ``instructions`` and ``answer_instruction``); ``{item}`` only in
+      ``user``, exactly once
     - ``scale``: ``{codes}``, the category lines joined with ``code_separator``
     - ``code``, one line per category: ``{response}`` (required), ``{label}``, ``{value}``, ``{id}``
 
@@ -76,17 +78,16 @@ class PromptFormat:
     braces inside instructions, labels, or items are never treated as placeholders.
     """
 
-    system: str | None = "{instructions}\n\n{scale}\n\n{answer_instruction}"
-    user: str = "Text:\n<text>\n{item}\n</text>"
+    system: str | None = "{instructions}\n\n{scale}"
+    user: str = "Text:\n<text>\n{item}\n</text>\n\n{answer_instruction}"
     scale: str = "Response codes:\n{codes}"
     code: str = "{response} = {label}"
     code_separator: str = "\n"
-    answer_instruction: str = "Answer with exactly one of the response codes listed above and nothing else."
 
     def __post_init__(self):
         if self.system is not None:
             _check_string(self.system, "prompt system", allow_empty=True)
-        for name in ("user", "scale", "code", "code_separator", "answer_instruction"):
+        for name in ("user", "scale", "code", "code_separator"):
             _check_string(getattr(self, name), f"prompt {name}", allow_empty=name != "code")
         _prompt.validate({**asdict(self)}, has_values=True)
 
@@ -110,6 +111,7 @@ class ScoringTask:
 
     name: str
     instructions: str
+    answer_instruction: str
     categories: tuple[Category, ...]
     ordered: bool
     examples: tuple[Example, ...] = field(default=())
@@ -126,10 +128,12 @@ class ScoringTask:
         ordered: bool = False,
         ids: Sequence[str] | None = None,
         examples: Iterable[Example | tuple[str, str] | Mapping[str, str]] | None = None,
+        answer_instruction: str = DEFAULT_ANSWER_INSTRUCTION,
         prompt: PromptFormat | None = None,
     ):
         _check_string(name, "name")
         _check_string(instructions, "instructions", allow_empty=True)
+        _check_string(answer_instruction, "answer_instruction", allow_empty=True)
         if not isinstance(ordered, bool):
             raise TypeError("ordered must be True or False")
         categories = list(categories)
@@ -183,6 +187,7 @@ class ScoringTask:
 
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "instructions", instructions)
+        object.__setattr__(self, "answer_instruction", answer_instruction)
         object.__setattr__(self, "categories", tuple(records))
         object.__setattr__(self, "ordered", ordered)
         object.__setattr__(self, "examples", tuple(parsed_examples))
@@ -198,6 +203,7 @@ class ScoringTask:
             "schema_version": self.schema_version,
             "name": self.name,
             "instructions": self.instructions,
+            "answer_instruction": self.answer_instruction,
             "categories": [{"id": c.id, "label": c.label, "response": c.response, "value": c.value} for c in self.categories],
             "ordered": self.ordered,
             "examples": [{"item": e.item, "category_id": e.category_id} for e in self.examples],
@@ -215,7 +221,7 @@ class ScoringTask:
 
     @classmethod
     def from_dict(cls, obj: Mapping[str, Any]) -> ScoringTask:
-        allowed = {"schema_version", "name", "instructions", "categories", "ordered", "examples", "prompt"}
+        allowed = {"schema_version", "name", "instructions", "answer_instruction", "categories", "ordered", "examples", "prompt"}
         unknown = set(obj) - allowed
         if unknown:
             raise ValueError(f"unknown task fields: {sorted(unknown)}")
@@ -233,6 +239,7 @@ class ScoringTask:
             categories=records,
             ordered=obj.get("ordered", False),
             examples=obj.get("examples", []),
+            answer_instruction=obj.get("answer_instruction", DEFAULT_ANSWER_INSTRUCTION),
             prompt=_prompt_from_dict(obj.get("prompt")),
         )
 
@@ -250,7 +257,7 @@ class ScoringTask:
 def _prompt_from_dict(obj: Mapping[str, Any] | None) -> PromptFormat:
     if obj is None:
         return PromptFormat()
-    unknown = set(obj) - {"system", "user", "scale", "code", "code_separator", "answer_instruction"}
+    unknown = set(obj) - {"system", "user", "scale", "code", "code_separator"}
     if unknown:
         raise ValueError(f"unknown prompt fields: {sorted(unknown)}")
     return PromptFormat(**obj)

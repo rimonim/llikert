@@ -5,13 +5,11 @@
 \title{Choose how a task is turned into a prompt}
 \usage{
 prompt_format(
-  system = "{instructions}\\n\\n{scale}\\n\\n{answer_instruction}",
-  user = "Text:\\n<text>\\n{item}\\n</text>",
+  system = "{instructions}\\n\\n{scale}",
+  user = "Text:\\n<text>\\n{item}\\n</text>\\n\\n{answer_instruction}",
   scale = "Response codes:\\n{codes}",
   code = "{response} = {label}",
-  code_separator = "\\n",
-  answer_instruction =
-    "Answer with exactly one of the response codes listed above and nothing else."
+  code_separator = "\\n"
 )
 }
 \arguments{
@@ -25,9 +23,6 @@ message.}
 \item{code}{Template for one category's line; must contain \code{{response}}.}
 
 \item{code_separator}{Text placed between category lines.}
-
-\item{answer_instruction}{Text inserted at \code{{answer_instruction}}, usually
-asking the model to answer with one of the codes only. Use \code{""} to omit.}
 }
 \value{
 An object of class \code{llikert_prompt_format}.
@@ -54,9 +49,10 @@ in \code{docs/prompts.md} in the package repository
 
 Templates contain placeholders in curly braces, which are replaced by:
 \itemize{
-\item in \code{system} and \code{user}: \code{{instructions}} (the task's instructions),
-\code{{scale}} (the filled-in \code{scale} template) and \code{{answer_instruction}};
-\code{{item}} (the item being scored) is allowed only in \code{user}, exactly once;
+\item in \code{system} and \code{user}: \code{{instructions}} and \code{{answer_instruction}} (the
+task's \code{instructions} and \code{answer_instruction}, from \code{\link[=scoring_task]{scoring_task()}}) and
+\code{{scale}} (the filled-in \code{scale} template); \code{{item}} (the item being
+scored) is allowed only in \code{user}, exactly once;
 \item in \code{scale}: \code{{codes}}, the category lines joined by \code{code_separator};
 \item in \code{code}, once per category: \code{{response}} (required), \code{{label}},
 \code{{value}} (only when the task has values) and \code{{id}}.
@@ -68,8 +64,8 @@ are.
 }
 
 \examples{
-# the default: instructions, codes and answer instruction in the system
-# message; the item in the user message
+# the default: instructions and codes in the system message; the item and
+# the answer instruction in the user message
 prompt_format()
 
 # instructions after the item, all in one user message
@@ -80,11 +76,10 @@ prompt_format(
 
 # questionnaire items: the item alone, the scale on one line
 prompt_format(
-  system = "{instructions}\n{scale}\n{answer_instruction}",
-  user = "{item}",
+  system = "{instructions}\n{scale}",
+  user = "{item}\n\n{answer_instruction}",
   scale = "{codes}",
   code = "{response} = {label}",
-  code_separator = "; ",
-  answer_instruction = "Reply with the number only."
+  code_separator = "; "
 )
 }

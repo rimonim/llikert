@@ -1,6 +1,8 @@
 # 0007: Prompt formats and "items"
 
-**Status:** accepted 2026-09-17 (owner request: more transparency and customizability in how tasks become prompts, and support for inputs that are not texts to classify, such as questionnaire items)
+**Status:** accepted 2026-09-17; points 1 and 2 partly superseded by [0008](0008-answer-instruction-belongs-to-the-task.md), which moves `answer_instruction` to the task and after the item (renderer 3)
+
+**Original status:** accepted 2026-09-17 (owner request: more transparency and customizability in how tasks become prompts, and support for inputs that are not texts to classify, such as questionnaire items)
 
 ## Decisions
 

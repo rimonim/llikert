@@ -1,5 +1,5 @@
 {
- "description": "Reference-fidelity fixture (decision D24): transformers float32, eager attention, CPU, official weights. Prompts were rendered by the M0 spike renderer, which renderer v1 reproduces (tokens are checked).",
+ "description": "Reference-fidelity fixture (decision D24): transformers float32, eager attention, CPU, official weights. Prompts were rendered by the M0 spike renderer, which renderer v1 reproduces (tokens are checked). Each task carries an explicit prompt format, so the recorded tokens stay valid when the default prompt changes (decision 0008).",
  "model": {
   "repo": "Qwen/Qwen3-4B-Instruct-2507",
   "revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
@@ -41,7 +41,15 @@
     }
    ],
    "ordered": false,
-   "examples": []
+   "examples": [],
+   "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n"
+   }
   },
   "sentiment": {
    "schema_version": 1,
@@ -80,7 +88,15 @@
     }
    ],
    "ordered": true,
-   "examples": []
+   "examples": [],
+   "answer_instruction": "Answer with exactly one of the response codes listed above and nothing else.",
+   "prompt": {
+    "system": "{instructions}\n\n{scale}\n\n{answer_instruction}",
+    "user": "Text:\n<text>\n{item}\n</text>",
+    "scale": "Response codes:\n{codes}",
+    "code": "{response} = {label}",
+    "code_separator": "\n"
+   }
   }
  },
  "items": [

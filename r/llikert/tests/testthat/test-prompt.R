@@ -26,13 +26,27 @@ test_that("the default prompt format reproduces the documented prompt", {
   task <- quickstart_nominal()
   msgs <- task_messages(task, "Where is it?")
   expect_identical(msgs$role, c("system", "user"))
-  expect_identical(msgs$content[[1]], paste0(
-    "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request",
-    "\n\nAnswer with exactly one of the response codes listed above and nothing else."
+  expect_identical(msgs$content[[1]],
+    "Classify the text's primary communicative function.\n\nResponse codes:\nA = description\nB = question\nC = request")
+  expect_identical(msgs$content[[2]], paste0(
+    "Text:\n<text>\nWhere is it?\n</text>\n\n",
+    "Answer with exactly one of the response codes listed above and nothing else."
   ))
-  expect_identical(msgs$content[[2]], "Text:\n<text>\nWhere is it?\n</text>")
   expect_output(print(prompt_format()), "answer_instruction")
   expect_output(print(task), "Prompt format: default")
+})
+
+test_that("the answer instruction comes from the task", {
+  task <- scoring_task("n", "Classify it.", c("a", "b"), c("A", "B"),
+                       answer_instruction = "Reply with one letter.")
+  msgs <- task_messages(task, "the item")
+  expect_identical(msgs$content[[2]], "Text:\n<text>\nthe item\n</text>\n\nReply with one letter.")
+  expect_identical(llikert:::task_as_list(task)$answer_instruction, "Reply with one letter.")
+  expect_null(llikert:::task_as_list(task)$prompt$answer_instruction)
+
+  none <- scoring_task("n", "Classify it.", c("a", "b"), c("A", "B"), answer_instruction = "")
+  expect_identical(task_messages(none, "x")$content[[2]], "Text:\n<text>\nx\n</text>\n\n")
+  expect_error(prompt_format(answer_instruction = "Reply with one letter."), "unused argument")
 })
 
 test_that("instructions can follow the item, and questionnaires can use a minimal prompt", {
@@ -43,11 +57,12 @@ test_that("instructions can follow the item, and questionnaires can use a minima
   expect_identical(msgs$content, "the item\n\nClassify it.\nResponse codes:\nA = a\nB = b")
 
   q <- scoring_task("Q", "", c("disagree", "agree"), c("1", "2"), values = c(1, 2), ordered = TRUE,
-                    prompt = prompt_format(system = "{scale} {answer_instruction}", user = "{item}", scale = "{codes}",
+                    answer_instruction = "Reply with the number only.",
+                    prompt = prompt_format(system = "{scale}", user = "{item}\n\n{answer_instruction}", scale = "{codes}",
                                            code = "{response} ({label}, value {value})", code_separator = ", "))
   expect_identical(task_messages(q, "I like parties.")$content,
-                   c("1 (disagree, value 1), 2 (agree, value 2) Answer with exactly one of the response codes listed above and nothing else.",
-                     "I like parties."))
+                   c("1 (disagree, value 1), 2 (agree, value 2)",
+                     "I like parties.\n\nReply with the number only."))
 })
 
 test_that("examples appear as user and assistant turns", {
@@ -55,7 +70,8 @@ test_that("examples appear as user and assistant turns", {
                        examples = data.frame(item = c("first", "second"), category = c("b", "a")))
   msgs <- task_messages(task, "third")
   expect_identical(msgs$role, c("system", "user", "assistant", "user", "assistant", "user"))
-  expect_identical(msgs$content[3:5], c("B", "Text:\n<text>\nsecond\n</text>", "A"))
+  answer <- "\n\nAnswer with exactly one of the response codes listed above and nothing else."
+  expect_identical(msgs$content[3:5], c("B", paste0("Text:\n<text>\nsecond\n</text>", answer), "A"))
 })
 
 test_that("invalid prompt formats are rejected with a clear message", {
