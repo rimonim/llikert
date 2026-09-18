@@ -39,7 +39,7 @@ task = ScoringTask(
 - **`categories`:** the names of your categories, which become the column names of your results.
 - **`responses`:** the short answer code for each category. Single capital letters or single digits work best.
 
-For a rating scale, add `values=[1, 2, 3, 4, 5]` and `ordered=True` to get an expected score per item. For worked examples the model sees before each item, add `examples=[("Where is the library?", "question")]`.
+For a rating scale, add `values=[1, 2, 3, 4, 5]` and `ordered=True` to get an expected score per item. For worked examples the model sees before each item, add `examples=[("Where is the library?", "question")]`, naming the category or its code (`"B"`).
 
 **See exactly what the model will read**, without connecting to anything:
 

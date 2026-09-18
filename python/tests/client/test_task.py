@@ -154,3 +154,17 @@ def test_value_placeholder_needs_values():
 
     with pytest.raises(ValueError, match="no values"):
         ScoringTask(name="n", instructions="i", categories=["a", "b"], responses=["A", "B"], prompt=PromptFormat(code="{response} {value}"))
+
+
+def test_examples_name_their_category_by_id_or_response_code():
+    def task(category):
+        return ScoringTask(name="n", instructions="i", categories=["description", "question"],
+                           responses=["A", "B"], examples=[("Where is it?", category)])
+
+    assert task("B").to_dict() == task("question").to_dict()
+    # an id wins when a value is both an id and another category's response code
+    both = ScoringTask(name="n", instructions="i", categories=["x", "y"], responses=["y", "x"],
+                       examples=[("i", "y")])
+    assert both.examples[0].category_id == "y"
+    with pytest.raises(ValueError, match="not one of this task's categories"):
+        task("quesiton")

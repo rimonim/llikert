@@ -39,7 +39,8 @@
 #' @param ids Category ids used for columns and joins. Defaults to the labels,
 #'   which must then be unique.
 #' @param examples Optional worked examples: a data frame with columns `item`
-#'   and `category` (a category id), used in row order.
+#'   and `category`, used in row order. Name the category by its id (the
+#'   category label, unless you gave `ids`) or by its response code.
 #' @param answer_instruction The sentence asking the model to reply with one
 #'   response code, shown after each item by default. A good place for a
 #'   reminder of the task itself ("Reply with the number that best describes
@@ -106,8 +107,10 @@ scoring_task <- function(name, instructions, categories, responses, values = NUL
     if (!is.data.frame(examples) || !all(c("item", "category") %in% names(examples))) {
       llikert_abort("`examples` must be a data frame with columns `item` and `category`.", "invalid_task")
     }
+    here <- rlang::current_env()
     exs <- lapply(seq_len(nrow(examples)), function(i) {
-      list(item = as.character(examples$item[[i]]), category_id = as.character(examples$category[[i]]))
+      list(item = as.character(examples$item[[i]]),
+           category_id = resolve_category(as.character(examples$category[[i]]), ids, responses, call = here))
     })
   }
   new_task(list(schema_version = 1L, name = name, instructions = instructions,
@@ -116,6 +119,20 @@ scoring_task <- function(name, instructions, categories, responses, values = NUL
 }
 
 default_answer_instruction <- "Answer with exactly one of the response codes listed above and nothing else."
+
+# An example names its category by id. A response code is accepted too, because that is what
+# the example shows the model; ids win when a value is both an id and another code.
+resolve_category <- function(value, ids, responses, call) {
+  if (value %in% ids) return(value)
+  hit <- which(responses == value)
+  if (length(hit) == 1L) return(ids[[hit]])
+  llikert_abort(
+    c(sprintf("Example category \"%s\" is not one of this task's categories.", value),
+      i = sprintf("Use a category id (%s) or a response code (%s).",
+                  paste0("\"", ids, "\"", collapse = ", "), paste0("\"", responses, "\"", collapse = ", "))),
+    "invalid_task", call = call
+  )
+}
 
 new_task <- function(x) {
   validate_task(x)
@@ -154,7 +171,10 @@ validate_task <- function(x) {
   for (e in x$examples) {
     if (length(setdiff(names(e), c("item", "category_id")))) fail("Examples have the fields `item` and `category_id`.")
     if (!rlang::is_string(e$item) || !nzchar(e$item) || !rlang::is_string(e$category_id)) fail("Examples need a nonempty item and a category id.")
-    if (!e$category_id %in% ids) fail(sprintf("Example category `%s` is not a category id.", e$category_id))
+    if (!e$category_id %in% ids) {
+      fail(sprintf("Example category \"%s\" is not a category id. The category ids are %s.",
+                   e$category_id, paste0("\"", ids, "\"", collapse = ", ")))
+    }
   }
   prompt <- x$prompt
   prompt_names <- c("system", "user", "scale", "code", "code_separator")

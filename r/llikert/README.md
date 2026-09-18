@@ -71,7 +71,7 @@ task <- scoring_task(
   responses = c("A", "B", "C"),
   examples = data.frame(
     item = c("Where is the library?", "Please close the door."),
-    category = c("question", "request")
+    category = c("question", "request")   # a category name, or its code ("B", "C")
   )
 )
 ```

@@ -51,7 +51,11 @@ class Category:
 
 @dataclass(frozen=True)
 class Example:
-    """A worked example shown to the model before each item: an item and its category id."""
+    """A worked example shown to the model before each item: an item and its category.
+
+    ``category_id`` is the category's id; :class:`ScoringTask` also accepts a response code
+    there and stores the matching id.
+    """
 
     item: str
     category_id: str
@@ -174,10 +178,7 @@ class ScoringTask:
             else:
                 item, category_id = ex
                 parsed_examples.append(Example(item=item, category_id=category_id))
-        known = {c.id for c in records}
-        for ex in parsed_examples:
-            if ex.category_id not in known:
-                raise ValueError(f"example category_id {ex.category_id!r} does not name a category")
+        parsed_examples = [_resolve_example(ex, records) for ex in parsed_examples]
 
         prompt = prompt if prompt is not None else PromptFormat()
         if not isinstance(prompt, PromptFormat):
@@ -252,6 +253,22 @@ class ScoringTask:
     def from_json(cls, path: str | os.PathLike) -> ScoringTask:
         with open(path, encoding="utf-8") as f:
             return cls.from_dict(json.load(f))
+
+
+def _resolve_example(example: Example, records: list[Category]) -> Example:
+    """An example names its category by id; a response code is accepted too, because that is
+    what the example shows the model. Ids win when a value is both an id and another code."""
+    ids = [c.id for c in records]
+    if example.category_id in ids:
+        return example
+    matches = [c.id for c in records if c.response == example.category_id]
+    if len(matches) == 1:
+        return Example(item=example.item, category_id=matches[0])
+    raise ValueError(
+        f"example category {example.category_id!r} is not one of this task's categories; "
+        f"use a category id ({', '.join(repr(i) for i in ids)}) "
+        f"or a response code ({', '.join(repr(c.response) for c in records)})"
+    )
 
 
 def _prompt_from_dict(obj: Mapping[str, Any] | None) -> PromptFormat:

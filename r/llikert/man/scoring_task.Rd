@@ -37,7 +37,8 @@ expected value. An ordinal declaration alone does not supply values.}
 which must then be unique.}
 
 \item{examples}{Optional worked examples: a data frame with columns \code{item}
-and \code{category} (a category id), used in row order.}
+and \code{category}, used in row order. Name the category by its id (the
+category label, unless you gave \code{ids}) or by its response code.}
 
 \item{answer_instruction}{The sentence asking the model to reply with one
 response code, shown after each item by default. A good place for a

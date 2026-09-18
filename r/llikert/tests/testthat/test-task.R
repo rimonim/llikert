@@ -52,3 +52,22 @@ test_that("client validation agrees with the shared task fixtures", {
     expect_error(llikert:::task_from_list(case$input), class = "llikert_error", label = basename(path))
   }
 })
+
+test_that("examples name their category by id or by response code", {
+  by_id <- scoring_task("n", "i", c("description", "question"), c("A", "B"),
+                        examples = data.frame(item = "Where is it?", category = "question"))
+  by_code <- scoring_task("n", "i", c("description", "question"), c("A", "B"),
+                          examples = data.frame(item = "Where is it?", category = "B"))
+  expect_identical(llikert:::task_as_list(by_code), llikert:::task_as_list(by_id))
+
+  # an id wins when a value is both an id and another category's response code
+  both <- scoring_task("n", "i", c("x", "y"), c("y", "x"),
+                       examples = data.frame(item = "i", category = "y"))
+  expect_identical(both$examples[[1]]$category_id, "y")
+
+  expect_error(
+    scoring_task("n", "i", c("description", "question"), c("A", "B"),
+                 examples = data.frame(item = "i", category = "quesiton")),
+    "not one of this task's categories", class = "llikert_error_invalid_task"
+  )
+})
